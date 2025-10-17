@@ -8,7 +8,8 @@ class Cliente(db.Model):
 
     # COLUNAS
     # chave primaria
-    cpf_cnpj: Mapped[int] = mapped_column(INTEGER(14), primary_key=True, autoincrement=False)
+    # max 14
+    cpf_cnpj: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False)
     
     nome_completo: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
     nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50))

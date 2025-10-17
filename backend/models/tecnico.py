@@ -7,7 +7,8 @@ class Tecnico(db.Model):
 
     # COLUNAS
     # chave primaria
-    cpf_tecnico: Mapped[int] = mapped_column(INTEGER(11), primary_key=True, autoincrement=False)
+    # max 11
+    cpf_tecnico: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False)
     
     nome_tecnico: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
     contato_tecnico: Mapped[str] = mapped_column(VARCHAR(20))
