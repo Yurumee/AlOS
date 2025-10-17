@@ -8,7 +8,7 @@ class Servico(db.Model):
 
     # COLUNAS
     # chave primaria
-    id_servico: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
+    servico_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     nome_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=False)
     descricao_servico: Mapped[str] = mapped_column(VARCHAR(30))

@@ -8,7 +8,7 @@ class Estoque(db.Model):
 
     # COLUNAS
     # chave primaria
-    id_item: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
+    item_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     nome_item: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     descricao_item: Mapped[str] = mapped_column(VARCHAR(30))
