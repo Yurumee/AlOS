@@ -1,6 +1,6 @@
 # importando bibliotecas necessarias
 from config import db
-from sqlalchemy import INTEGER, VARCHAR, Numeric
+from sqlalchemy import INTEGER, VARCHAR, NUMERIC, Numeric
 from sqlalchemy.orm import Mapped, mapped_column
 
 class Cliente(db.Model):
@@ -8,13 +8,13 @@ class Cliente(db.Model):
 
     # COLUNAS
     # chave primaria
-    cpf_cnpj: Mapped[int] = mapped_column(INTEGER(14), primary_key=True)
+    cpf_cnpj: Mapped[int] = mapped_column(INTEGER(14), primary_key=True, autoincrement=False)
     
     nome_completo: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
     nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50))
-    telefone: Mapped[int] = mapped_column(INTEGER, nullable=False)
+    telefone: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     endereco: Mapped[str] = mapped_column(VARCHAR(50), nullable=False) # rua, numero
     bairro: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     cidade: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     cep: Mapped[int] = mapped_column(INTEGER)
-    limite_credito: Mapped[Numeric] = mapped_column(Numeric(12, 2))
+    limite_credito: Mapped[Numeric] = mapped_column(NUMERIC(12, 2))
