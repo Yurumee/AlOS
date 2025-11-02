@@ -18,11 +18,11 @@ class OrdemServico(db.Model):
     tipo_ordem: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     emissao: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now())
     fechamento: Mapped[DateTime] = mapped_column(DATETIME)
-    validade: Mapped[DateTime] = mapped_column(DATETIME)
+    # validade: Mapped[DateTime] = mapped_column(DATETIME)
     prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2))
-    solucao: Mapped[str] = mapped_column(VARCHAR, nullable=False)
-    observacoes_os: Mapped[str] = mapped_column(VARCHAR)
+    # solucao: Mapped[str] = mapped_column(VARCHAR, nullable=False)
+    # observacoes_os: Mapped[str] = mapped_column(VARCHAR)
 
     # RELACIONAMENTOS
