@@ -3,6 +3,8 @@ import datetime
 from sqlalchemy import VARCHAR, INTEGER, NUMERIC, Numeric, DATETIME, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+# from models.anexo import Anexo
+
 class OrdemServico(db.Model):
     __tablename__ = 'ordemServico'
 
@@ -26,3 +28,7 @@ class OrdemServico(db.Model):
     # observacoes_os: Mapped[str] = mapped_column(VARCHAR)
 
     # RELACIONAMENTOS
+    # relacionamento 1:1 entre ordem e anexo
+    anexo: Mapped['models.anexo.Anexo'] = relationship(back_populates='ordem', uselist=False)
+    
+    
