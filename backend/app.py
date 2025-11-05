@@ -7,8 +7,10 @@ from models.ordemServico import OrdemServico
 from models.produto import Produto
 from models.servico import Servico
 from models.tecnico import Tecnico
-
-
+from models.os_servicos import OSServicos
+from models.os_itens import OSItens
+from models.categoria import Categoria
+from models.anexo import Anexo
 
 if __name__ == '__main__':
     with app.app_context():
