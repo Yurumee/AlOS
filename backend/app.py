@@ -8,7 +8,11 @@ from models.produto import Produto
 from models.servico import Servico
 from models.tecnico import Tecnico
 
+# importando blueprints
+from routes.client import view_client
 
+# registrando blueprints
+app.register_blueprint(view_client)
 
 if __name__ == '__main__':
     with app.app_context():
