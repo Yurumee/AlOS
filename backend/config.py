@@ -14,6 +14,11 @@ makedirs(db_folder, exist_ok=True)
 # configurando banco sqlite
 # cria o arquivo de banco na pasta especificada
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/database/alos.db'
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+                                            'pool_size': 5,
+                                            'max_overflow': 1,
+                                            'pool_timeout': 900
+                                          }
 
 # modelo para as tabelas
 class Base(DeclarativeBase):
