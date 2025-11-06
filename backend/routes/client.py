@@ -6,13 +6,15 @@ from flask import Blueprint, jsonify, request
 view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
 
 # rota get all clients
+# essa rota deve exibir todos os clientes em lista na tela inicial do modulo de clientes
 @view_client.route('/', methods=['GET'])
 def all_clients():
     from models.cliente import Cliente
-    
+
     clients = db.session.query(Cliente).all()
     resp = {}
     
+    # retorna clientes em formato json
     for client in clients:
         resp[client.cpf_cnpj] = {
                                     "nome completo": client.nome_completo,
@@ -30,29 +32,21 @@ def all_clients():
                     'status':200,
                     'clientes':resp
                     })
-    # return clients
 
 # rota cadastro de cliente
+# esta rota deve exibir o formulário de clientes
+# quando o formulario for enviado, deve cadastrar o cliente no banco
 @view_client.route('/novo', methods=['GET', 'POST'])
 def new_client():
     if request.method == 'POST':
         from models.cliente import Cliente
 
+        # guarda dados do frontend
         data = request.get_json()
 
+        # separando em variaveis
         cpf_cnpj = data.get('cpf-cnpj-cliente')
-        flag_cnpj = bool(data.get('flag-cnpj'))
-
-        if len(cpf_cnpj) != 11 and flag_cnpj == False:
-            return jsonify({
-                            'message':'cpf invalido'
-                            })
-        
-        elif len(cpf_cnpj) != 14 and flag_cnpj == True:
-            return jsonify({
-                            'message':'cnpj invalido'
-                            })
-
+        flag_cnpj = bool(data.get('flag-cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
         nome = data.get('nome-cliente')
         nome_fantasia = data.get('empresa-cliente')
         endereco = data.get('endereco-cliente')
@@ -62,15 +56,51 @@ def new_client():
         telefone = data.get('telefone-cliente')
         lim_credito = data.get('limite-credito')
 
+        # cpf/cnpj nao deve ser nulo
+        if cpf_cnpj == '' or cpf_cnpj == None:
+            return jsonify({'message':'cpf/cnpj nao pode ser nulo'})
+
+        # print(f'valor da flag: {flag_cnpj}')
+        # print(f'tamanho cpf/cnpj: {len(cpf_cnpj)}')
+
+        # cpf/cnpj devem ter a quantidade de caracteres desejada
+        if len(cpf_cnpj) != 11 and flag_cnpj == False:
+            return jsonify({
+                            'message':'cpf invalido'
+                            })
+        
+        if len(cpf_cnpj) != 14 and flag_cnpj == True:
+            return jsonify({
+                            'message':'cnpj invalido'
+                            })
+
+        # verifica se o cliente ja existe no banco
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj).first()
-            # print(cliente_exists)
+            
             if cliente_exists:
                 return jsonify({'message':'cliente existe'})    
         except:
             return jsonify({'message':'error'})
         
+        # verifica se campo telefone possui apenas numeros
+        if all(char.isdigit() for char in telefone) != True:
+            return jsonify({'message':'telefone deve conter apenas numeros'})
+        
+        # verifica se o limite de credito é um valor negativo
+        if lim_credito < 0:
+            return jsonify({'message':'limite de credito nao deve ser um valor negativo'})
+        
+        # verifica se o nome é nulo
+        if not nome:
+            return jsonify({'message':'nome nao deve ser nulo'})
+        
+        if not nome_fantasia and flag_cnpj == True:
+            return jsonify({'message':'informe o nome fantasia da empresa'})
+        
         try:
+            # realizando transação
+            # criando o cliente a ser inserido
             client = Cliente(
                                 cpf_cnpj = cpf_cnpj,
                                 nome_completo = nome,
@@ -84,16 +114,29 @@ def new_client():
                                 limite_credito = lim_credito
                             )
             
+            # inserindo e realizando commit
             db.session.add(client)
             db.session.commit()
+            # fim da transação
+    
             return jsonify({'message':'criado'})
 
         except Exception as e:
             return jsonify({'message':'algo deu errado', 'err':str(e)})
         
 
-
+    # com metodo GET, exibe a tela de formulario
     return jsonify({
                     'message':'ok',
                     'status':200
                     })
+
+# rota para alterar um cliente existente
+# esta rota deve alterar os dados do cliente desejado
+@view_client.route('/editar/<int:cpf_cnpj>', methods=['GET', 'PATCH', 'POST'])
+def edit_client(cpf_cnpj):
+    if request.method == 'PATCH':
+        
+        pass
+
+    return jsonify({'message':'ok'})

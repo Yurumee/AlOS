@@ -18,5 +18,5 @@ class Cliente(db.Model):
     endereco: Mapped[str] = mapped_column(VARCHAR(50), nullable=False) # rua, numero
     bairro: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     cidade: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
-    cep: Mapped[int] = mapped_column(INTEGER)
+    cep: Mapped[str] = mapped_column(VARCHAR)
     limite_credito: Mapped[Numeric] = mapped_column(NUMERIC(12, 2))
