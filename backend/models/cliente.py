@@ -1,8 +1,10 @@
 # importando bibliotecas necessarias
 from config import db
 from sqlalchemy import INTEGER, VARCHAR, NUMERIC, Numeric, BOOLEAN
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from models.produto import Produto
+from models.ordemServico import OrdemServico
 class Cliente(db.Model):
     __tablename__ = 'cliente'
 
@@ -20,3 +22,9 @@ class Cliente(db.Model):
     cidade: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     cep: Mapped[str] = mapped_column(VARCHAR)
     limite_credito: Mapped[Numeric] = mapped_column(NUMERIC(12, 2))
+
+    # RELACIONAMENTOS
+    # relacionamento 1:n com Produto
+    produto_id: Mapped[list['Produto']] = relationship()
+    # relacionamento 1:n com ordemServico
+    ordem_servicos: Mapped[list['OrdemServico']] = relationship()

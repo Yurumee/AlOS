@@ -7,8 +7,10 @@ from models.ordemServico import OrdemServico
 from models.produto import Produto
 from models.servico import Servico
 from models.tecnico import Tecnico
-
-# importando blueprints
+from models.os_servicos import OSServicos
+from models.os_itens import OSItens
+from models.categoria import Categoria
+from models.anexo import Anexo# importando blueprints
 from routes.client import view_client
 
 # registrando blueprints
