@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
                                             'pool_size': 5,
                                             'max_overflow': 1,
                                             'pool_timeout': 900
-                                            }
+                                          }
 
 # modelo para as tabelas
 class Base(DeclarativeBase):

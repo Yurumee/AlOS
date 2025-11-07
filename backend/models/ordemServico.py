@@ -29,6 +29,7 @@ class OrdemServico(db.Model):
 
     # RELACIONAMENTOS
     # relacionamento 1:1 entre ordem e anexo
+    # model declarado dessa forma para evitar erro de circular import 
     anexo: Mapped['models.anexo.Anexo'] = relationship(back_populates='ordem', uselist=False)
     
     
