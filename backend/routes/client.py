@@ -41,20 +41,24 @@ def new_client():
     if request.method == 'POST':
         from models.cliente import Cliente
 
-        # guarda dados do frontend
-        data = request.get_json()
+        try:
+            # guarda dados do frontend
+            data = request.get_json()
 
-        # separando em variaveis
-        cpf_cnpj = data.get('cpf-cnpj-cliente')
-        flag_cnpj = bool(data.get('flag-cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
-        nome = data.get('nome-cliente')
-        nome_fantasia = data.get('empresa-cliente')
-        endereco = data.get('endereco-cliente')
-        bairro = data.get('bairro-cliente')
-        cidade = data.get('cidade-cliente')
-        cep = data.get('cep-cliente')
-        telefone = data.get('telefone-cliente')
-        lim_credito = data.get('limite-credito')
+            # separando em variaveis
+            cpf_cnpj = data.get('cpf-cnpj-cliente')
+            flag_cnpj = bool(data.get('flag-cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
+            nome = data.get('nome-cliente')
+            nome_fantasia = data.get('empresa-cliente')
+            endereco = data.get('endereco-cliente')
+            bairro = data.get('bairro-cliente')
+            cidade = data.get('cidade-cliente')
+            cep = data.get('cep-cliente')
+            telefone = data.get('telefone-cliente')
+            lim_credito = data.get('limite-credito')
+        
+        except Exception as e:
+            return jsonify({'error':str(e)})
 
         # cpf/cnpj nao deve ser nulo
         if cpf_cnpj == '' or cpf_cnpj == None:
@@ -132,11 +136,91 @@ def new_client():
                     })
 
 # rota para alterar um cliente existente
-# esta rota deve alterar os dados do cliente desejado
-@view_client.route('/editar/<int:cpf_cnpj>', methods=['GET', 'PATCH', 'POST'])
-def edit_client(cpf_cnpj):
-    if request.method == 'PATCH':
-        
-        pass
+# esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
+@view_client.route('/editar/<int:cpf_cnpj_desejado>', methods=['GET', 'PATCH'])
+def patch_client(cpf_cnpj_desejado):
+    from models.cliente import Cliente
 
-    return jsonify({'message':'ok'})
+    if request.method == 'PATCH':
+        # recebe dados do frontend
+        data = request.get_json()
+        # separando em variaveis
+        nome = data.get('nome-cliente')
+        nome_fantasia = data.get('empresa-cliente')
+        endereco = data.get('endereco-cliente')
+        bairro = data.get('bairro-cliente')
+        cidade = data.get('cidade-cliente')
+        cep = data.get('cep-cliente')
+        telefone = data.get('telefone-cliente')
+        lim_credito = data.get('limite-credito')
+
+        # checa se o cliente existe
+        try:
+            cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+        except:
+            return jsonify({'message':'algo deu errado'})
+        
+        if not cliente_exists:
+            return jsonify({'message':'o cliente especificado nao existe'})
+        
+        # checar se os dados estao corretos
+        if not nome:
+            return jsonify({'message':'nome nao pode ser nulo'})
+        
+        if not nome_fantasia and cliente_exists.pessoa_juridica == True:
+            return jsonify({'message':'nome fantasia nao pode ser nulo'})
+        
+        if lim_credito < 0:
+            return jsonify({'message':'limite de credito nao pode ser numero negativo'})
+        
+        if all(char.isdigit() for char in telefone) != True:
+            return({'message':'telefone deve apenas conter numeros'})
+        
+        if not endereco or not bairro or not cidade:
+            return jsonify({'message':'endereço incompleto'})
+        
+        # realizando modificações
+        try:
+            if nome != cliente_exists.nome_completo:
+                cliente_exists.nome_completo = nome
+                # db.session.commit()
+            
+            if nome_fantasia != cliente_exists.nome_fantasia:
+                cliente_exists.nome_fantasia = nome_fantasia
+            
+            if lim_credito != cliente_exists.limite_credito:
+                cliente_exists.limite_credito = lim_credito
+            
+            if telefone != cliente_exists.telefone:
+                cliente_exists.telefone = telefone
+
+            if cidade != cliente_exists.cidade:
+                cliente_exists.cidade = cidade
+
+            if bairro != cliente_exists.bairro:
+                cliente_exists.bairro = bairro
+            
+            if endereco != cliente_exists.endereco:
+                cliente_exists.endereco = endereco
+            
+            if cep != cliente_exists.cep:
+                cliente_exists.cep = cep
+
+            db.session.commit()
+
+        except Exception as e:
+            return jsonify({'message':str(e)})
+        
+        return jsonify({'message':'cliente editado com sucesso'})
+        
+
+    # caso metodo seja get, retorna a pagina para edição de cliente
+    try:
+        cliente = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+    except:
+        return jsonify({'message':'algo deu errado'})
+    
+    if not cliente:
+        cliente = 'este cliente nao existe'
+
+    return jsonify({'message':'ok', 'cliente a ser editado':cliente.nome_completo})
