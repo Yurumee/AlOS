@@ -1,4 +1,5 @@
 from config import db
+# from typing import Optional
 import datetime
 from sqlalchemy import VARCHAR, INTEGER, NUMERIC, Numeric, DATETIME, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -13,9 +14,9 @@ class OrdemServico(db.Model):
     ordem_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    tecnico_cpf: Mapped[int] = relationship(ForeignKey('cpf_tecnico'))
-    produto_id: Mapped[int] = relationship(ForeignKey('produto_id'))
-    cliente_cpf_cnpj: Mapped[int] = relationship(ForeignKey('cpf_cnpj'))
+    tecnico_cpf: Mapped[int] = mapped_column(INTEGER, ForeignKey('tecnico.cpf_tecnico'))
+    produto_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('produto.produto_id'))
+    cliente_cpf_cnpj: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cpf_cnpj'))
 
     tipo_ordem: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     emissao: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now())
@@ -24,8 +25,6 @@ class OrdemServico(db.Model):
     prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2))
-    # solucao: Mapped[str] = mapped_column(VARCHAR, nullable=False)
-    # observacoes_os: Mapped[str] = mapped_column(VARCHAR)
 
     # RELACIONAMENTOS
     # relacionamento 1:1 entre ordem e anexo

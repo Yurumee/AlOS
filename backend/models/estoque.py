@@ -11,7 +11,7 @@ class Estoque(db.Model):
     item_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    categoria_id: Mapped[int] = mapped_column(ForeignKey('categoria.categoria_id'))
+    categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'))
 
     nome_item: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     descricao_item: Mapped[str] = mapped_column(VARCHAR(30))

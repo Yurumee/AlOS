@@ -12,7 +12,7 @@ class Produto(db.Model):
     produto_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    cliente_cpf_cnpj: Mapped[int] = mapped_column(ForeignKey('cliente.cpf_cnpj'))
+    cliente_cpf_cnpj: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cpf_cnpj'))
 
     modelo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, default='SEM INFO')
     num_serie: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, default='SEM INFO')

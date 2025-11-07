@@ -13,8 +13,8 @@ class OSItens(db.Model):
     id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chaves estrangeiras
-    ordem_id: Mapped[int] = mapped_column(ForeignKey('ordemServico.ordem_id'))
-    item_id: Mapped[int] = mapped_column(ForeignKey('estoque.item_id'))
+    ordem_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('ordemServico.ordem_id'))
+    item_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('estoque.item_id'))
 
     # RELACIONAMENTOS
     # relacionamentos n:n entre ordemServico e estoque
