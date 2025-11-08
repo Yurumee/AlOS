@@ -33,6 +33,74 @@ def all_clients():
                     'clientes':resp
                     })
 
+# rota pesquisa de cliente por nome/cpf/cnpj
+# essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
+@view_client.route('/pesquisar/<str_pesquisa>', methods=['GET', 'POST'])
+def search_client(str_pesquisa):
+    
+    if request.method == 'POST':
+        from models.cliente import Cliente
+        # pesquisa pelo cpf/cnpj
+        if str_pesquisa.isdigit():    
+            # pesquisa pelo cpf
+            if int(str_pesquisa) == 11:
+                
+                try:
+                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
+                    if cliente_desejado:
+                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
+                    else:
+                        return jsonify({'message':'cliente com esse cpf nao existe'})
+                
+                except Exception as e:
+                    return jsonify({'err':str(e)})
+
+            # pesquisa pelo cnpj
+            elif int(str_pesquisa) == 14:
+                
+                try:
+                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
+                    if cliente_desejado:
+                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
+                    else:
+                        return jsonify({'message':'cliente com esse cnpj nao existe'})
+                
+                except Exception as e:
+                    return jsonify({'err':str(e)})
+
+            # se não for nenhum dos dois, o dado é invalido
+            else:
+                return 'o dado nao é valido'
+
+        # pesquisa pelo nome
+        try:
+            clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
+
+            if clientes_desejados:
+                result = {}
+                for cliente in clientes_desejados:
+                    result[cliente.cpf_cnpj] = {
+                                                'nome do cliente':cliente.nome_completo,
+                                                'nome fantasia':cliente.nome_fantasia,
+                                                'endereco':cliente.endereco,
+                                                'bairro':cliente.bairro,
+                                                'cep':cliente.cep,
+                                                'cidade':cliente.cidade,
+                                                'limite de credito':cliente.limite_credito,
+                                                'pessoa juridica':cliente.pessoa_juridica
+                                                }
+
+                return jsonify({'clientes pesquisados':result})
+            
+            else:
+                return jsonify({'message':'cliente com esse nome nao existe'})
+        
+        except Exception as e:
+            return jsonify({'err':str(e)})
+
+    
+    # return 'nao é um tipo de dado valido'
+
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes
 # quando o formulario for enviado, deve cadastrar o cliente no banco
@@ -137,11 +205,12 @@ def new_client():
 
 # rota para alterar um cliente existente
 # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
-@view_client.route('/editar/<int:cpf_cnpj_desejado>', methods=['GET', 'PATCH'])
+# 
+@view_client.route('/editar/<int:cpf_cnpj_desejado>', methods=['GET', 'POST'])
 def patch_client(cpf_cnpj_desejado):
     from models.cliente import Cliente
 
-    if request.method == 'PATCH':
+    if request.method == 'POST':
         # recebe dados do frontend
         data = request.get_json()
         # separando em variaveis
@@ -225,11 +294,12 @@ def patch_client(cpf_cnpj_desejado):
 
     return jsonify({'message':'ok', 'cliente a ser editado':cliente.nome_completo})
 
-@view_client.route('/excluir/<int:cpf_cnpj_desejado>', methods=['GET', 'DELETE'])
+# rota para deletar um cliente com base no cpf/cnpj informado
+@view_client.route('/excluir/<int:cpf_cnpj_desejado>', methods=['GET', 'POST'])
 def delete_client(cpf_cnpj_desejado):
     from models.cliente import Cliente
 
-    if request.method == 'DELETE':
+    if request.method == 'POST':
         # checa se o cliente existe
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
