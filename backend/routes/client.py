@@ -224,3 +224,37 @@ def patch_client(cpf_cnpj_desejado):
         cliente = 'este cliente nao existe'
 
     return jsonify({'message':'ok', 'cliente a ser editado':cliente.nome_completo})
+
+@view_client.route('/excluir/<int:cpf_cnpj_desejado>', methods=['GET', 'DELETE'])
+def delete_client(cpf_cnpj_desejado):
+    from models.cliente import Cliente
+
+    if request.method == 'DELETE':
+        # checa se o cliente existe
+        try:
+            cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+        except:
+            return jsonify({'message':'algo deu errado'})
+        
+        if not cliente_exists:
+            return jsonify({'message':'o cliente especificado nao existe ou cpf/cnpj incorreto'})
+        
+        # exclui o cliente
+        try:
+                db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).delete()
+                db.session.commit()
+                return jsonify({'message':'cliente deletado com sucesso'})
+    
+        except Exception as e:
+            return jsonify({'err':str(e)})
+
+    # caso metodo seja get, retorna a pagina para exclusão de cliente
+    try:
+        cliente = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+    except:
+        return jsonify({'message':'algo deu errado'})
+    
+    if not cliente:
+        cliente = 'este cliente nao existe'
+
+    return jsonify({'message':'ok', 'cliente a ser excluido':cliente.nome_completo})
