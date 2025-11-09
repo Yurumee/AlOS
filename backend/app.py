@@ -14,9 +14,11 @@ from models.anexo import Anexo
 
 # importando blueprints
 from routes.client import view_client
+from routes.home import view_home
 
 # registrando blueprints
 app.register_blueprint(view_client)
+app.register_blueprint(view_home)
 
 if __name__ == '__main__':
     with app.app_context():

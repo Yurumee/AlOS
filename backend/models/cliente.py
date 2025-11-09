@@ -8,7 +8,7 @@ from models.ordemServico import OrdemServico
 class Cliente(db.Model):
     __tablename__ = 'cliente'
 
-    # COLUNAS
+    # COLUNAS   
     # chave primaria
     cliente_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False, nullable=False)
     
