@@ -1,5 +1,6 @@
 import './styles/Clients.css'
 import '/index.html?url'
+import './styles/index.css'
 
 
 function Clients() {
@@ -8,32 +9,45 @@ function Clients() {
         window.location.href = '/'
     }
 
-    return(
+    return (
         <>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" 
-rel="stylesheet"/>            
+
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
             <header>
                 <div>
-                    <img onClick={goto_home} src='/logo-placeholder.png' alt="logo da empresa" />
-                    
-                    <input type="text" />
 
+                    <img className='logo' onClick={goto_home} src='/logo-placeholder.png' alt="logo da empresa" />
+
+                    <div className='search'>
+                        <input className='searchbar' type="text" />
+                        <span className="material-icons md-24 md-primary">search</span>
+                    </div>
                 </div>
             </header>
 
-            <div>
-                {/* <span class="material-symbols-outlined">add_circle</span> */}
+            <div className='buttons'>
 
+                <button className='button-client'>
+                    <span className="material-icons md-48 md-primary">add_circle_outline</span>
+                    Novo Cliente
+                </button>
 
+                <button className='button-client'>
+                    <span className="material-icons md-48 md-primary">edit</span>
+                    Editar Cliente
+                </button>
 
-<span class="material-icons">add_circle</span>
+                <button className='button-client'>
+                    <span className="material-icons md-48 md-primary">delete_outline</span>
+                    Excluir Cliente
+                </button>
 
-                <span></span>
             </div>
 
             {/* tabela de clientes existentes*/}
             <div className="clientsCreated">
-                <p className='header2'>CLIENTES CADASTRADOS</p>
+                <p className='h2'>CLIENTES CADASTRADOS</p>
             </div>
         </>
     )
