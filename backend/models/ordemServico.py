@@ -16,7 +16,7 @@ class OrdemServico(db.Model):
     # chave estrangeira
     tecnico_cpf: Mapped[int] = mapped_column(INTEGER, ForeignKey('tecnico.cpf_tecnico'))
     produto_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('produto.produto_id'))
-    cliente_cpf_cnpj: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cpf_cnpj'))
+    cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 
     tipo_ordem: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     emissao: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now())

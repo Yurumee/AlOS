@@ -8,10 +8,11 @@ from models.ordemServico import OrdemServico
 class Cliente(db.Model):
     __tablename__ = 'cliente'
 
-    # COLUNAS
+    # COLUNAS   
     # chave primaria
-    # max 14
-    cpf_cnpj: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False, nullable=False)
+    cliente_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False, nullable=False)
+
+    cpf_cnpj: Mapped[int] = mapped_column(INTEGER, unique=True, nullable=False) # max 11 ou 14
     
     nome_completo: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
     nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50))
