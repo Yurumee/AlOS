@@ -1,16 +1,15 @@
-function Home() {
+import './styles/Home.css'
+import './styles/index.css'
+import Navbar from './Navbar'
 
-    function goto_clients() {
-        window.location.href = '/cliente'
-    }
+function Home() {
 
     return(
         <>
+        <Navbar/>
             <div>
-                TESTE TELA PRINCIPAL
+                teste
             </div>
-
-            <button onClick={goto_clients}>Ir para clientes</button>
         </>
     )
 }

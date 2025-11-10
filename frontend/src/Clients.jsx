@@ -1,44 +1,42 @@
 import './styles/Clients.css'
-import '/index.html?url'
 import './styles/index.css'
+import Navbar from './Navbar'
 
+function Clients() 
+{
 
-function Clients() {
+    function new_client()
+    {
 
-    function goto_home() {
-        window.location.href = '/'
+    }
+
+    function edit_client()
+    {
+
+    }
+
+    function delete_client()
+    {
+
     }
 
     return (
         <>
-
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-
-            <header>
-                <div>
-
-                    <img className='logo' onClick={goto_home} src='/logo-placeholder.png' alt="logo da empresa" />
-
-                    <div className='search'>
-                        <input className='searchbar' type="text" />
-                        <span className="material-icons md-24 md-primary">search</span>
-                    </div>
-                </div>
-            </header>
+            <Navbar />
 
             <div className='buttons'>
 
-                <button className='button-client'>
+                <button className='button-client' onClick={new_client}>
                     <span className="material-icons md-48 md-primary">add_circle_outline</span>
                     Novo Cliente
                 </button>
 
-                <button className='button-client'>
+                <button className='button-client' onClick={edit_client}>
                     <span className="material-icons md-48 md-primary">edit</span>
                     Editar Cliente
                 </button>
 
-                <button className='button-client'>
+                <button className='button-client' onClick={delete_client}>
                     <span className="material-icons md-48 md-primary">delete_outline</span>
                     Excluir Cliente
                 </button>
