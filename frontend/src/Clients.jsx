@@ -7,7 +7,7 @@ function Clients()
 
     function new_client()
     {
-
+        window.location.href = '/novo-cliente'
     }
 
     function edit_client()

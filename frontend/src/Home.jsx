@@ -8,7 +8,7 @@ function Home() {
         <>
         <Navbar/>
             <div>
-                teste
+                Esta é a tela principal da aplicação
             </div>
         </>
     )

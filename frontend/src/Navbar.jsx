@@ -10,27 +10,27 @@ function Navbar() {
 
     function goto_client() 
     {
-        window.location.href = '/cliente'
+        window.location.href = '/clientes'
     }
     
     function goto_product() 
     {
-        window.location.href = '/produto'
+        window.location.href = '/produtos'
     }
 
-    function goto_storage() 
+    function goto_stock() 
     {
         window.location.href = '/estoque'
     }
     
     function goto_service() 
     {
-        window.location.href = '/servico'
+        window.location.href = '/servicos'
     }
 
     function goto_os() 
     {
-        window.location.href = '/ordem-servico'
+        window.location.href = '/ordem-servicos'
     }
 
     function search()
@@ -60,7 +60,7 @@ function Navbar() {
                             Produtos
                         </div>
 
-                        <div onClick={goto_storage}>
+                        <div onClick={goto_stock}>
                             Estoque
                         </div>
 
