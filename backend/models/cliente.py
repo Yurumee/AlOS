@@ -10,11 +10,11 @@ class Cliente(db.Model):
 
     # COLUNAS   
     # chave primaria
-    cliente_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False, nullable=False)
+    cliente_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True, nullable=False)
     
     cpf_cnpj: Mapped[int] = mapped_column(INTEGER, unique=True, nullable=False) # max 11 ou 14
     nome_completo: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
-    nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50))
+    nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50), nullable=True)
     pessoa_juridica: Mapped[bool] = mapped_column(BOOLEAN)
     telefone: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     endereco: Mapped[str] = mapped_column(VARCHAR(50), nullable=False) # rua, numero

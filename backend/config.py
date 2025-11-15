@@ -3,9 +3,13 @@ from os import path, makedirs
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from flask_cors import CORS
 
 # criando uma instancia flask
 app = Flask(__name__)
+
+# permissão da comunicação entre frontend e backend
+CORS(app)
 
 # cria a pasta do banco de dados caso nao exista
 db_folder = path.join(app.root_path, 'database')

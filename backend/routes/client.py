@@ -16,7 +16,8 @@ def all_clients():
     
     # retorna clientes em formato json
     for client in clients:
-        resp[client.cpf_cnpj] = {
+        resp[client.cliente_id] = {
+                                    "CPF/CNPJ": client.cpf_cnpj,
                                     "nome completo": client.nome_completo,
                                     "nome fantasia": client.nome_fantasia,
                                     "endereco": client.endereco,
@@ -27,11 +28,9 @@ def all_clients():
                                     "pessoa juridica": client.pessoa_juridica
                                 }
 
-    return jsonify({
-                    'message':'ok',
-                    'status':200,
-                    'clientes':resp
-                    })
+    print(resp)
+    return jsonify({'clientes': resp})
+    # return resp
 
 # rota pesquisa de cliente por nome/cpf/cnpj
 # essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
@@ -79,15 +78,16 @@ def search_client(str_pesquisa):
             if clientes_desejados:
                 result = {}
                 for cliente in clientes_desejados:
-                    result[cliente.cpf_cnpj] = {
-                                                'nome do cliente':cliente.nome_completo,
-                                                'nome fantasia':cliente.nome_fantasia,
+                    result[cliente.cliente_id] = {
+                                                'cpf_cnpj': cliente.cpf_cnpj,
+                                                'nome_cliente':cliente.nome_completo,
+                                                'nome_fantasia':cliente.nome_fantasia,
                                                 'endereco':cliente.endereco,
                                                 'bairro':cliente.bairro,
                                                 'cep':cliente.cep,
                                                 'cidade':cliente.cidade,
-                                                'limite de credito':cliente.limite_credito,
-                                                'pessoa juridica':cliente.pessoa_juridica
+                                                'limite_credito':cliente.limite_credito,
+                                                'pessoa_juridica':cliente.pessoa_juridica
                                                 }
 
                 return jsonify({'clientes pesquisados':result})
@@ -104,26 +104,32 @@ def search_client(str_pesquisa):
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes
 # quando o formulario for enviado, deve cadastrar o cliente no banco
-@view_client.route('/novo', methods=['GET', 'POST'])
+@view_client.route('/novo', methods=['POST'])
 def new_client():
     if request.method == 'POST':
         from models.cliente import Cliente
 
         try:
+            print('no try')
             # guarda dados do frontend
-            data = request.get_json()
+            data = request.json
+
+            print('peguei dados')
+            print(data)
 
             # separando em variaveis
-            cpf_cnpj = data.get('cpf-cnpj-cliente')
-            flag_cnpj = bool(data.get('flag-cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
-            nome = data.get('nome-cliente')
-            nome_fantasia = data.get('empresa-cliente')
-            endereco = data.get('endereco-cliente')
-            bairro = data.get('bairro-cliente')
-            cidade = data.get('cidade-cliente')
-            cep = data.get('cep-cliente')
-            telefone = data.get('telefone-cliente')
-            lim_credito = data.get('limite-credito')
+            cpf_cnpj = data.get('cpf_cnpj_cliente')
+            flag_cnpj = bool(data.get('flag_cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
+            nome = data.get('nome_cliente')
+            nome_fantasia = data.get('empresa_cliente')
+            endereco = data.get('endereco_cliente')
+            bairro = data.get('bairro_cliente')
+            cidade = data.get('cidade_cliente')
+            cep = data.get('cep_cliente')
+            telefone = data.get('telefone_cliente')
+            lim_credito = float(data.get('limite_credito'))
+
+            print(flag_cnpj)
         
         except Exception as e:
             return jsonify({'error':str(e)})
@@ -131,9 +137,6 @@ def new_client():
         # cpf/cnpj nao deve ser nulo
         if cpf_cnpj == '' or cpf_cnpj == None:
             return jsonify({'message':'cpf/cnpj nao pode ser nulo'})
-
-        # print(f'valor da flag: {flag_cnpj}')
-        # print(f'tamanho cpf/cnpj: {len(cpf_cnpj)}')
 
         # cpf/cnpj devem ter a quantidade de caracteres desejada
         if len(cpf_cnpj) != 11 and flag_cnpj == False:
@@ -173,6 +176,7 @@ def new_client():
         try:
             # realizando transação
             # criando o cliente a ser inserido
+            print('iniciando cadastro de cliente')
             client = Cliente(
                                 cpf_cnpj = cpf_cnpj,
                                 nome_completo = nome,
@@ -185,23 +189,16 @@ def new_client():
                                 cep = cep,
                                 limite_credito = lim_credito
                             )
-            
+
             # inserindo e realizando commit
             db.session.add(client)
             db.session.commit()
             # fim da transação
-    
-            return jsonify({'message':'criado'})
+
+            return '', 201
 
         except Exception as e:
-            return jsonify({'message':'algo deu errado', 'err':str(e)})
-        
-
-    # com metodo GET, exibe a tela de formulario
-    return jsonify({
-                    'message':'ok',
-                    'status':200
-                    })
+            return str(e)
 
 # rota para alterar um cliente existente
 # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
