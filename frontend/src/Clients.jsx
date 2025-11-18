@@ -6,25 +6,42 @@ import { useEffect, useState } from 'react'
 function Clients() 
 {
     // guarda os clientes
-    const [clients, setClients] = useState()
+    const [clients, setClients] = useState([])
+    // carregamento
+    const [isLoading, setIsLoading] = useState(true)
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
-    useEffect(() => {
+    useEffect(() => 
+    {
+            async function getClients() {
+            setIsLoading(true)
+
+            // url da api
+            URL = 'http://127.0.0.1:5000/cliente/'
+            const response = await fetch(URL)
+            const data = await response.json();
+            const list = Object.values(data.clientes)
+            setClients(list)
+
+            setIsLoading(false)
+            }
+
         getClients()
     }, [])
-    console.log(clients)
 
-    async function getClients() {
-        // url da api
-        URL = 'http://127.0.0.1:5000/cliente/'
-        // realiza GET na api
-        // depois busca apenas o json
-        // depois insere os dados do json no setClients
-        // setClients vai receber e guardar tudo em clients
-        await fetch(URL).then(resp => resp.json()).then(data => setClients(data))
-        .catch(e => console.log(e))
-        // se tiver erros, mostra no terminal
-    }
+    // async function getClients() {
+    //     setIsLoading(true)
+
+    //     // url da api
+    //     URL = 'http://127.0.0.1:5000/cliente/'
+    //     // realiza GET na api
+    //     // depois busca apenas o json
+    //     // depois insere os dados do json no setClients
+    //     // setClients vai receber e guardar tudo em clients
+    //     await fetch(URL).then(resp => resp.json()).then(data => setClients(data.clientes))
+    //     .catch(e => console.log(e)).finally(setIsLoading(false))
+    //     // se tiver erros, mostra no terminal
+    // }
 
     function new_client()
     {
@@ -64,29 +81,25 @@ function Clients()
 
             </div>
 
+            <div>
+                {isLoading && <p>Carregando...</p>}
+            </div>
+
             {/* tabela de clientes existentes*/}
             <div className="clientsCreated">
                 <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                <table>
+                 <table>
                     <tbody>
                             <tr>
-                                
+                                {clients && clients.map(client => (
+                                            <td key={client.cliente_id}> {client.cpf_cnpj} </td>
+                                        )
+                                    )}    
                             </tr>
+
                     </tbody>
                 </table>
-
-                {/* {clients.clientes.map((content, key) => (
-                    <tr>
-                        
-                    </tr>
-                ) 
-                } */}
-
-                {/* {clients.clientes.map(client => (
-                                        <td key={client.cliente_id}> {client.cpf_cnpj} </td>
-                                    )
-                                )} */}
 
             </div>
         </>

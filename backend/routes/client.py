@@ -17,15 +17,15 @@ def all_clients():
     # retorna clientes em formato json
     for client in clients:
         resp[client.cliente_id] = {
-                                    "CPF/CNPJ": client.cpf_cnpj,
-                                    "nome completo": client.nome_completo,
-                                    "nome fantasia": client.nome_fantasia,
+                                    "cpf_cnpj": client.cpf_cnpj,
+                                    "nome_completo": client.nome_completo,
+                                    "nome_fantasia": client.nome_fantasia,
                                     "endereco": client.endereco,
                                     "bairro": client.bairro,
                                     "cidade": client.cidade,
                                     "cep": client.cep,
-                                    "limite de credito": client.limite_credito,
-                                    "pessoa juridica": client.pessoa_juridica
+                                    "limite_credito": client.limite_credito,
+                                    "pessoa_juridica": client.pessoa_juridica
                                 }
 
     print(resp)
