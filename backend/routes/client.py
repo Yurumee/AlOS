@@ -24,12 +24,13 @@ def all_clients():
                                     "bairro": client.bairro,
                                     "cidade": client.cidade,
                                     "cep": client.cep,
+                                    "telefone": client.telefone,
                                     "limite_credito": client.limite_credito,
                                     "pessoa_juridica": client.pessoa_juridica
                                 }
 
-    print(resp)
-    return jsonify({'clientes': resp})
+    # print(resp)
+    return jsonify({'clientes': resp}), 200
     # return resp
 
 # rota pesquisa de cliente por nome/cpf/cnpj

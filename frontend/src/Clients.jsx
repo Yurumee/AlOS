@@ -1,7 +1,42 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import Navbar from './Navbar'
+import NavBar from './NavBar'
+import ClientsVisualize from './ClientsVisualize'
 import { useEffect, useState } from 'react'
+
+// function ClientsVisualize(props)
+// {
+//     const client = props.client
+//     return
+//     (
+//             <div>
+//                 <h4>Nome Completo</h4>
+//                 <p>{client.nome_completo}</p>
+
+//                 <h4>Nome Fantasia</h4>
+//                 <p>{client.nome_fantasia}</p>
+
+//                 <h4>Telefone</h4>
+//                 <p>{client.telefone}</p>
+
+//                 <h4>Limite de Crédito</h4>
+//                 <p>{client.limite_credito}</p>
+
+//                 <h4>Endereço</h4>
+//                 <p>{client.endereco}</p>
+
+//                 <h4>Bairro</h4>
+//                 <p>{client.bairro}</p>
+
+//                 <h4>Cidade</h4>
+//                 <p>{client.cidade}</p>
+
+//                 <h4>CEP</h4>
+//                 <p>{client.cep}</p>
+
+//             </div>
+//     )
+// }
 
 function Clients() 
 {
@@ -9,6 +44,10 @@ function Clients()
     const [clients, setClients] = useState([])
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
+    // esconde ou mostra modal do cliente
+    const [modalOpen, setModalOpen] = useState(false)
+    // cliente do modal
+    const [modalClient, setModalClient] = useState({})
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -43,6 +82,26 @@ function Clients()
     //     // se tiver erros, mostra no terminal
     // }
 
+    // function ClientRows(props)
+    // {
+    //     const client = props.clients
+    //     if (client && !isLoading)
+    //     {
+    //         return <>
+    //             {client.map(client => (
+    //                 <tr>
+    //                     <td key={client.nome_completo}> {client.nome_completo} </td>
+    //                     <td key={client.nome_fantasia}> {client.nome_fantasia} </td>
+    //                     <td key={client.telefone}> {client.telefone} </td>
+    //                     <td key={client.limite_credito}> {client.limite_credito} </td>
+    //                 </tr>
+    //             )
+    //             )
+    //         }
+    //         </>         
+    //     }
+    // }
+
     function new_client()
     {
         window.location.href = '/novo-cliente'
@@ -58,9 +117,15 @@ function Clients()
 
     }
 
+    function visualize_client(client)
+    {
+        setModalClient(client)
+        setModalOpen(!modalOpen)
+    }
+
     return (
         <>
-            <Navbar />
+            <NavBar />
 
             <div className='buttons'>
 
@@ -89,19 +154,36 @@ function Clients()
             <div className="clientsCreated">
                 <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                 <table>
+                <table>
                     <tbody>
-                            <tr>
-                                {clients && clients.map(client => (
-                                            <td key={client.cliente_id}> {client.cpf_cnpj} </td>
-                                        )
-                                    )}    
-                            </tr>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>Nome Fantasia</th>
+                            <th>Telefone</th>
+                            <th>Limite de Crédito</th>
+                        </tr>
 
+                        {/* {!isLoading && <ClientRows clients={clients} />} */}
+
+                        {!isLoading  && clients.map(client => (
+                                <>
+                                    <tr>
+                                        <td key={client.cliente_id}> {client.nome_completo} </td>
+                                        <td key={client.cliente_id}> {client.nome_fantasia} </td>
+                                        <td key={client.cliente_id}> {client.telefone} </td>
+                                        <td key={client.cliente_id}> {client.limite_credito} </td>
+
+                                        <td> <button onClick={() => visualize_client(client)}>unfold_more</button> </td>
+                                    </tr>
+                                </>
+                            )
+                        )}
                     </tbody>
                 </table>
 
+                
             </div>
+            {modalOpen && <ClientsVisualize client={modalClient} show={modalOpen} close={() => setModalOpen(false)}/>}
         </>
     )
 }

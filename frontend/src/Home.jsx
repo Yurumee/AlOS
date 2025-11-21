@@ -1,6 +1,6 @@
 import './styles/Home.css'
 import './styles/index.css'
-import Navbar from './Navbar'
+import Navbar from './NavBar'
 
 function Home() {
 

@@ -1,5 +1,12 @@
+/* BOOTSTRAP */
+.custom-bg-nav {
+    background-color: #FAE588;
+}
 
-.navbar {
+
+
+/* OLD */
+/* .navbar {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -49,4 +56,4 @@
 
 .material-icons.md-primary {
     color: #1C70A4;
-}
+} */

@@ -1,7 +1,7 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import './styles/ClientsNew.css'
-import Navbar from './Navbar'
+import Navbar from './NavBar'
 
 import { useState } from 'react'
 
