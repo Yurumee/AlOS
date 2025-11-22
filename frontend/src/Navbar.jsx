@@ -38,8 +38,9 @@ function NavBar() {
     // }
 
     return (
-
-        <Navbar expand="lg" className='custom-bg-nav'>
+        <>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+            <Navbar expand="lg" className='custom-bg-nav'>
             <Container fluid>
                 <Navbar.Brand href='/'>Logo Empresa</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
@@ -62,14 +63,14 @@ function NavBar() {
                             type="search"
                             placeholder="Search"
                             className="me-2"
-                            aria-label="Search"
-                        />
+                            aria-label="Search" />
                         <Button variant="outline-success">Search</Button>
                     </Form>
 
                 </Navbar.Collapse>
             </Container>
-        </Navbar>
+            </Navbar>
+        </>
 
         // <>
         //     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />

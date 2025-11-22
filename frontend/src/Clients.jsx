@@ -29,7 +29,6 @@ function Clients()
             setClients(list)
 
             setIsLoading(false)
-            console.log(data.id)
             }
 
         getClients()
@@ -92,6 +91,8 @@ function Clients()
 
     return (
         <>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+            
             <NavBar />
 
             <div className='buttons'>
@@ -132,8 +133,8 @@ function Clients()
                         </tr>
 
                         {/* {!isLoading && <ClientRows clients={clients} />} */}
-
-                        {!isLoading  && clients.map(client => (
+                    
+                        {!isLoading && clients.map(client => (
                                 <>
                                     <tr key={client.id}>
                                         <td> {client.id} </td>

@@ -285,18 +285,18 @@ def delete_client(id_desejado):
     if request.method == 'POST':
         # checa se o cliente existe
         try:
-            cliente_exists = db.session.query(Cliente).filter_by(client_id=id_desejado).one_or_none()
+            cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
         except:
-            return jsonify({'message':'algo deu errado'})
+            return '', 500
         
         if not cliente_exists:
-            return jsonify({'message':'o cliente especificado nao existe ou cpf/cnpj incorreto'})
+            return '', 404
         
         # exclui o cliente
         try:
                 db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
                 db.session.commit()
-                return jsonify({'message':'cliente deletado com sucesso'})
+                return '', 200
     
         except Exception as e:
             return jsonify({'err':str(e)})
@@ -325,4 +325,5 @@ def getClient(id_desejado):
                                         "limite_credito": cliente_exists.limite_credito,
                                         "pessoa_juridica": cliente_exists.pessoa_juridica
                                     }
+        # jsonify({cliente_exists.cliente_id:result})
         return result, 200

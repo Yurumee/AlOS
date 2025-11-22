@@ -9,34 +9,73 @@ function ClientsDelete() {
     let params = useParams()
     const id = params.id
     const [client, setClient] = useState()
-    const [clientNome, setClientNome] = useState()
-    const [clientFantasia, setClientFantasia] = useState()
-    const [clientCpf, setClientCpf] = useState()
+    const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
+    useEffect(() => 
+    {
         async function getClient(){
             const URL = `http://localhost:5000/cliente/pesquisar/${id}`
-            await fetch(URL).then(resp => resp.json()).then(data => setClient(data)).then(data => console.log( data))
-            
-            setClientNome(client.nome_completo)
-            setClientFantasia(client.nome_fantasia)
-            setClientCpf(client.cpf_cnpj)
+            const resp = await fetch(URL).then(resp => resp.json())
+            const list = Object.values(resp)
+            setClient(list[0])
+            setIsLoading(false)
         }
 
         getClient()
-        console.log(client)
     }, [])
+
+    async function confirm()
+    {
+        const URL = `http://localhost:5000/cliente/excluir/${id}`
+        await fetch(URL, 
+            {
+                method: 'POST',
+                headers: 
+                    {
+                        'Content-Type':'application/json'
+                    },
+            })
+
+        window.location.href = '/clientes'
+    }
+
+    function cancel()
+    {
+        window.location.href = '/clientes'
+    }
 
     return (
 
         <>
             <NavBar />
-            
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+            <div>
+                {isLoading && 
+                    <p>CARREGANDO...</p>
+                }
+            </div>
 
-            <h1>Deseja realmente deletar este cliente?</h1>
-            <input type="text" value={clientNome} />
-            <input type="text" value={clientFantasia} />
-            <input type="text" value={clientCpf} />
+            {!isLoading && client &&
+                <>
+                    <h1>Deseja realmente deletar este cliente?</h1>
+                    
+                    <span>{client.nome_completo}</span>
+                    <span>{client.nome_fantasia}</span>
+                    <span>{client.cpf_cnpj}</span>
+                
+                    <br />
+                    
+                    <button onClick={confirm}>
+                        <span className="material-symbols-outlined">check_circle</span>
+                    </button>
+                    
+                    <button onClick={cancel}>
+                        <span className="material-symbols-outlined">cancel</span>
+                    </button>
+                        
+                    
+                </>
+            }
 
         </>
     )
