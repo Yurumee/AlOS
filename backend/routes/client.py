@@ -12,11 +12,12 @@ def all_clients():
     from models.cliente import Cliente
 
     clients = db.session.query(Cliente).all()
-    resp = {}
+    result = {}
     
     # retorna clientes em formato json
     for client in clients:
-        resp[client.cliente_id] = {
+        result[client.cliente_id] = {
+                                    "id":client.cliente_id,
                                     "cpf_cnpj": client.cpf_cnpj,
                                     "nome_completo": client.nome_completo,
                                     "nome_fantasia": client.nome_fantasia,
@@ -29,8 +30,8 @@ def all_clients():
                                     "pessoa_juridica": client.pessoa_juridica
                                 }
 
-    # print(resp)
-    return jsonify({'clientes': resp}), 200
+    print(result)
+    return result, 200
     # return resp
 
 # rota pesquisa de cliente por nome/cpf/cnpj
@@ -111,12 +112,8 @@ def new_client():
         from models.cliente import Cliente
 
         try:
-            print('no try')
             # guarda dados do frontend
             data = request.json
-
-            print('peguei dados')
-            print(data)
 
             # separando em variaveis
             cpf_cnpj = data.get('cpf_cnpj_cliente')
@@ -204,26 +201,26 @@ def new_client():
 # rota para alterar um cliente existente
 # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
 # 
-@view_client.route('/editar/<int:cpf_cnpj_desejado>', methods=['GET', 'POST'])
-def patch_client(cpf_cnpj_desejado):
+@view_client.route('/editar/<int:id_desejado>', methods=['POST'])
+def patch_client(id_desejado):
     from models.cliente import Cliente
 
     if request.method == 'POST':
         # recebe dados do frontend
         data = request.get_json()
         # separando em variaveis
-        nome = data.get('nome-cliente')
-        nome_fantasia = data.get('empresa-cliente')
-        endereco = data.get('endereco-cliente')
-        bairro = data.get('bairro-cliente')
-        cidade = data.get('cidade-cliente')
-        cep = data.get('cep-cliente')
-        telefone = data.get('telefone-cliente')
-        lim_credito = data.get('limite-credito')
+        nome = data.get('nome_cliente')
+        nome_fantasia = data.get('empresa_cliente')
+        endereco = data.get('endereco_cliente')
+        bairro = data.get('bairro_cliente')
+        cidade = data.get('cidade_cliente')
+        cep = data.get('cep_cliente')
+        telefone = data.get('telefone_cliente')
+        lim_credito = data.get('limite_credito')
 
         # checa se o cliente existe
         try:
-            cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+            cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
         except:
             return jsonify({'message':'algo deu errado'})
         
@@ -279,28 +276,16 @@ def patch_client(cpf_cnpj_desejado):
             return jsonify({'message':str(e)})
         
         return jsonify({'message':'cliente editado com sucesso'})
-        
-
-    # caso metodo seja get, retorna a pagina para edição de cliente
-    try:
-        cliente = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
-    except:
-        return jsonify({'message':'algo deu errado'})
-    
-    if not cliente:
-        cliente = 'este cliente nao existe'
-
-    return jsonify({'message':'ok', 'cliente a ser editado':cliente.nome_completo})
 
 # rota para deletar um cliente com base no cpf/cnpj informado
-@view_client.route('/excluir/<int:cpf_cnpj_desejado>', methods=['GET', 'POST'])
-def delete_client(cpf_cnpj_desejado):
+@view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
+def delete_client(id_desejado):
     from models.cliente import Cliente
 
     if request.method == 'POST':
         # checa se o cliente existe
         try:
-            cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
+            cliente_exists = db.session.query(Cliente).filter_by(client_id=id_desejado).one_or_none()
         except:
             return jsonify({'message':'algo deu errado'})
         
@@ -309,20 +294,35 @@ def delete_client(cpf_cnpj_desejado):
         
         # exclui o cliente
         try:
-                db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).delete()
+                db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
                 db.session.commit()
                 return jsonify({'message':'cliente deletado com sucesso'})
     
         except Exception as e:
             return jsonify({'err':str(e)})
+        
+@view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
+def getClient(id_desejado):
+    from models.cliente import Cliente
 
-    # caso metodo seja get, retorna a pagina para exclusão de cliente
     try:
-        cliente = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj_desejado).one_or_none()
-    except:
-        return jsonify({'message':'algo deu errado'})
+        cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
+    except Exception as e:
+        return '', 500
     
-    if not cliente:
-        cliente = 'este cliente nao existe'
-
-    return jsonify({'message':'ok', 'cliente a ser excluido':cliente.nome_completo})
+    if cliente_exists:
+        result = {}
+        result[cliente_exists.cliente_id] = {
+                                        "id":cliente_exists.cliente_id,
+                                        "cpf_cnpj": cliente_exists.cpf_cnpj,
+                                        "nome_completo": cliente_exists.nome_completo,
+                                        "nome_fantasia": cliente_exists.nome_fantasia,
+                                        "endereco": cliente_exists.endereco,
+                                        "bairro": cliente_exists.bairro,
+                                        "cidade": cliente_exists.cidade,
+                                        "cep": cliente_exists.cep,
+                                        "telefone": cliente_exists.telefone,
+                                        "limite_credito": cliente_exists.limite_credito,
+                                        "pessoa_juridica": cliente_exists.pessoa_juridica
+                                    }
+        return result, 200

@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
 import Clients from './Clients.jsx'
 import ClientsNew from './ClientsNew.jsx';
+import ClientsEdit from './ClientsEdit.jsx';
+import ClientsDelete from './ClientsDelete.jsx'
 import Home from './Home.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,6 +20,8 @@ createRoot(document.getElementById('root')).render(
         <Route index element={<Home />} />
         <Route path='/clientes' element={<Clients />}/>
         <Route path='/novo-cliente' element={<ClientsNew />}/>
+        <Route path='/editar-cliente/:id' element={<ClientsEdit />}/>
+        <Route path='/deletar-cliente/:id' element={<ClientsDelete />}/>
         {/* <Route path='/produtos' element={<Products />}/> */}
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}

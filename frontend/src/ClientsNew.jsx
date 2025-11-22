@@ -1,13 +1,12 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import './styles/ClientsNew.css'
-import Navbar from './NavBar'
+import NavBar from './NavBar'
 
 import { useState } from 'react'
 
 function ClientsNew()
 {
-
 
     // guardando valores na variavel
     const [cpf_cnpj, setCpfCnpj] = useState()
@@ -28,7 +27,7 @@ function ClientsNew()
         event.preventDefault()
 
         // url para backend
-        URL = 'http://localhost:5000/cliente/novo'
+        const URL = 'http://localhost:5000/cliente/novo'
 
         await fetch (URL, 
         {
@@ -58,7 +57,7 @@ function ClientsNew()
 
     return(
         <>
-            <Navbar/>
+            <NavBar/>
 
             <div className='forms'>
                 <form onSubmit={submit}>

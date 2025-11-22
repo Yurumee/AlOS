@@ -4,40 +4,6 @@ import NavBar from './NavBar'
 import ClientsVisualize from './ClientsVisualize'
 import { useEffect, useState } from 'react'
 
-// function ClientsVisualize(props)
-// {
-//     const client = props.client
-//     return
-//     (
-//             <div>
-//                 <h4>Nome Completo</h4>
-//                 <p>{client.nome_completo}</p>
-
-//                 <h4>Nome Fantasia</h4>
-//                 <p>{client.nome_fantasia}</p>
-
-//                 <h4>Telefone</h4>
-//                 <p>{client.telefone}</p>
-
-//                 <h4>Limite de Crédito</h4>
-//                 <p>{client.limite_credito}</p>
-
-//                 <h4>Endereço</h4>
-//                 <p>{client.endereco}</p>
-
-//                 <h4>Bairro</h4>
-//                 <p>{client.bairro}</p>
-
-//                 <h4>Cidade</h4>
-//                 <p>{client.cidade}</p>
-
-//                 <h4>CEP</h4>
-//                 <p>{client.cep}</p>
-
-//             </div>
-//     )
-// }
-
 function Clients() 
 {
     // guarda os clientes
@@ -56,13 +22,14 @@ function Clients()
             setIsLoading(true)
 
             // url da api
-            URL = 'http://127.0.0.1:5000/cliente/'
+            const URL = 'http://127.0.0.1:5000/cliente/'
             const response = await fetch(URL)
             const data = await response.json();
-            const list = Object.values(data.clientes)
+            const list = Object.values(data)
             setClients(list)
 
             setIsLoading(false)
+            console.log(data.id)
             }
 
         getClients()
@@ -109,12 +76,12 @@ function Clients()
 
     function edit_client()
     {
-
+        // window.location.href = '/editar-cliente'
     }
 
     function delete_client()
     {
-
+        // window.location.href = '/deletar-cliente'
     }
 
     function visualize_client(client)
@@ -157,6 +124,7 @@ function Clients()
                 <table>
                     <tbody>
                         <tr>
+                            <th>ID</th>
                             <th>Nome Completo</th>
                             <th>Nome Fantasia</th>
                             <th>Telefone</th>
@@ -167,11 +135,12 @@ function Clients()
 
                         {!isLoading  && clients.map(client => (
                                 <>
-                                    <tr>
-                                        <td key={client.cliente_id}> {client.nome_completo} </td>
-                                        <td key={client.cliente_id}> {client.nome_fantasia} </td>
-                                        <td key={client.cliente_id}> {client.telefone} </td>
-                                        <td key={client.cliente_id}> {client.limite_credito} </td>
+                                    <tr key={client.id}>
+                                        <td> {client.id} </td>
+                                        <td> {client.nome_completo} </td>
+                                        <td> {client.nome_fantasia} </td>
+                                        <td> {client.telefone} </td>
+                                        <td> {client.limite_credito} </td>
 
                                         <td> <button onClick={() => visualize_client(client)}>unfold_more</button> </td>
                                     </tr>

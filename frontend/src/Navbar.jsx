@@ -9,33 +9,33 @@ import Navbar from 'react-bootstrap/Navbar';
 
 function NavBar() {
 
-    function goto_home() {
-        window.location.href = '/'
-    }
+    // function goto_home() {
+    //     window.location.href = '/'
+    // }
 
-    function goto_client() {
-        window.location.href = '/clientes'
-    }
+    // function goto_client() {
+    //     window.location.href = '/clientes'
+    // }
 
-    function goto_product() {
-        window.location.href = '/produtos'
-    }
+    // function goto_product() {
+    //     window.location.href = '/produtos'
+    // }
 
-    function goto_stock() {
-        window.location.href = '/estoque'
-    }
+    // function goto_stock() {
+    //     window.location.href = '/estoque'
+    // }
 
-    function goto_service() {
-        window.location.href = '/servicos'
-    }
+    // function goto_service() {
+    //     window.location.href = '/servicos'
+    // }
 
-    function goto_os() {
-        window.location.href = '/ordem-servicos'
-    }
+    // function goto_os() {
+    //     window.location.href = '/ordem-servicos'
+    // }
 
-    function search() {
+    // function search() {
 
-    }
+    // }
 
     return (
 
@@ -50,7 +50,11 @@ function NavBar() {
                         navbarScroll
                     >
                         <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/clientes">Ordem de Serviço</Nav.Link>
                         <Nav.Link href="/clientes">Clientes</Nav.Link>
+                        <Nav.Link href="/clientes">Produtos</Nav.Link>
+                        <Nav.Link href="/clientes">Estoque</Nav.Link>
+                        <Nav.Link href="/clientes">Serviços</Nav.Link>
                     </Nav>
 
                     <Form className="d-flex">
