@@ -1,4 +1,38 @@
-.clientsCreated {
+.material-icons.md-primary {
+    color: #1C70A4;
+} 
+
+.table-color {
+    background-color: #1C70A4;
+}
+
+
+.button-client {
+    border-radius: 10px;
+    border-color: #64B6E9;
+    background-color: #F3FBFF;
+    border-width: 4px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-self: center;
+    padding: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-weight: 100;
+    font-size: 14px;
+    width: auto;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    column-gap: 10px;
+    justify-self: start;
+    margin-top: 15px;
+    margin-left: 30px;
+}
+
+/* .clientsCreated {
     text-align: center;
 }
 
@@ -81,7 +115,4 @@
     margin-top: 15px;
     margin-left: 30px;
 }
-
-.material-icons.md-primary {
-    color: #1C70A4;
-}
+*/

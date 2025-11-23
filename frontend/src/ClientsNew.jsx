@@ -5,12 +5,15 @@ import NavBar from './NavBar'
 
 import { useState } from 'react'
 
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+
 function ClientsNew()
 {
 
     // guardando valores na variavel
     const [cpf_cnpj, setCpfCnpj] = useState()
-    const [flag_cnpj, setFlagCnpj] = useState()
+    const [flag_cnpj, setFlagCnpj] = useState(false)
     const [cliente_nome, setClienteNome] = useState()
     const [empresa_nome, setEmpresaNome] = useState()
     const [cliente_endereco, setClienteEndereco] = useState()
@@ -59,7 +62,65 @@ function ClientsNew()
         <>
             <NavBar/>
 
-            <div className='forms'>
+            <div className='container'>
+
+            <Form onSubmit={submit}>
+                <Form.Group controlId='form.inputCpfCnpj'>
+                    <Form.Label>CPF/CNPJ</Form.Label>
+                    <Form.Control type='number' placeholder='00000000000' maxLength={14} required onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Nome do Ciente</Form.Label>
+                    <Form.Control type='text' required onChange={(event) => setClienteNome(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Pessoa Jurídica</Form.Label>
+                    <Form.Check type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Nome Fantasia</Form.Label>
+                    <Form.Control type='text' onChange={(event) => setEmpresaNome(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Telefone</Form.Label>
+                    <Form.Control type='number' required onChange={(event) => setClienteTel(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Limite de Crédito</Form.Label>
+                    <Form.Control type='number' step={0.01} required onChange={(event) => setClienteCredito(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Endereço</Form.Label>
+                    <Form.Control type='text' required onChange={(event) => setClienteEndereco(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Bairro</Form.Label>
+                    <Form.Control type='text' required onChange={(event) => setClienteBairro(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Cidade</Form.Label>
+                    <Form.Control type='text' required onChange={(event) => setClienteCidade(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>CEP</Form.Label>
+                    <Form.Control type='number' onChange={(event) => setClienteCep(event.target.value)} />
+                </Form.Group>
+                
+                <Button variant='outline-primary' type='submit'>Cadastrar cliente</Button>
+            </Form>
+
+            </div>
+
+            {/* <div className='forms'>
                 <form onSubmit={submit}>
                     <span>CPF/CNPJ</span>
                     <input type='number' placeholder='CPF/CNPJ' required onChange={(event) => setCpfCnpj(event.target.value)} />
@@ -93,7 +154,7 @@ function ClientsNew()
 
                     <button type='submit'>Cadastrar Cliente</button>
                 </form>
-            </div>
+            </div> */}
         </>
     )
 

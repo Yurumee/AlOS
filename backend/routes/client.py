@@ -117,7 +117,7 @@ def new_client():
 
             # separando em variaveis
             cpf_cnpj = data.get('cpf_cnpj_cliente')
-            flag_cnpj = bool(data.get('flag_cnpj')) # caso contenha algo, sera True, caso nao tenha nada, sera False
+            flag_cnpj = data.get('flag_cnpj') # caso contenha algo, sera True, caso nao tenha nada, sera False
             nome = data.get('nome_cliente')
             nome_fantasia = data.get('empresa_cliente')
             endereco = data.get('endereco_cliente')

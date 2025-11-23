@@ -4,6 +4,9 @@ import NavBar from './NavBar'
 import ClientsVisualize from './ClientsVisualize'
 import { useEffect, useState } from 'react'
 
+import Table from 'react-bootstrap/Table'
+import Button from 'react-bootstrap/Button'
+
 function Clients() 
 {
     // guarda os clientes
@@ -91,7 +94,8 @@ function Clients()
 
     return (
         <>
-            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
             
             <NavBar />
 
@@ -119,21 +123,24 @@ function Clients()
             </div>
 
             {/* tabela de clientes existentes*/}
-            <div className="clientsCreated">
+            <div className="clientsCreated container">
                 <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                <table>
-                    <tbody>
+                <Table striped bordered hover responsive variant='primary'>
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Nome Completo</th>
                             <th>Nome Fantasia</th>
                             <th>Telefone</th>
                             <th>Limite de Crédito</th>
+                            <th>#</th>
                         </tr>
+                    </thead>
 
                         {/* {!isLoading && <ClientRows clients={clients} />} */}
                     
+                    <tbody>
                         {!isLoading && clients.map(client => (
                                 <>
                                     <tr key={client.id}>
@@ -143,13 +150,14 @@ function Clients()
                                         <td> {client.telefone} </td>
                                         <td> {client.limite_credito} </td>
 
-                                        <td> <button onClick={() => visualize_client(client)}>unfold_more</button> </td>
+                                        <td> <Button className="material-icons md-16" onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
+                                            {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                     </tr>
                                 </>
                             )
                         )}
                     </tbody>
-                </table>
+                </Table>
 
                 
             </div>
