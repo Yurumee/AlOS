@@ -29,8 +29,7 @@ def all_clients():
                                     "limite_credito": client.limite_credito,
                                     "pessoa_juridica": client.pessoa_juridica
                                 }
-
-    print(result)
+        
     return result, 200
     # return resp
 
@@ -126,8 +125,6 @@ def new_client():
             cep = data.get('cep_cliente')
             telefone = data.get('telefone_cliente')
             lim_credito = float(data.get('limite_credito'))
-
-            print(flag_cnpj)
         
         except Exception as e:
             return jsonify({'error':str(e)})
@@ -208,6 +205,7 @@ def patch_client(id_desejado):
     if request.method == 'POST':
         # recebe dados do frontend
         data = request.get_json()
+
         # separando em variaveis
         nome = data.get('nome_cliente')
         nome_fantasia = data.get('empresa_cliente')
@@ -222,60 +220,61 @@ def patch_client(id_desejado):
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
         except:
-            return jsonify({'message':'algo deu errado'})
+            return '', 500
         
         if not cliente_exists:
-            return jsonify({'message':'o cliente especificado nao existe'})
+            return '', 404
         
         # checar se os dados estao corretos
-        if not nome:
-            return jsonify({'message':'nome nao pode ser nulo'})
+        # if not nome:
+        #     return '', 406
         
-        if not nome_fantasia and cliente_exists.pessoa_juridica == True:
-            return jsonify({'message':'nome fantasia nao pode ser nulo'})
+        # if not nome_fantasia and cliente_exists.pessoa_juridica == True:
+        #     return '', 406
         
-        if lim_credito < 0:
-            return jsonify({'message':'limite de credito nao pode ser numero negativo'})
+        if lim_credito != None and float(lim_credito) < 0:
+            return '', 406
         
-        if all(char.isdigit() for char in telefone) != True:
-            return({'message':'telefone deve apenas conter numeros'})
+        if telefone != None and all(char.isdigit() for char in telefone) != True:
+            return '', 406
         
-        if not endereco or not bairro or not cidade:
-            return jsonify({'message':'endereço incompleto'})
+        # if not endereco or not bairro or not cidade:
+        #     return '', 406
         
         # realizando modificações
         try:
-            if nome != cliente_exists.nome_completo:
+            if nome != None and nome != cliente_exists.nome_completo:
                 cliente_exists.nome_completo = nome
                 # db.session.commit()
             
-            if nome_fantasia != cliente_exists.nome_fantasia:
+            if nome_fantasia != None and nome_fantasia != cliente_exists.nome_fantasia:
                 cliente_exists.nome_fantasia = nome_fantasia
             
-            if lim_credito != cliente_exists.limite_credito:
-                cliente_exists.limite_credito = lim_credito
+            if lim_credito != None and lim_credito != cliente_exists.limite_credito:
+                cliente_exists.limite_credito = float(lim_credito)
             
-            if telefone != cliente_exists.telefone:
+            if telefone != None and telefone != cliente_exists.telefone:
                 cliente_exists.telefone = telefone
 
-            if cidade != cliente_exists.cidade:
+            if cidade != None and cidade != cliente_exists.cidade:
                 cliente_exists.cidade = cidade
 
-            if bairro != cliente_exists.bairro:
+            if bairro != None and bairro != cliente_exists.bairro:
                 cliente_exists.bairro = bairro
             
-            if endereco != cliente_exists.endereco:
+            if endereco != None and endereco != cliente_exists.endereco:
                 cliente_exists.endereco = endereco
             
-            if cep != cliente_exists.cep:
+            if cep != None and cep != cliente_exists.cep:
                 cliente_exists.cep = cep
 
             db.session.commit()
 
         except Exception as e:
-            return jsonify({'message':str(e)})
+            print(str(e))
+            return '', 500
         
-        return jsonify({'message':'cliente editado com sucesso'})
+        return '', 200
 
 # rota para deletar um cliente com base no cpf/cnpj informado
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])

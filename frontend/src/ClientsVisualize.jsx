@@ -6,6 +6,11 @@ function ClientsVisualize(props)
 {   
     const client = props.client
 
+    function edit_current()
+    {
+        window.location.href = `/editar-cliente/${client.id}`
+    }
+
     function delete_current()
     {
         window.location.href = `/deletar-cliente/${client.id}`
@@ -14,7 +19,7 @@ function ClientsVisualize(props)
     return (     
         <dialog open>
             <button onClick={props.close}>X</button>
-            <button>Editar</button>
+            <button onClick={edit_current}>Editar</button>
             <button onClick={delete_current}>Excluir</button>
 
             <br />

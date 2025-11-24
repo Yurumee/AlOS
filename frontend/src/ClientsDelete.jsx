@@ -13,7 +13,8 @@ function ClientsDelete() {
 
     useEffect(() => 
     {
-        async function getClient(){
+        async function getClient()
+        {
             const URL = `http://localhost:5000/cliente/pesquisar/${id}`
             const resp = await fetch(URL).then(resp => resp.json())
             const list = Object.values(resp)

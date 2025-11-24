@@ -72,7 +72,7 @@ function ClientsNew()
 
                 <Form.Group>
                     <Form.Label>Nome do Ciente</Form.Label>
-                    <Form.Control type='text' required onChange={(event) => setClienteNome(event.target.value)} />
+                    <Form.Control type='text' placeholder='João Maria' required onChange={(event) => setClienteNome(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -82,37 +82,37 @@ function ClientsNew()
 
                 <Form.Group>
                     <Form.Label>Nome Fantasia</Form.Label>
-                    <Form.Control type='text' onChange={(event) => setEmpresaNome(event.target.value)} />
+                    <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' required onChange={(event) => setClienteTel(event.target.value)} />
+                    <Form.Control type='number' placeholder='84912345678' required onChange={(event) => setClienteTel(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' step={0.01} required onChange={(event) => setClienteCredito(event.target.value)} />
+                    <Form.Control type='number' placeholder='99.99' step={0.01} required onChange={(event) => setClienteCredito(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' required onChange={(event) => setClienteEndereco(event.target.value)} />
+                    <Form.Control type='text' placeholder='Rua Exemplo, 001' required onChange={(event) => setClienteEndereco(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Bairro</Form.Label>
-                    <Form.Control type='text' required onChange={(event) => setClienteBairro(event.target.value)} />
+                    <Form.Control type='text' placeholder='Centro' required onChange={(event) => setClienteBairro(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Cidade</Form.Label>
-                    <Form.Control type='text' required onChange={(event) => setClienteCidade(event.target.value)} />
+                    <Form.Control type='text' placeholder='Campos Neutrais' required onChange={(event) => setClienteCidade(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>CEP</Form.Label>
-                    <Form.Control type='number' onChange={(event) => setClienteCep(event.target.value)} />
+                    <Form.Control type='number' placeholder='12345000' onChange={(event) => setClienteCep(event.target.value)} />
                 </Form.Group>
                 
                 <Button variant='outline-primary' type='submit'>Cadastrar cliente</Button>

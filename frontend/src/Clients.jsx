@@ -126,7 +126,7 @@ function Clients()
             <div className="clientsCreated container">
                 <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                <Table striped bordered hover responsive variant='primary'>
+                <Table striped bordered hover responsive variant='warning'>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -150,7 +150,7 @@ function Clients()
                                         <td> {client.telefone} </td>
                                         <td> {client.limite_credito} </td>
 
-                                        <td> <Button className="material-icons md-16" onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
+                                        <td> <Button className="material-icons md-16" variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
                                             {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                     </tr>
                                 </>

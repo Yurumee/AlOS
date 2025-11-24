@@ -40,7 +40,7 @@ function NavBar() {
     return (
         <>
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-            <Navbar expand="lg" className='custom-bg-nav'>
+            <Navbar expand="lg" className='custom-bg-nav' variant='warning'>
             <Container fluid>
                 <Navbar.Brand href='/'>Logo Empresa</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
