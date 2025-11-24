@@ -5,6 +5,9 @@ import NavBar from './NavBar'
 import {useParams} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/esm/Button'
+
 function ClientsDelete() {
     let params = useParams()
     const id = params.id
@@ -58,22 +61,25 @@ function ClientsDelete() {
 
             {!isLoading && client &&
                 <>
-                    <h1>Deseja realmente deletar este cliente?</h1>
-                    
-                    <span>{client.nome_completo}</span>
-                    <span>{client.nome_fantasia}</span>
-                    <span>{client.cpf_cnpj}</span>
-                
-                    <br />
-                    
-                    <button onClick={confirm}>
-                        <span className="material-symbols-outlined">check_circle</span>
-                    </button>
-                    
-                    <button onClick={cancel}>
-                        <span className="material-symbols-outlined">cancel</span>
-                    </button>
-                        
+
+                <div className="container mt-3">
+
+                    <Card>
+                        <Card.Header>Deseja realmente deletar este cliente?</Card.Header>
+                            <Card.Body>
+                                <Card.Title>{client.cpf_cnpj}</Card.Title>
+                                <Card.Text>
+                                    <p>Nome: {client.nome_completo}</p>
+                                    <br />
+                                    <p>Nome Fantasia: {client.nome_fantasia}</p>
+                                </Card.Text>
+                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
+
+                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                            </Card.Body>
+                    </Card>
+
+                </div>  
                     
                 </>
             }

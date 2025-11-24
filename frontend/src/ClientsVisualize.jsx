@@ -1,64 +1,45 @@
 import './styles/index.css'
 import './styles/ClientsVisualize.css'
-// import { useEffect } from 'react'
 
-function ClientsVisualize(props)
-{   
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
+
+function ClientsVisualize(props) {
     const client = props.client
 
-    function edit_current()
-    {
+    function edit_current() {
         window.location.href = `/editar-cliente/${client.id}`
     }
 
-    function delete_current()
-    {
+    function delete_current() {
         window.location.href = `/deletar-cliente/${client.id}`
     }
 
-    return (     
-        <dialog open>
-            <button onClick={props.close}>X</button>
-            <button onClick={edit_current}>Editar</button>
-            <button onClick={delete_current}>Excluir</button>
-
-            <br />
-
-            <strong>ID</strong>
-            <span>{client.id}</span>
-            <br />
-
-            <strong>Nome Completo</strong>
-            <span>{client.nome_completo}</span>
-            <br />            
-
-            <strong>Nome Fantasia</strong>
-            <span>{client.nome_fantasia}</span>
-            <br />
-
-            <strong>Telefone</strong>
-            <span>{client.telefone}</span>
-            <br />
-
-            <strong>Limite de Crédito</strong>
-            <span>{client.limite_credito}</span>
-            <br />
-
-            <strong>Endereço</strong>
-            <span>{client.endereco}</span>
-            <br />
-
-            <strong>Bairro</strong>
-            <span>{client.bairro}</span>
-            <br />
-
-            <strong>Cidade</strong>
-            <span>{client.cidade}</span>
-            <br />
-
-            <strong>CEP</strong>
-            <span>{client.cep}</span>
-        </dialog>
+    return (
+        <div className="modal show modal-pos" style={{ display: 'block' }}>
+                <Modal.Dialog>
+                <Modal.Header closeButton onClick={props.close}>
+                    <Modal.Title>Dados do Cliente - {client.cpf_cnpj}</Modal.Title>
+                </Modal.Header>
+    
+                <Modal.Body>
+                    <p>ID do Cliente: {client.id}</p>
+                    <p>Nome Completo: {client.nome_completo}</p>
+                    <p>Nome Fantasia: {client.nome_fantasia}</p>
+                    <p>Telefone: {client.telefone}</p>
+                    <p>Limite de Crédito: {client.limite_credito}</p>
+                    <p>Endereço: {client.endereco}</p>
+                    <p>Bairro: {client.bairro}</p>
+                    <p>Cidade: {client.cidade}</p>
+                    <p>CEP: {client.cep}</p>
+                </Modal.Body>
+    
+                <Modal.Footer>
+                    <Button onClick={delete_current} variant="danger">Excluir Cliente</Button>
+                    <Button onClick={edit_current} variant="warning">Editar Cliente</Button>
+                </Modal.Footer>
+            </Modal.Dialog>
+        </div>
     )
 }
 

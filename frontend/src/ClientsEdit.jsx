@@ -132,7 +132,7 @@ function ClientsEdit()
                     <Form.Label>CEP</Form.Label>
                     <Form.Control type='number' defaultValue={client.cep} placeholder='12345000' onChange={(event) => setNewClienteCep(event.target.value)} />
                 </Form.Group>
-                
+                <br />
                 <Button variant='outline-warning' type='submit'>Editar cliente</Button>
             </Form>
 

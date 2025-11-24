@@ -78,12 +78,12 @@ function Clients()
 
     function edit_client()
     {
-        // window.location.href = '/editar-cliente'
+        window.location.href = '/editar-cliente'
     }
 
     function delete_client()
     {
-        // window.location.href = '/deletar-cliente'
+        window.location.href = '/deletar-cliente'
     }
 
     function visualize_client(client)
@@ -161,6 +161,7 @@ function Clients()
 
                 
             </div>
+
             {modalOpen && <ClientsVisualize client={modalClient} show={modalOpen} close={() => setModalOpen(false)}/>}
         </>
     )
