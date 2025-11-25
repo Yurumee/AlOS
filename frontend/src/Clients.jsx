@@ -2,6 +2,7 @@ import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import ClientsVisualize from './ClientsVisualize'
+import ModalId from './ModalId'
 import { useEffect, useState } from 'react'
 
 import Table from 'react-bootstrap/Table'
@@ -15,8 +16,12 @@ function Clients()
     const [isLoading, setIsLoading] = useState(true)
     // esconde ou mostra modal do cliente
     const [modalOpen, setModalOpen] = useState(false)
+    // esconde ou mostra modal para editar ou excluir um cliente
+    const [modalOperationOpen, setModalOperationOpen] = useState(false)
     // cliente do modal
     const [modalClient, setModalClient] = useState({})
+    // operação realizada
+    const [operation, setOperation] = useState('')
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -78,12 +83,17 @@ function Clients()
 
     function edit_client()
     {
-        window.location.href = '/editar-cliente'
+        setOperation('edit')
+        setModalOperationOpen(!modalOperationOpen)
+        // window.location.href = '/editar-cliente'
     }
 
     function delete_client()
     {
-        window.location.href = '/deletar-cliente'
+        
+        setOperation('delete')
+        setModalOperationOpen(!modalOperationOpen)
+        // window.location.href = '/deletar-cliente'
     }
 
     function visualize_client(client)
@@ -101,20 +111,20 @@ function Clients()
 
             <div className='buttons'>
 
-                <button className='button-client' onClick={new_client}>
-                    <span className="material-icons md-48 md-primary">add_circle_outline</span>
+                <Button bsPrefix='button-client' variant='warning' onClick={new_client}>
+                    <span className="material-icons md-24 md-primary">add_circle_outline</span>
                     Novo Cliente
-                </button>
+                </Button>
 
-                <button className='button-client' onClick={edit_client}>
-                    <span className="material-icons md-48 md-primary">edit</span>
+                <Button bsPrefix='button-client' onClick={edit_client}>
+                    <span className="material-icons md-24 md-primary">edit</span>
                     Editar Cliente
-                </button>
-
-                <button className='button-client' onClick={delete_client}>
-                    <span className="material-icons md-48 md-primary">delete_outline</span>
+                </Button>
+                
+                <Button bsPrefix='button-client' onClick={delete_client}>
+                    <span className="material-icons md-24 md-primary">delete_outline</span>
                     Excluir Cliente
-                </button>
+                </Button>
 
             </div>
 
@@ -150,7 +160,7 @@ function Clients()
                                         <td> {client.telefone} </td>
                                         <td> {client.limite_credito} </td>
 
-                                        <td> <Button className="material-icons md-16" variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
+                                        <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
                                             {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                     </tr>
                                 </>
@@ -163,6 +173,7 @@ function Clients()
             </div>
 
             {modalOpen && <ClientsVisualize client={modalClient} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOperationOpen && <ModalId operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </>
     )
 }

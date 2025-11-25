@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function NavBar() {
 
@@ -52,7 +53,16 @@ function NavBar() {
                     >
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href="/clientes">Ordem de Serviço</Nav.Link>
-                        <Nav.Link href="/clientes">Clientes</Nav.Link>
+                        {/* <Nav.Link href="/clientes">Clientes</Nav.Link> */}
+                        
+                        <NavDropdown title='Clientes'>
+                            <NavDropdown.Item href='/clientes'>Ir para Clientes</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/novo-cliente'>Novo Cliente</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-cliente'>Editar Cliente</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-cliente'>Deletar Cliente</NavDropdown.Item>
+                        </NavDropdown>
+                        
                         <Nav.Link href="/clientes">Produtos</Nav.Link>
                         <Nav.Link href="/clientes">Estoque</Nav.Link>
                         <Nav.Link href="/clientes">Serviços</Nav.Link>

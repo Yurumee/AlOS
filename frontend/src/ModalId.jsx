@@ -2,44 +2,52 @@ import './styles/index.css'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
+import { useState } from 'react'
 
 function ModalId(props) {
-    // const client = props.client
+    const [idCliente, setIdCliente] = useState()
+    const flag_operation = props.operation
 
-    // function edit_current() {
-    //     window.location.href = `/editar-cliente/${client.id}`
-    // }
+    function redirect()
+    {
+        if(flag_operation == 'edit') 
+        {
+            window.location.href = `/editar-cliente/${idCliente}`
+        }
 
-    // function delete_current() {
-    //     window.location.href = `/deletar-cliente/${client.id}`
-    // }
+        if(flag_operation == 'delete') 
+        {
+            window.location.href = `/deletar-cliente/${idCliente}`    
+        }
+    }
+
+    function go_back()
+    {
+        window.location.href = '/clientes'
+    }
 
     return (
         <div className="modal show" style={{ display: 'block'}}>
             <Modal.Dialog>
                 <Modal.Header closeButton onClick={props.close}>
-                    <Modal.Title>Dados do Cliente - {client.cpf_cnpj}</Modal.Title>
+                    <Modal.Title>Insira o ID do cliente desejado</Modal.Title>
                 </Modal.Header>
     
                 <Modal.Body>
-                    <p>ID do Cliente: {client.id}</p>
-                    <p>Nome Completo: {client.nome_completo}</p>
-                    <p>Nome Fantasia: {client.nome_fantasia}</p>
-                    <p>Telefone: {client.telefone}</p>
-                    <p>Limite de Crédito: {client.limite_credito}</p>
-                    <p>Endereço: {client.endereco}</p>
-                    <p>Bairro: {client.bairro}</p>
-                    <p>Cidade: {client.cidade}</p>
-                    <p>CEP: {client.cep}</p>
+                    <FloatingLabel label="ID" className="mb-3">
+                        <Form.Control type="number" required placeholder="ID" onChange={(event) => setIdCliente(event.target.value)} />
+                    </FloatingLabel>
                 </Modal.Body>
     
                 <Modal.Footer>
-                    <Button onClick={delete_current} variant="danger">Excluir Cliente</Button>
-                    <Button onClick={edit_current} variant="warning">Editar Cliente</Button>
+                    <Button onClick={redirect} variant="warning">Continuar</Button>
+                    {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
                 </Modal.Footer>
             </Modal.Dialog>
         </div>
     )
 }
 
-export default ClientsVisualize
+export default ModalId

@@ -1,17 +1,18 @@
 .material-icons.md-primary {
-    color: #1C70A4;
+    color: #fff3b7;
 } 
 
 .button-client {
     border-radius: 10px;
-    border-color: #64B6E9;
-    background-color: #F3FBFF;
-    border-width: 4px;
+    border-color: #ffc107;
+    background-color: #ffc107;
+    border-width: 2px;
     display: flex;
     flex-direction: column;
     text-align: center;
     align-self: center;
     padding: 5px;
+    color: black;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
     font-weight: 100;
     font-size: 14px;
@@ -24,6 +25,7 @@
     column-gap: 10px;
     justify-self: start;
     margin-top: 15px;
+    margin-bottom: 15px;
     margin-left: 30px;
 }
 

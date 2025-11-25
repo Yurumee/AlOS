@@ -4,9 +4,11 @@ import Clients from './Clients.jsx'
 import ClientsNew from './ClientsNew.jsx';
 import ClientsEdit from './ClientsEdit.jsx';
 import ClientsDelete from './ClientsDelete.jsx'
+import ModalId from './ModalId.jsx';
 import Home from './Home.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 <link
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
@@ -22,6 +24,8 @@ createRoot(document.getElementById('root')).render(
         <Route path='/novo-cliente' element={<ClientsNew />}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit />}/>
         <Route path='/deletar-cliente/:id' element={<ClientsDelete />}/>
+        <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
+        <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
         {/* <Route path='/produtos' element={<Products />}/> */}
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
