@@ -1,7 +1,7 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-// import ClientsVisualize from './ClientsVisualize'
+import ProductsVisualize from './ProductsVisualize'
 import ModalId from './ModalId'
 import { useEffect, useState } from 'react'
 
@@ -80,12 +80,12 @@ function Products()
 
                 <Button bsPrefix='button-client' variant='warning' onClick={new_product}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
-                    Novo Cliente
+                    Novo Produto
                 </Button>
 
                 <Button bsPrefix='button-client' onClick={edit_product}>
                     <span className="material-icons md-24 md-primary">edit</span>
-                    Editar Cliente
+                    Editar Produto
                 </Button>
                 
                 <Button bsPrefix='button-client' onClick={delete_product}>
@@ -104,6 +104,7 @@ function Products()
             
             {/* tabela de produtos existentes*/}
             { !isLoading && 
+                
                 <div className="clientsCreated container">
                     <p className='h2'>PRODUTOS CADASTRADOS</p>
 
@@ -111,10 +112,10 @@ function Products()
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nome Completo</th>
-                                <th>Nome Fantasia</th>
-                                <th>Telefone</th>
-                                <th>Limite de Crédito</th>
+                                <th>Modelo</th>
+                                <th>N° Série</th>
+                                <th>Acessorios</th>
+                                <th>Cliente</th>
                                 <th>#</th>
                             </tr>
                         </thead>
@@ -124,10 +125,10 @@ function Products()
                                     <>
                                         <tr key={product.id}>
                                             <td> {product.id} </td>
-                                            <td> {product.nome_completo} </td>
-                                            <td> {product.nome_fantasia} </td>
-                                            <td> {product.telefone} </td>
-                                            <td> {product.limite_credito} </td>
+                                            <td> {product.modelo} </td>
+                                            <td> {product.num_serie} </td>
+                                            <td> {product.acessorios} </td>
+                                            <td> {product.cliente_nome} </td>
 
                                             <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_product(product)}>unfold_more</Button> </td> 
                                         </tr>
@@ -136,12 +137,10 @@ function Products()
                             )}
                         </tbody>
                     </Table>
-
-                        
                 </div>
             }
 
-            {modalOpen && <ClientsVisualize client={modalProduct} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOpen && <ProductsVisualize product={modalProduct} show={modalOpen} close={() => setModalOpen(false)}/>}
             {modalOperationOpen && <ModalId operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )

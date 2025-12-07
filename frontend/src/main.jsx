@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
 import Clients from './Clients.jsx'
 import Products from './Products.jsx';
+import ProductsNew from './ProductsNew.jsx';
 import ClientsNew from './ClientsNew.jsx';
 import ClientsEdit from './ClientsEdit.jsx';
 import ClientsDelete from './ClientsDelete.jsx'
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')).render(
         <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
         <Route path='/produtos' element={<Products />}/>
+        <Route path='/novo-produto' element={<ProductsNew />}/>
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}

@@ -10,25 +10,27 @@ view_product = Blueprint('view_product', __name__, url_prefix='/produto')
 @view_product.route('/', methods=['GET'])
 def all_products():
     from models.produto import Produto
+    from models.cliente import Cliente
 
     products = db.session.query(Produto).all()
     result = {}
     
     # retorna clientes em formato json
     for product in products:
+        cliente_nome = db.session.query(Cliente).filter_by(cliente_id=product.cliente_id).one_or_none().nome_completo
         result[product.produto_id] = {
                                     "id":product.produto_id,
-                                    "cliente_id": product.cliente_id,
+                                    "cliente_nome": cliente_nome,
                                     "modelo": product.modelo,
                                     "num_serie": product.num_serie,
                                     "cor": product.cor,
                                     "sis_operacional": product.sis_operacional,
-                                    "avaria": product.avaria,
-                                    "liga": product.liga,
-                                    "carrega": product.carrega,
-                                    "backup": product.backup,
+                                    "avaria": 'Sim' if product.avaria == True else 'Não',
+                                    "liga": 'Sim' if product.liga == True else 'Não',
+                                    "carrega": 'Sim' if product.carrega == True else 'Não',
+                                    "backup": 'Sim' if product.backup == True else 'Não',
                                     "acessorios": product.acessorios,
-                                    "obs": product.observacoes
+                                    "obs": product.observacoes,
                                 }
         
     return result, 200
@@ -115,25 +117,27 @@ def new_client():
         try:
             # guarda dados do frontend
             data = request.json
+            print(data)
 
             # separando em variaveis
             cliente_id = data.get('cliente_id')
             modelo = data.get('modelo')
-            num_serie = data.get('numero_serie')
+            num_serie = data.get('num_serie')
             cor = data.get('cor')
-            so = data.get('sistema_operacional')
+            so = data.get('sis_operacional')
             avaria = data.get('avaria')
             liga = data.get('liga')
             carrega = data.get('carrega')
             backup = data.get('backup')
             acessorios = data.get('acessorios')
-            observacoes = data.get('observacoes')
+            observacoes = data.get('obs')
         
         except Exception as e:
             return jsonify({'error':str(e)})
 
         try:
             cliente_desejado = db.session.query(Cliente).filter_by(cliente_id=cliente_id).first()
+            print(cliente_desejado)
         except:
             return '', 500
 
@@ -166,13 +170,14 @@ def new_client():
                                 backup = backup,
                                 acessorios = acessorios,
                                 observacoes = observacoes,
+                                cliente_id = cliente_id
                             )
-            
-
-            product.cliente.append(cliente_desejado)
 
             # inserindo e realizando commit
             db.session.add(product)
+
+            # product.cliente.append(cliente_desejado)
+
             db.session.commit()
             # fim da transação
 
