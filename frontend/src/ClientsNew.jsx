@@ -80,10 +80,12 @@ function ClientsNew()
                     <Form.Check type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Nome Fantasia</Form.Label>
-                    <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
-                </Form.Group>
+                {flag_cnpj && 
+                    <Form.Group>
+                        <Form.Label>Nome Fantasia</Form.Label>
+                        <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
+                    </Form.Group>
+                }
 
                 <Form.Group>
                     <Form.Label>Telefone</Form.Label>

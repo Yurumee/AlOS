@@ -35,72 +35,66 @@ def all_clients():
 
 # rota pesquisa de cliente por nome/cpf/cnpj
 # essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
-@view_client.route('/pesquisar/<str_pesquisa>', methods=['GET', 'POST'])
+@view_client.route('/pesquisar/<str_pesquisa>', methods=['POST'])
 def search_client(str_pesquisa):
-    
     if request.method == 'POST':
         from models.cliente import Cliente
         # pesquisa pelo cpf/cnpj
         if str_pesquisa.isdigit():    
             # pesquisa pelo cpf
-            if int(str_pesquisa) == 11:
+            if int(str_pesquisa) <= 14:
                 
                 try:
-                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
+                    cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
                     if cliente_desejado:
-                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
+                        result = {}
+                        for cliente in clientes_desejados:
+                            result[cliente.cliente_id] = {
+                                                        'cpf_cnpj': cliente.cpf_cnpj,
+                                                        'nome_cliente':cliente.nome_completo,
+                                                        'nome_fantasia':cliente.nome_fantasia,
+                                                        'endereco':cliente.endereco,
+                                                        'bairro':cliente.bairro,
+                                                        'cep':cliente.cep,
+                                                        'cidade':cliente.cidade,
+                                                        'limite_credito':cliente.limite_credito,
+                                                        'pessoa_juridica':cliente.pessoa_juridica
+                                                        }
+                        
+                        return result, 200
+
                     else:
-                        return jsonify({'message':'cliente com esse cpf nao existe'})
+                        return '', 404
                 
                 except Exception as e:
-                    return jsonify({'err':str(e)})
+                    return '', 500
+        else: 
+            # pesquisa pelo nome
+            try:
+                clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
 
-            # pesquisa pelo cnpj
-            elif int(str_pesquisa) == 14:
-                
-                try:
-                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
-                    if cliente_desejado:
-                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
-                    else:
-                        return jsonify({'message':'cliente com esse cnpj nao existe'})
-                
-                except Exception as e:
-                    return jsonify({'err':str(e)})
+                if clientes_desejados:
+                    result = {}
+                    for cliente in clientes_desejados:
+                        result[cliente.cliente_id] = {
+                                                    'cpf_cnpj': cliente.cpf_cnpj,
+                                                    'nome_cliente':cliente.nome_completo,
+                                                    'nome_fantasia':cliente.nome_fantasia,
+                                                    'endereco':cliente.endereco,
+                                                    'bairro':cliente.bairro,
+                                                    'cep':cliente.cep,
+                                                    'cidade':cliente.cidade,
+                                                    'limite_credito':cliente.limite_credito,
+                                                    'pessoa_juridica':cliente.pessoa_juridica
+                                                    }
 
-            # se não for nenhum dos dois, o dado é invalido
-            else:
-                return 'o dado nao é valido'
+                    return result, 200
 
-        # pesquisa pelo nome
-        try:
-            clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
+                else:
+                    return '', 404
 
-            if clientes_desejados:
-                result = {}
-                for cliente in clientes_desejados:
-                    result[cliente.cliente_id] = {
-                                                'cpf_cnpj': cliente.cpf_cnpj,
-                                                'nome_cliente':cliente.nome_completo,
-                                                'nome_fantasia':cliente.nome_fantasia,
-                                                'endereco':cliente.endereco,
-                                                'bairro':cliente.bairro,
-                                                'cep':cliente.cep,
-                                                'cidade':cliente.cidade,
-                                                'limite_credito':cliente.limite_credito,
-                                                'pessoa_juridica':cliente.pessoa_juridica
-                                                }
-
-                return jsonify({'clientes pesquisados':result})
-            
-            else:
-                return jsonify({'message':'cliente com esse nome nao existe'})
-        
-        except Exception as e:
-            return jsonify({'err':str(e)})
-
-    
-    # return 'nao é um tipo de dado valido'
+            except Exception as e:
+                return '', 500
 
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes

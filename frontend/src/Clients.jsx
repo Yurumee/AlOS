@@ -107,7 +107,7 @@ function Clients()
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
             
-            <NavBar />
+            <NavBar search='http://127.0.0.1:5000/cliente/pesquisar/' search_str/>
 
             <div className='buttons'>
 
