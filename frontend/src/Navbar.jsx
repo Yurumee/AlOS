@@ -63,7 +63,14 @@ function NavBar() {
                             <NavDropdown.Item href='/deletar-cliente'>Deletar Cliente</NavDropdown.Item>
                         </NavDropdown>
                         
-                        <Nav.Link href="/clientes">Produtos</Nav.Link>
+                        <NavDropdown title='Produtos'>
+                            <NavDropdown.Item href='/produtos'>Ir para Produtos</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/novo-cliente'>Novo Produto</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-cliente'>Editar Produto</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-cliente'>Deletar Produto</NavDropdown.Item>
+                        </NavDropdown>
+                        
                         <Nav.Link href="/clientes">Estoque</Nav.Link>
                         <Nav.Link href="/clientes">Serviços</Nav.Link>
                     </Nav>

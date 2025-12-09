@@ -3,6 +3,7 @@ from sqlalchemy import VARCHAR, INTEGER, BOOLEAN, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.ordemServico import OrdemServico
+# from models.cliente import Cliente
 
 class Produto(db.Model):
     __tablename__ = 'produto'
@@ -14,8 +15,8 @@ class Produto(db.Model):
     # chave estrangeira
     cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 
-    modelo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, default='SEM INFO')
-    num_serie: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, default='SEM INFO')
+    modelo: Mapped[str] = mapped_column(VARCHAR(20))
+    num_serie: Mapped[str] = mapped_column(VARCHAR(20))
     cor: Mapped[str] = mapped_column(VARCHAR(20))
     sis_operacional: Mapped[str] = mapped_column(VARCHAR(20))
     avaria: Mapped[bool] = mapped_column(BOOLEAN)
@@ -28,3 +29,6 @@ class Produto(db.Model):
     # RELACIONAMENTOS
     # relacionamento 1:n com ordemServico
     ordem_servicos: Mapped[list['OrdemServico']] = relationship()
+
+    # relacionamento com Cliente
+    # cliente: Mapped["models.cliente.Cliente"] = relationship()

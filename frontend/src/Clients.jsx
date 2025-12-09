@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
 
 function Clients() 
 {
@@ -103,7 +104,7 @@ function Clients()
     }
 
     return (
-        <>
+        <div>
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
             
@@ -128,53 +129,58 @@ function Clients()
 
             </div>
 
-            <div>
-                {isLoading && <p>Carregando...</p>}
-            </div>
-
+            
+            {isLoading && 
+                <div style={{position: 'absolute', top: '50%', left: '50%'}}>
+                    <Spinner animation="border" variant='warning'/>
+                </div>
+            }
+            
             {/* tabela de clientes existentes*/}
-            <div className="clientsCreated container">
-                <p className='h2'>CLIENTES CADASTRADOS</p>
+            { !isLoading && 
+                <div className="clientsCreated container">
+                    <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                <Table striped bordered hover responsive variant='warning'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome Completo</th>
-                            <th>Nome Fantasia</th>
-                            <th>Telefone</th>
-                            <th>Limite de Crédito</th>
-                            <th>#</th>
-                        </tr>
-                    </thead>
+                    <Table striped bordered hover responsive variant='warning'>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome Completo</th>
+                                <th>Nome Fantasia</th>
+                                <th>Telefone</th>
+                                <th>Limite de Crédito</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
 
-                        {/* {!isLoading && <ClientRows clients={clients} />} */}
-                    
-                    <tbody>
-                        {!isLoading && clients.map(client => (
-                                <>
-                                    <tr key={client.id}>
-                                        <td> {client.id} </td>
-                                        <td> {client.nome_completo} </td>
-                                        <td> {client.nome_fantasia} </td>
-                                        <td> {client.telefone} </td>
-                                        <td> {client.limite_credito} </td>
+                            {/* {!isLoading && <ClientRows clients={clients} />} */}
 
-                                        <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
-                                            {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
-                                    </tr>
-                                </>
-                            )
-                        )}
-                    </tbody>
-                </Table>
+                        <tbody>
+                            {!isLoading && clients.map(client => (
+                                    <>
+                                        <tr key={client.id}>
+                                            <td> {client.id} </td>
+                                            <td> {client.nome_completo} </td>
+                                            <td> {client.nome_fantasia} </td>
+                                            <td> {client.telefone} </td>
+                                            <td> {client.limite_credito} </td>
 
-                
-            </div>
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
+                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
+                                        </tr>
+                                    </>
+                                )
+                            )}
+                        </tbody>
+                    </Table>
+
+                        
+                </div>
+            }
 
             {modalOpen && <ClientsVisualize client={modalClient} show={modalOpen} close={() => setModalOpen(false)}/>}
             {modalOperationOpen && <ModalId operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
-        </>
+        </div>
     )
 }
 
