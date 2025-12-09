@@ -2,7 +2,8 @@ import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import ProductsVisualize from './ProductsVisualize'
-import ModalId from './ModalId'
+import ModalProd from './ModalProd'
+
 import { useEffect, useState } from 'react'
 
 import Table from 'react-bootstrap/Table'
@@ -52,15 +53,12 @@ function Products()
     {
         setOperation('edit')
         setModalOperationOpen(!modalOperationOpen)
-        // window.location.href = '/editar-cliente'
     }
 
     function delete_product()
-    {
-        
+    { 
         setOperation('delete')
         setModalOperationOpen(!modalOperationOpen)
-        // window.location.href = '/deletar-cliente'
     }
 
     function visualize_product(product)
@@ -90,7 +88,7 @@ function Products()
                 
                 <Button bsPrefix='button-client' onClick={delete_product}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
-                    Excluir Cliente
+                    Excluir Produto
                 </Button>
 
             </div>
@@ -141,7 +139,7 @@ function Products()
             }
 
             {modalOpen && <ProductsVisualize product={modalProduct} show={modalOpen} close={() => setModalOpen(false)}/>}
-            {modalOperationOpen && <ModalId operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
+            {modalOperationOpen && <ModalProd operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )
 }

@@ -36,8 +36,8 @@ def all_products():
     return result, 200
     # return resp
 
-# rota pesquisa de cliente por nome/cpf/cnpj
-# essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
+# rota pesquisa de produto por modelo/num_serie
+# essa rota deve exibir os produtos com base no modelo informado ou numero de serie
 @view_product.route('/pesquisar/<str_pesquisa>', methods=['GET', 'POST'])
 def search_client(str_pesquisa):
     
@@ -186,86 +186,73 @@ def new_client():
         except Exception as e:
             return str(e)
 
-# # rota para alterar um cliente existente
-# # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
-# # 
-# @view_product.route('/editar/<int:id_desejado>', methods=['POST'])
-# def patch_client(id_desejado):
-#     from models.cliente import Cliente
+# rota para alterar um produto existente
+# esta rota deve alterar os dados do produto desejado baseado no id
+# 
+@view_product.route('/editar/<int:id_desejado>', methods=['POST'])
+def patch_product(id_desejado):
+    from models.produto import Produto
 
-#     if request.method == 'POST':
-#         # recebe dados do frontend
-#         data = request.get_json()
+    if request.method == 'POST':
+        # recebe dados do frontend
+        data = request.get_json()
 
-#         # separando em variaveis
-#         nome = data.get('nome_cliente')
-#         nome_fantasia = data.get('empresa_cliente')
-#         endereco = data.get('endereco_cliente')
-#         bairro = data.get('bairro_cliente')
-#         cidade = data.get('cidade_cliente')
-#         cep = data.get('cep_cliente')
-#         telefone = data.get('telefone_cliente')
-#         lim_credito = data.get('limite_credito')
+        # separando em variaveis
+        modelo = data.get('modelo_dispositivo')
+        cor = data.get('cor_dispositivo')
+        sistema = data.get('sistema_dispositivo')
+        avaria = data.get('avaria')
+        liga = data.get('liga')
+        carrega = data.get('carrega')
+        backup = data.get('backup_dispositivo')
+        acessorio = data.get('acessorio_dispositivo')
+        observacoes = data.get('obs_dispositivo')
 
-#         # checa se o cliente existe
-#         try:
-#             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
-#         except:
-#             return '', 500
+        # checa se o produto existe
+        try:
+            produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
+        except:
+            return '', 500
         
-#         if not cliente_exists:
-#             return '', 404
+        if not produto_exists:
+            return '', 404
         
-#         # checar se os dados estao corretos
-#         # if not nome:
-#         #     return '', 406
-        
-#         # if not nome_fantasia and cliente_exists.pessoa_juridica == True:
-#         #     return '', 406
-        
-#         if lim_credito != None and float(lim_credito) < 0:
-#             return '', 406
-        
-#         if telefone != None and all(char.isdigit() for char in telefone) != True:
-#             return '', 406
-        
-#         # if not endereco or not bairro or not cidade:
-#         #     return '', 406
-        
-#         # realizando modificações
-#         try:
-#             if nome != None and nome != cliente_exists.nome_completo:
-#                 cliente_exists.nome_completo = nome
-#                 # db.session.commit()
+        # realizando modificações
+        try:
+            if modelo != None and modelo != produto_exists.modelo:
+                produto_exists.modelo = modelo
             
-#             if nome_fantasia != None and nome_fantasia != cliente_exists.nome_fantasia:
-#                 cliente_exists.nome_fantasia = nome_fantasia
+            if cor != None and cor != produto_exists.cor:
+                produto_exists.cor = cor
             
-#             if lim_credito != None and lim_credito != cliente_exists.limite_credito:
-#                 cliente_exists.limite_credito = float(lim_credito)
+            if sistema != None and sistema != produto_exists.sis_operacional:
+                produto_exists.sis_operacional = sistema
             
-#             if telefone != None and telefone != cliente_exists.telefone:
-#                 cliente_exists.telefone = telefone
+            if avaria != None and avaria != produto_exists.avaria:
+                produto_exists.avaria = avaria
 
-#             if cidade != None and cidade != cliente_exists.cidade:
-#                 cliente_exists.cidade = cidade
+            if liga != None and liga != produto_exists.liga:
+                produto_exists.liga = liga
 
-#             if bairro != None and bairro != cliente_exists.bairro:
-#                 cliente_exists.bairro = bairro
+            if carrega != None and carrega != produto_exists.carrega:
+                produto_exists.carrega = carrega
             
-#             if endereco != None and endereco != cliente_exists.endereco:
-#                 cliente_exists.endereco = endereco
+            if backup != None and backup != produto_exists.backup:
+                produto_exists.backup = backup
             
-#             if cep != None and cep != cliente_exists.cep:
-#                 cliente_exists.cep = cep
+            if acessorio != None and acessorio != produto_exists.acessorios:
+                produto_exists.acessorios = acessorio
+            
+            if observacoes != None and observacoes != produto_exists.observacoes:
+                            produto_exists.observacoes = observacoes
 
-#             db.session.commit()
+            db.session.commit()
 
-#         except Exception as e:
-#             print(str(e))
-#             return '', 500
+        except Exception as e:
+            print(str(e))
+            return '', 500
         
-#         return '', 200
+        return '', 200
 
 # # rota para deletar um cliente com base no cpf/cnpj informado
 # @view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
