@@ -80,53 +80,56 @@ function ProductsEdit()
 
             <div className='container'>
 
-            <h1>Editando Produto - {product.cpf_cnpj}</h1>
+            <h1>Editando Produto - {product.num_serie}</h1>
 
             <Form onSubmit={submit}>
 
                 <Form.Group>
                     <Form.Label>Modelo do Produto</Form.Label>
-                    <Form.Control type='text' defaultValue={product.nome_completo} placeholder='João Maria' required onChange={(event) => setNewClienteNome(event.target.value)} />
+                    <Form.Control type='text' defaultValue={product.modelo} onChange={(event) => setNewModelo(event.target.value)} />
                 </Form.Group>
-
-                {
-                    client.flag_cnpj && <Form.Group>
-                                            <Form.Label>Nome Fantasia</Form.Label>
-                                            <Form.Control type='text' defaultValue={client.nome_fantasia} placeholder='Empresa Fulana' onChange={(event) => setNewEmpresaNome(event.target.value)} />
-                                        </Form.Group>
-                }
-
+                
                 <Form.Group>
-                    <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' defaultValue={product.telefone} placeholder='84912345678' required onChange={(event) => setNewClienteTel(event.target.value)} />
+                    <Form.Label>Cor do Produto</Form.Label>
+                    <Form.Control type='text' defaultValue={product.cor} onChange={(event) => setNewCor(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' defaultValue={product.limite_credito} placeholder='99.99' step={0.01} required onChange={(event) => setNewClienteCredito(event.target.value)} />
+                    <Form.Label>Sistema Operacional do Produto</Form.Label>
+                    <Form.Control type='text' defaultValue={product.sis_operacional} onChange={(event) => setNewSisOperacional(event.target.value)} />
+                </Form.Group>
+                
+                <Form.Group>
+                    <Form.Label>Possui avarias?</Form.Label>
+                    <Form.Check type='switch' onChange={(event) => setNewAvaria(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' defaultValue={client.endereco} placeholder='Rua Exemplo, 001' required onChange={(event) => setNewClienteEndereco(event.target.value)} />
+                    <Form.Label>Está ligando?</Form.Label>
+                    <Form.Check type='switch' onChange={(event) => setNewLiga(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Bairro</Form.Label>
-                    <Form.Control type='text' defaultValue={product.bairro} placeholder='Centro' required onChange={(event) => setNewClienteBairro(event.target.value)} />
+                    <Form.Label>Está carregando?</Form.Label>
+                    <Form.Check type='switch' onChange={(event) => setNewCarrega(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Cidade</Form.Label>
-                    <Form.Control type='text' defaultValue={product.cidade} placeholder='Campos Neutrais' required onChange={(event) => setNewClienteCidade(event.target.value)} />
+                    <Form.Label>Possui backup?</Form.Label>
+                    <Form.Check type='switch' onChange={(event) => setNewBackup(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>CEP</Form.Label>
-                    <Form.Control type='number' defaultValue={product.cep} placeholder='12345000' onChange={(event) => setNewClienteCep(event.target.value)} />
+                    <Form.Label>Acessórios</Form.Label>
+                    <Form.Control type='textarea' defaultValue={product.acessorios} onChange={(event) => setNewAcessorio(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label>Observações</Form.Label>
+                    <Form.Control type='textarea' defaultValue={product.obs} onChange={(event) => setNewObservacao(event.target.value)} />
                 </Form.Group>
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar cliente</Button>
+                <Button variant='outline-warning' type='submit'>Editar Produto</Button>
             </Form>
 
             </div>

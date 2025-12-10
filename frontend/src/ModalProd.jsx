@@ -8,7 +8,6 @@ import { use, useState } from 'react'
 
 function ModalProd(props) {
     const [idProduct, setIdProduct] = useState()
-    const [option, setOption] = useState(false)
     const flag_operation = props.operation
 
     function redirect()

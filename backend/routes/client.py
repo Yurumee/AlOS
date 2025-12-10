@@ -35,45 +35,17 @@ def all_clients():
 
 # rota pesquisa de cliente por nome/cpf/cnpj
 # essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
-@view_client.route('/pesquisar/<str_pesquisa>', methods=['POST'])
+@view_client.route('/pesquisar/<str_pesquisa>', methods=['GET'])
 def search_client(str_pesquisa):
-    if request.method == 'POST':
-        from models.cliente import Cliente
-        # pesquisa pelo cpf/cnpj
-        if str_pesquisa.isdigit():    
-            # pesquisa pelo cpf
-            if int(str_pesquisa) <= 14:
-                
-                try:
-                    cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
-                    if cliente_desejado:
-                        result = {}
-                        for cliente in clientes_desejados:
-                            result[cliente.cliente_id] = {
-                                                        'cpf_cnpj': cliente.cpf_cnpj,
-                                                        'nome_cliente':cliente.nome_completo,
-                                                        'nome_fantasia':cliente.nome_fantasia,
-                                                        'endereco':cliente.endereco,
-                                                        'bairro':cliente.bairro,
-                                                        'cep':cliente.cep,
-                                                        'cidade':cliente.cidade,
-                                                        'limite_credito':cliente.limite_credito,
-                                                        'pessoa_juridica':cliente.pessoa_juridica
-                                                        }
-                        
-                        return result, 200
-
-                    else:
-                        return '', 404
-                
-                except Exception as e:
-                    return '', 500
-        else: 
-            # pesquisa pelo nome
+    from models.cliente import Cliente
+    # pesquisa pelo cpf/cnpj
+    if str_pesquisa.isdigit():    
+        # pesquisa pelo cpf
+        if int(str_pesquisa) <= 14:
+            
             try:
-                clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
-
-                if clientes_desejados:
+                cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
+                if cliente_desejado:
                     result = {}
                     for cliente in clientes_desejados:
                         result[cliente.cliente_id] = {
@@ -87,14 +59,37 @@ def search_client(str_pesquisa):
                                                     'limite_credito':cliente.limite_credito,
                                                     'pessoa_juridica':cliente.pessoa_juridica
                                                     }
-
+                    
                     return result, 200
-
                 else:
                     return '', 404
-
+            
             except Exception as e:
                 return '', 500
+    else: 
+        # pesquisa pelo nome
+        try:
+            clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
+            if clientes_desejados:
+                result = {}
+                for cliente in clientes_desejados:
+                    result[cliente.cliente_id] = {
+                                                'cpf_cnpj': cliente.cpf_cnpj,
+                                                'nome_cliente':cliente.nome_completo,
+                                                'nome_fantasia':cliente.nome_fantasia,
+                                                'endereco':cliente.endereco,
+                                                'bairro':cliente.bairro,
+                                                'cep':cliente.cep,
+                                                'cidade':cliente.cidade,
+                                                'limite_credito':cliente.limite_credito,
+                                                'pessoa_juridica':cliente.pessoa_juridica
+                                                }
+                return result, 200
+            else:
+                return '', 404
+            
+        except Exception as e:
+            return '', 500
 
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes

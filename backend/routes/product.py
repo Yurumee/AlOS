@@ -38,70 +38,72 @@ def all_products():
 
 # rota pesquisa de produto por modelo/num_serie
 # essa rota deve exibir os produtos com base no numero de serie informado, modelo ou id
-@view_product.route('/pesquisar/<str_pesquisa>', methods=['POST'])
+@view_product.route('/pesquisar/<str_pesquisa>', methods=['GET'])
 def search_product(str_pesquisa):
-    
-    if request.method == 'POST':
-        from models.produto import Produto
-        from models.cliente import Cliente
-        # pesquisa pelo modelo
-        try:
-            # checa se é um id (apenas numeros)
-            if str_pesquisa.isdigit():
-                produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).all()
+    from models.produto import Produto
+    from models.cliente import Cliente
+
+    print(str_pesquisa)
+
+    # pesquisa pelo modelo
+    try:
+        # checa se é um id (apenas numeros)
+        if str_pesquisa.isdigit():
+            produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).all()
+
+            if produto_desejado:
                 cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
-    
-                if produto_desejado:
-                    result = {}
-                    for product in produto_desejado:
-                        result[product.produto_id] = {
-                                        "id":product.produto_id,
-                                        "cliente_nome": cliente_nome,
-                                        "modelo": product.modelo,
-                                        "num_serie": product.num_serie,
-                                        "cor": product.cor,
-                                        "sis_operacional": product.sis_operacional,
-                                        "avaria": 'Sim' if product.avaria == True else 'Não',
-                                        "liga": 'Sim' if product.liga == True else 'Não',
-                                        "carrega": 'Sim' if product.carrega == True else 'Não',
-                                        "backup": 'Sim' if product.backup == True else 'Não',
-                                        "acessorios": product.acessorios,
-                                        "obs": product.observacoes,
-                                    }
-                    return result, 302
                 
-                else:
-                    return '', 404
-        
-        
+                result = {}
+                for product in produto_desejado:
+                    result[product.produto_id] = {
+                                    "id":product.produto_id,
+                                    "cliente_nome": cliente_nome,
+                                    "modelo": product.modelo,
+                                    "num_serie": product.num_serie,
+                                    "cor": product.cor,
+                                    "sis_operacional": product.sis_operacional,
+                                    "avaria": 'Sim' if product.avaria == True else 'Não',
+                                    "liga": 'Sim' if product.liga == True else 'Não',
+                                    "carrega": 'Sim' if product.carrega == True else 'Não',
+                                    "backup": 'Sim' if product.backup == True else 'Não',
+                                    "acessorios": product.acessorios,
+                                    "obs": product.observacoes,
+                                }
+                return result, 302
+            
             else:
-                produto_desejado =  db.session.query(Produto).filter_by(modelo=str_pesquisa).all()
+                return '', 404
+    
+    
+        else:
+            produto_desejado =  db.session.query(Produto).filter(Produto.modelo.ilike(f'%{str_pesquisa}%')).all()
+            
+            if produto_desejado:
                 cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
 
-                if produto_desejado:
-                    result = {}
-                    for product in produto_desejado:
-                        result[product.produto_id] = {
-                                        "id":product.produto_id,
-                                        "cliente_nome": cliente_nome,
-                                        "modelo": product.modelo,
-                                        "num_serie": product.num_serie,
-                                        "cor": product.cor,
-                                        "sis_operacional": product.sis_operacional,
-                                        "avaria": 'Sim' if product.avaria == True else 'Não',
-                                        "liga": 'Sim' if product.liga == True else 'Não',
-                                        "carrega": 'Sim' if product.carrega == True else 'Não',
-                                        "backup": 'Sim' if product.backup == True else 'Não',
-                                        "acessorios": product.acessorios,
-                                        "obs": product.observacoes,
-                                    }
-                    return result, 302
-
-                else:
-                    return '', 404
-        
-        except Exception as e:
-            return '', 500
+                result = {}
+                for product in produto_desejado:
+                    result[product.produto_id] = {
+                                    "id":product.produto_id,
+                                    "cliente_nome": cliente_nome,
+                                    "modelo": product.modelo,
+                                    "num_serie": product.num_serie,
+                                    "cor": product.cor,
+                                    "sis_operacional": product.sis_operacional,
+                                    "avaria": 'Sim' if product.avaria == True else 'Não',
+                                    "liga": 'Sim' if product.liga == True else 'Não',
+                                    "carrega": 'Sim' if product.carrega == True else 'Não',
+                                    "backup": 'Sim' if product.backup == True else 'Não',
+                                    "acessorios": product.acessorios,
+                                    "obs": product.observacoes,
+                                }
+                return result, 302
+            else:
+                return '', 404
+    
+    except Exception as e:
+        return jsonify({'err':str(e)}), 500
 
         
 # rota cadastro de produto
