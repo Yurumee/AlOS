@@ -4,10 +4,11 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import { useState } from 'react'
+import { use, useState } from 'react'
 
 function ModalProd(props) {
     const [idProduct, setIdProduct] = useState()
+    const [option, setOption] = useState(false)
     const flag_operation = props.operation
 
     function redirect()
@@ -32,12 +33,12 @@ function ModalProd(props) {
         <div className="modal show" style={{ display: 'block'}}>
             <Modal.Dialog>
                 <Modal.Header closeButton onClick={props.close}>
-                    <Modal.Title>Insira o ID do produto desejado</Modal.Title>
+                    <Modal.Title>Buscar produto desejado</Modal.Title>
                 </Modal.Header>
     
                 <Modal.Body>
-                    <FloatingLabel label="ID" className="mb-3">
-                        <Form.Control type="number" required placeholder="ID" onChange={(event) => setIdProduct(event.target.value)} />
+                    <FloatingLabel label="ID ou Nº Série" className="mb-3">
+                        <Form.Control type="text" required placeholder="ID" onChange={(event) => setIdProduct(event.target.value)} />
                     </FloatingLabel>
                 </Modal.Body>
     

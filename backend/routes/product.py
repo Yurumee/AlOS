@@ -37,74 +37,73 @@ def all_products():
     # return resp
 
 # rota pesquisa de produto por modelo/num_serie
-# essa rota deve exibir os produtos com base no modelo informado ou numero de serie
-@view_product.route('/pesquisar/<str_pesquisa>', methods=['GET', 'POST'])
-def search_client(str_pesquisa):
+# essa rota deve exibir os produtos com base no numero de serie informado, modelo ou id
+@view_product.route('/pesquisar/<str_pesquisa>', methods=['POST'])
+def search_product(str_pesquisa):
     
     if request.method == 'POST':
+        from models.produto import Produto
         from models.cliente import Cliente
-        # pesquisa pelo cpf/cnpj
-        if str_pesquisa.isdigit():    
-            # pesquisa pelo cpf
-            if int(str_pesquisa) == 11:
-                
-                try:
-                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
-                    if cliente_desejado:
-                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
-                    else:
-                        return jsonify({'message':'cliente com esse cpf nao existe'})
-                
-                except Exception as e:
-                    return jsonify({'err':str(e)})
-
-            # pesquisa pelo cnpj
-            elif int(str_pesquisa) == 14:
-                
-                try:
-                    cliente_desejado =  db.session.query(Cliente).filter_by(cpf_cnpj=int(str_pesquisa)).one_or_none()
-                    if cliente_desejado:
-                        return jsonify({'cliente pesquisado':f'{cliente_desejado.nome_completo}'})
-                    else:
-                        return jsonify({'message':'cliente com esse cnpj nao existe'})
-                
-                except Exception as e:
-                    return jsonify({'err':str(e)})
-
-            # se não for nenhum dos dois, o dado é invalido
-            else:
-                return 'o dado nao é valido'
-
-        # pesquisa pelo nome
+        # pesquisa pelo modelo
         try:
-            clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
-
-            if clientes_desejados:
-                result = {}
-                for cliente in clientes_desejados:
-                    result[cliente.cliente_id] = {
-                                                'cpf_cnpj': cliente.cpf_cnpj,
-                                                'nome_cliente':cliente.nome_completo,
-                                                'nome_fantasia':cliente.nome_fantasia,
-                                                'endereco':cliente.endereco,
-                                                'bairro':cliente.bairro,
-                                                'cep':cliente.cep,
-                                                'cidade':cliente.cidade,
-                                                'limite_credito':cliente.limite_credito,
-                                                'pessoa_juridica':cliente.pessoa_juridica
-                                                }
-
-                return jsonify({'clientes pesquisados':result})
-            
+            # checa se é um id (apenas numeros)
+            if str_pesquisa.isdigit():
+                produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).all()
+                cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+    
+                if produto_desejado:
+                    result = {}
+                    for product in produto_desejado:
+                        result[product.produto_id] = {
+                                        "id":product.produto_id,
+                                        "cliente_nome": cliente_nome,
+                                        "modelo": product.modelo,
+                                        "num_serie": product.num_serie,
+                                        "cor": product.cor,
+                                        "sis_operacional": product.sis_operacional,
+                                        "avaria": 'Sim' if product.avaria == True else 'Não',
+                                        "liga": 'Sim' if product.liga == True else 'Não',
+                                        "carrega": 'Sim' if product.carrega == True else 'Não',
+                                        "backup": 'Sim' if product.backup == True else 'Não',
+                                        "acessorios": product.acessorios,
+                                        "obs": product.observacoes,
+                                    }
+                    return result, 302
+                
+                else:
+                    return '', 404
+        
+        
             else:
-                return jsonify({'message':'cliente com esse nome nao existe'})
+                produto_desejado =  db.session.query(Produto).filter_by(modelo=str_pesquisa).all()
+                cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+
+                if produto_desejado:
+                    result = {}
+                    for product in produto_desejado:
+                        result[product.produto_id] = {
+                                        "id":product.produto_id,
+                                        "cliente_nome": cliente_nome,
+                                        "modelo": product.modelo,
+                                        "num_serie": product.num_serie,
+                                        "cor": product.cor,
+                                        "sis_operacional": product.sis_operacional,
+                                        "avaria": 'Sim' if product.avaria == True else 'Não',
+                                        "liga": 'Sim' if product.liga == True else 'Não',
+                                        "carrega": 'Sim' if product.carrega == True else 'Não',
+                                        "backup": 'Sim' if product.backup == True else 'Não',
+                                        "acessorios": product.acessorios,
+                                        "obs": product.observacoes,
+                                    }
+                    return result, 302
+
+                else:
+                    return '', 404
         
         except Exception as e:
-            return jsonify({'err':str(e)})
+            return '', 500
 
-    
-    # return 'nao é um tipo de dado valido'
-
+        
 # rota cadastro de produto
 # esta rota deve exibir o formulário de produtos
 # quando o formulario for enviado, deve cadastrar o produto no banco e ligá-lo ao cliente especificado

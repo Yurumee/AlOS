@@ -3,10 +3,13 @@ import { createRoot } from 'react-dom/client'
 import Clients from './Clients.jsx'
 import Products from './Products.jsx';
 import ProductsNew from './ProductsNew.jsx';
+import ProductsEdit from './ProductsEdit.jsx'
+import ProductsDelete from './ProductsDelete.jsx'
 import ClientsNew from './ClientsNew.jsx';
 import ClientsEdit from './ClientsEdit.jsx';
 import ClientsDelete from './ClientsDelete.jsx'
 import ModalId from './ModalId.jsx';
+import ModalProd from './ModalProd.jsx';
 import Home from './Home.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,6 +33,10 @@ createRoot(document.getElementById('root')).render(
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
         <Route path='/produtos' element={<Products />}/>
         <Route path='/novo-produto' element={<ProductsNew />}/>
+        <Route path='/editar-produto/:id' element={<ProductsEdit />}/>
+        <Route path='/deletar-produto/:id' element={<ProductsDelete />}/>
+        <Route path='/editar-produto' element={<ModalProd operation={'edit'}/>}/>
+        <Route path='/deletar-produto' element={<ModalProd operation={'delete'} />}/>
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}

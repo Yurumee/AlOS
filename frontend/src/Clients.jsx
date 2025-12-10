@@ -86,7 +86,6 @@ function Clients()
     {
         setOperation('edit')
         setModalOperationOpen(!modalOperationOpen)
-        // window.location.href = '/editar-cliente'
     }
 
     function delete_client()
@@ -94,7 +93,6 @@ function Clients()
         
         setOperation('delete')
         setModalOperationOpen(!modalOperationOpen)
-        // window.location.href = '/deletar-cliente'
     }
 
     function visualize_client(client)
