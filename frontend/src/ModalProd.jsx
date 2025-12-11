@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import { use, useState } from 'react'
+import { useState } from 'react'
 
 function ModalProd(props) {
     const [idProduct, setIdProduct] = useState()
@@ -36,7 +36,7 @@ function ModalProd(props) {
                 </Modal.Header>
     
                 <Modal.Body>
-                    <FloatingLabel label="ID ou Nº Série" className="mb-3">
+                    <FloatingLabel label="ID " className="mb-3">
                         <Form.Control type="text" required placeholder="ID" onChange={(event) => setIdProduct(event.target.value)} />
                     </FloatingLabel>
                 </Modal.Body>

@@ -25,18 +25,21 @@ createRoot(document.getElementById('root')).render(
   <BrowserRouter>
       <Routes>
         <Route index element={<Home />} />
+        
         <Route path='/clientes' element={<Clients />}/>
         <Route path='/novo-cliente' element={<ClientsNew />}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit />}/>
         <Route path='/deletar-cliente/:id' element={<ClientsDelete />}/>
         <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
+
         <Route path='/produtos' element={<Products />}/>
         <Route path='/novo-produto' element={<ProductsNew />}/>
         <Route path='/editar-produto/:id' element={<ProductsEdit />}/>
         <Route path='/deletar-produto/:id' element={<ProductsDelete />}/>
         <Route path='/editar-produto' element={<ModalProd operation={'edit'}/>}/>
         <Route path='/deletar-produto' element={<ModalProd operation={'delete'} />}/>
+
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}

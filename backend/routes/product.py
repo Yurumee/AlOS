@@ -36,74 +36,73 @@ def all_products():
     return result, 200
     # return resp
 
-# rota pesquisa de produto por modelo/num_serie
-# essa rota deve exibir os produtos com base no numero de serie informado, modelo ou id
-@view_product.route('/pesquisar/<str_pesquisa>', methods=['GET'])
-def search_product(str_pesquisa):
-    from models.produto import Produto
-    from models.cliente import Cliente
+# rota pesquisa de produto por modelo/id
+# rota utilizada pela barra de pesquisa
+# essa rota deve exibir os produtos com base no numero de serie ou id
+# @view_product.route('/pesquisar/<str_pesquisa>', methods=['GET'])
+# def search_product(str_pesquisa):
+#     from models.produto import Produto
+#     from models.cliente import Cliente
 
-    print(str_pesquisa)
+#     # pesquisa pelo modelo
+#     try:
+#         # checa se é um id (apenas numeros)
+#         if str_pesquisa.isdigit():
+#             print(str_pesquisa)
 
-    # pesquisa pelo modelo
-    try:
-        # checa se é um id (apenas numeros)
-        if str_pesquisa.isdigit():
-            produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).all()
+#             produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).one_or_none()
+#             print(produto_desejado)
 
-            if produto_desejado:
-                cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
-                
-                result = {}
-                for product in produto_desejado:
-                    result[product.produto_id] = {
-                                    "id":product.produto_id,
-                                    "cliente_nome": cliente_nome,
-                                    "modelo": product.modelo,
-                                    "num_serie": product.num_serie,
-                                    "cor": product.cor,
-                                    "sis_operacional": product.sis_operacional,
-                                    "avaria": 'Sim' if product.avaria == True else 'Não',
-                                    "liga": 'Sim' if product.liga == True else 'Não',
-                                    "carrega": 'Sim' if product.carrega == True else 'Não',
-                                    "backup": 'Sim' if product.backup == True else 'Não',
-                                    "acessorios": product.acessorios,
-                                    "obs": product.observacoes,
-                                }
-                return result, 302
+#             if produto_desejado:
+#                 cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+#                 result = {
+#                             "id":produto_desejado.produto_id,
+#                             "cliente_nome": cliente_nome,
+#                             "modelo": produto_desejado.modelo,
+#                             "num_serie": produto_desejado.num_serie,
+#                             "cor": produto_desejado.cor,
+#                             "sis_operacional": produto_desejado.sis_operacional,
+#                             "avaria": produto_desejado.avaria,
+#                             "liga": produto_desejado.liga,
+#                             "carrega": produto_desejado.carrega,
+#                             "backup": produto_desejado.backup,
+#                             "acessorios": produto_desejado.acessorios,
+#                             "obs": produto_desejado.observacoes,
+#                         }
+#                 print(result)
+#                 return result, 302
             
-            else:
-                return '', 404
-    
-    
-        else:
-            produto_desejado =  db.session.query(Produto).filter(Produto.modelo.ilike(f'%{str_pesquisa}%')).all()
+#             else:
+#                 return '', 404
             
-            if produto_desejado:
-                cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+#         # else:
+#         #     produto_desejado =  db.session.query(Produto).filter(Produto.modelo.ilike(f'%{str_pesquisa}%')).all()
+            
+#         #     if produto_desejado:
+#         #         cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
 
-                result = {}
-                for product in produto_desejado:
-                    result[product.produto_id] = {
-                                    "id":product.produto_id,
-                                    "cliente_nome": cliente_nome,
-                                    "modelo": product.modelo,
-                                    "num_serie": product.num_serie,
-                                    "cor": product.cor,
-                                    "sis_operacional": product.sis_operacional,
-                                    "avaria": 'Sim' if product.avaria == True else 'Não',
-                                    "liga": 'Sim' if product.liga == True else 'Não',
-                                    "carrega": 'Sim' if product.carrega == True else 'Não',
-                                    "backup": 'Sim' if product.backup == True else 'Não',
-                                    "acessorios": product.acessorios,
-                                    "obs": product.observacoes,
-                                }
-                return result, 302
-            else:
-                return '', 404
+#         #         result = {}
+#         #         for product in produto_desejado:
+#         #             result[product.produto_id] = {
+#         #                             "id":product.produto_id,
+#         #                             "cliente_nome": cliente_nome,
+#         #                             "modelo": product.modelo,
+#         #                             "num_serie": product.num_serie,
+#         #                             "cor": product.cor,
+#         #                             "sis_operacional": product.sis_operacional,
+#         #                             "avaria": 'Sim' if product.avaria == True else 'Não',
+#         #                             "liga": 'Sim' if product.liga == True else 'Não',
+#         #                             "carrega": 'Sim' if product.carrega == True else 'Não',
+#         #                             "backup": 'Sim' if product.backup == True else 'Não',
+#         #                             "acessorios": product.acessorios,
+#         #                             "obs": product.observacoes,
+#         #                         }
+#         #         return result, 302
+#         #     else:
+#         #         return '', 404
     
-    except Exception as e:
-        return jsonify({'err':str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'err':str(e)}), 500
 
         
 # rota cadastro de produto
@@ -255,53 +254,65 @@ def patch_product(id_desejado):
         
         return '', 200
 
-# # rota para deletar um cliente com base no cpf/cnpj informado
-# @view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
-# def delete_client(id_desejado):
-#     from models.cliente import Cliente
+# rota para deletar um produto com base no id informado
+@view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
+def delete_client(id_desejado):
+    from models.produto import Produto
 
-#     if request.method == 'POST':
-#         # checa se o cliente existe
-#         try:
-#             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
-#         except:
-#             return '', 500
+    if request.method == 'POST':
+        # checa se o produto existe
+        try:
+            produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
+        except:
+            return '', 500
         
-#         if not cliente_exists:
-#             return '', 404
+        if not produto_exists:
+            return '', 404
         
-#         # exclui o cliente
-#         try:
-#                 db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
-#                 db.session.commit()
-#                 return '', 200
+        # exclui o produto
+        try:
+                db.session.query(Produto).filter_by(produto_id=id_desejado).delete()
+                db.session.commit()
+                return '', 200
     
-#         except Exception as e:
-#             return jsonify({'err':str(e)})
+        except Exception as e:
+            return jsonify({'err':str(e)})
         
-# @view_product.route('/pesquisar/<int:id_desejado>', methods=['GET'])
-# def getClient(id_desejado):
-#     from models.cliente import Cliente
+# rota usada para pesquisar produtos com base no id para ser utilizado para edição ou exclusão
+@view_product.route('/pesquisar/<int:id_desejado>', methods=['GET'])
+def getProduct(id_desejado):
+    from models.produto import Produto
+    from models.cliente import Cliente
 
-#     try:
-#         cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
-#     except Exception as e:
-#         return '', 500
+    try:
+        produto_desejado = db.session.query(Produto).filter_by(produto_id=id_desejado).first()
     
-#     if cliente_exists:
-#         result = {}
-#         result[cliente_exists.cliente_id] = {
-#                                         "id":cliente_exists.cliente_id,
-#                                         "cpf_cnpj": cliente_exists.cpf_cnpj,
-#                                         "nome_completo": cliente_exists.nome_completo,
-#                                         "nome_fantasia": cliente_exists.nome_fantasia,
-#                                         "endereco": cliente_exists.endereco,
-#                                         "bairro": cliente_exists.bairro,
-#                                         "cidade": cliente_exists.cidade,
-#                                         "cep": cliente_exists.cep,
-#                                         "telefone": cliente_exists.telefone,
-#                                         "limite_credito": cliente_exists.limite_credito,
-#                                         "pessoa_juridica": cliente_exists.pessoa_juridica
-#                                     }
-#         # jsonify({cliente_exists.cliente_id:result})
-#         return result, 200
+    except Exception:
+        return '', 500
+    
+    try:
+        # caso o produto exista
+        if produto_desejado:
+            # pega o nome do cliente do produto especifico
+            cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+        else:
+            return '', 404
+    except Exception:
+        return '', 500
+    
+    result = {
+                "id":produto_desejado.produto_id,
+                "cliente_nome": cliente_nome,
+                "modelo": produto_desejado.modelo,
+                "num_serie": produto_desejado.num_serie,
+                "cor": produto_desejado.cor,
+                "sis_operacional": produto_desejado.sis_operacional,
+                "avaria": produto_desejado.avaria,
+                "liga": produto_desejado.liga,
+                "carrega": produto_desejado.carrega,
+                "backup": produto_desejado.backup,
+                "acessorios": produto_desejado.acessorios,
+                "obs": produto_desejado.observacoes,
+            }
+                
+    return result, 302

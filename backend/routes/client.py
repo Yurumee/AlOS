@@ -34,62 +34,63 @@ def all_clients():
     # return resp
 
 # rota pesquisa de cliente por nome/cpf/cnpj
+# esta rota é utilizada pela barra de pesquisa
 # essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
-@view_client.route('/pesquisar/<str_pesquisa>', methods=['GET'])
-def search_client(str_pesquisa):
-    from models.cliente import Cliente
-    # pesquisa pelo cpf/cnpj
-    if str_pesquisa.isdigit():    
-        # pesquisa pelo cpf
-        if int(str_pesquisa) <= 14:
+# @view_client.route('/pesquisar/<str_pesquisa>', methods=['GET'])
+# def search_client(str_pesquisa):
+#     from models.cliente import Cliente
+#     # pesquisa pelo cpf/cnpj
+#     if str_pesquisa.isdigit():    
+#         # pesquisa pelo cpf
+#         if int(str_pesquisa) <= 14:
             
-            try:
-                cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
-                if cliente_desejado:
-                    result = {}
-                    for cliente in clientes_desejados:
-                        result[cliente.cliente_id] = {
-                                                    'cpf_cnpj': cliente.cpf_cnpj,
-                                                    'nome_cliente':cliente.nome_completo,
-                                                    'nome_fantasia':cliente.nome_fantasia,
-                                                    'endereco':cliente.endereco,
-                                                    'bairro':cliente.bairro,
-                                                    'cep':cliente.cep,
-                                                    'cidade':cliente.cidade,
-                                                    'limite_credito':cliente.limite_credito,
-                                                    'pessoa_juridica':cliente.pessoa_juridica
-                                                    }
+#             try:
+#                 cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
+#                 if cliente_desejado:
+#                     result = {}
+#                     for cliente in clientes_desejados:
+#                         result[cliente.cliente_id] = {
+#                                                     'cpf_cnpj': cliente.cpf_cnpj,
+#                                                     'nome_cliente':cliente.nome_completo,
+#                                                     'nome_fantasia':cliente.nome_fantasia,
+#                                                     'endereco':cliente.endereco,
+#                                                     'bairro':cliente.bairro,
+#                                                     'cep':cliente.cep,
+#                                                     'cidade':cliente.cidade,
+#                                                     'limite_credito':cliente.limite_credito,
+#                                                     'pessoa_juridica':cliente.pessoa_juridica
+#                                                     }
                     
-                    return result, 200
-                else:
-                    return '', 404
+#                     return result, 200
+#                 else:
+#                     return '', 404
             
-            except Exception as e:
-                return '', 500
-    else: 
-        # pesquisa pelo nome
-        try:
-            clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
-            if clientes_desejados:
-                result = {}
-                for cliente in clientes_desejados:
-                    result[cliente.cliente_id] = {
-                                                'cpf_cnpj': cliente.cpf_cnpj,
-                                                'nome_cliente':cliente.nome_completo,
-                                                'nome_fantasia':cliente.nome_fantasia,
-                                                'endereco':cliente.endereco,
-                                                'bairro':cliente.bairro,
-                                                'cep':cliente.cep,
-                                                'cidade':cliente.cidade,
-                                                'limite_credito':cliente.limite_credito,
-                                                'pessoa_juridica':cliente.pessoa_juridica
-                                                }
-                return result, 200
-            else:
-                return '', 404
+#             except Exception as e:
+#                 return '', 500
+#     else: 
+#         # pesquisa pelo nome
+#         try:
+#             clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
+#             if clientes_desejados:
+#                 result = {}
+#                 for cliente in clientes_desejados:
+#                     result[cliente.cliente_id] = {
+#                                                 'cpf_cnpj': cliente.cpf_cnpj,
+#                                                 'nome_cliente':cliente.nome_completo,
+#                                                 'nome_fantasia':cliente.nome_fantasia,
+#                                                 'endereco':cliente.endereco,
+#                                                 'bairro':cliente.bairro,
+#                                                 'cep':cliente.cep,
+#                                                 'cidade':cliente.cidade,
+#                                                 'limite_credito':cliente.limite_credito,
+#                                                 'pessoa_juridica':cliente.pessoa_juridica
+#                                                 }
+#                 return result, 200
+#             else:
+#                 return '', 404
             
-        except Exception as e:
-            return '', 500
+#         except Exception as e:
+#             return '', 500
 
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes
@@ -289,6 +290,8 @@ def delete_client(id_desejado):
         except Exception as e:
             return jsonify({'err':str(e)})
         
+
+# esta rota pesquisa o id do cliente
 @view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 def getClient(id_desejado):
     from models.cliente import Cliente

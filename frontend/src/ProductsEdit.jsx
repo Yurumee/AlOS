@@ -31,8 +31,8 @@ function ProductsEdit()
         {
             const URL = `http://localhost:5000/produto/pesquisar/${id}`
             const resp = await fetch(URL).then(resp => resp.json())
-            const list = Object.values(resp)
-            setProduct(list[0])
+            console.log(resp)
+            setProduct(resp)
             setIsLoading(false)
         }
 
@@ -101,22 +101,22 @@ function ProductsEdit()
                 
                 <Form.Group>
                     <Form.Label>Possui avarias?</Form.Label>
-                    <Form.Check type='switch' onChange={(event) => setNewAvaria(event.target.checked)} />
+                    <Form.Check type='switch' defaultChecked={product.avaria} onChange={(event) => setNewAvaria(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Está ligando?</Form.Label>
-                    <Form.Check type='switch' onChange={(event) => setNewLiga(event.target.checked)} />
+                    <Form.Check type='switch' defaultChecked={product.liga} onChange={(event) => setNewLiga(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Está carregando?</Form.Label>
-                    <Form.Check type='switch' onChange={(event) => setNewCarrega(event.target.checked)} />
+                    <Form.Check type='switch' defaultChecked={product.carrega} onChange={(event) => setNewCarrega(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Possui backup?</Form.Label>
-                    <Form.Check type='switch' onChange={(event) => setNewBackup(event.target.checked)} />
+                    <Form.Check type='switch' defaultChecked={product.backup} onChange={(event) => setNewBackup(event.target.checked)} />
                 </Form.Group>
 
                 <Form.Group>

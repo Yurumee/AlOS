@@ -74,22 +74,22 @@ function ProductsNew()
 
                 <Form.Group>
                     <Form.Label>Modelo</Form.Label>
-                    <Form.Control type='text' placeholder='00000000000' required onChange={(event) => setModelo(event.target.value)}></Form.Control>
+                    <Form.Control type='text' placeholder='M0D3-L0' required onChange={(event) => setModelo(event.target.value)}></Form.Control>
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Número de Série</Form.Label>
-                    <Form.Control type='text' placeholder='João Maria' required onChange={(event) => setNumSerie(event.target.value)} />
+                    <Form.Control type='text' placeholder='S3R14LNUMB3R' required onChange={(event) => setNumSerie(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Cor</Form.Label>
-                    <Form.Control type='text' onChange={(event) => setCor(event.target.value)} />
+                    <Form.Control type='text' placeholder='Azul' onChange={(event) => setCor(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Sistema Operacional</Form.Label>
-                    <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setSisOperacional(event.target.value)} />
+                    <Form.Control type='text' placeholder='Win 10' onChange={(event) => setSisOperacional(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -114,14 +114,14 @@ function ProductsNew()
 
                 <Form.Group>
                     <Form.Label>Acessórios</Form.Label>
-                    <Form.Control type='text' placeholder='12345000' onChange={(event) => setAcessorios(event.target.value)} />
+                    <Form.Control as='textarea' placeholder='- Carregador &#10; - Bolsa alaranjada &#10; ...' onChange={(event) => setAcessorios(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Observações</Form.Label>
-                    <Form.Control type='text' placeholder='12345000' onChange={(event) => setObservacao(event.target.value)} />
+                    <Form.Control as='textarea' placeholder='- Tela rachada na lateral direita &#10; - Dobradiça direita com defeito &#10; ...' onChange={(event) => setObservacao(event.target.value)} />
                 </Form.Group>
-                
+                <br />
                 <Button variant='outline-primary' type='submit'>Cadastrar produto</Button>
             </Form>
 

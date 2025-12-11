@@ -11,26 +11,25 @@ import Button from 'react-bootstrap/esm/Button'
 function ProductsDelete() {
     let params = useParams()
     const id = params.id
-    const [client, setClient] = useState()
+    const [product, setProduct] = useState()
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => 
     {
-        async function getClient()
+        async function getProduct()
         {
-            const URL = `http://localhost:5000/cliente/pesquisar/${id}`
+            const URL = `http://localhost:5000/produto/pesquisar/${id}`
             const resp = await fetch(URL).then(resp => resp.json())
-            const list = Object.values(resp)
-            setClient(list[0])
+            setProduct(resp)
             setIsLoading(false)
         }
 
-        getClient()
+        getProduct()
     }, [])
 
     async function confirm()
     {
-        const URL = `http://localhost:5000/cliente/excluir/${id}`
+        const URL = `http://localhost:5000/produto/excluir/${id}`
         await fetch(URL, 
             {
                 method: 'POST',
@@ -40,12 +39,12 @@ function ProductsDelete() {
                     },
             })
 
-        window.location.href = '/clientes'
+        window.location.href = '/produtos'
     }
 
     function cancel()
     {
-        window.location.href = '/clientes'
+        window.location.href = '/produtos'
     }
 
     return (
@@ -59,19 +58,18 @@ function ProductsDelete() {
                 }
             </div>
 
-            {!isLoading && client &&
+            {!isLoading && product &&
                 <>
 
                 <div className="container mt-3">
 
                     <Card>
-                        <Card.Header>Deseja realmente deletar este cliente?</Card.Header>
+                        <Card.Header>Deseja realmente deletar este produto?</Card.Header>
                             <Card.Body>
-                                <Card.Title>{client.cpf_cnpj}</Card.Title>
+                                <Card.Title>{product.num_serie}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {client.nome_completo}</p>
-                                    <br />
-                                    <p>Nome Fantasia: {client.nome_fantasia}</p>
+                                    <p>Modelo: {product.modelo}</p>
+                                    <p>Pertencente a: {product.cliente_nome}</p>
                                 </Card.Text>
                             <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
 

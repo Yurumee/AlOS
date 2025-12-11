@@ -66,9 +66,9 @@ function NavBar() {
                         <NavDropdown title='Produtos'>
                             <NavDropdown.Item href='/produtos'>Ir para Produtos</NavDropdown.Item>
                             <NavDropdown.Divider></NavDropdown.Divider>
-                            <NavDropdown.Item href='/novo-cliente'>Novo Produto</NavDropdown.Item>
-                            <NavDropdown.Item href='/editar-cliente'>Editar Produto</NavDropdown.Item>
-                            <NavDropdown.Item href='/deletar-cliente'>Deletar Produto</NavDropdown.Item>
+                            <NavDropdown.Item href='/novo-produto'>Novo Produto</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-produto'>Editar Produto</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-produto'>Deletar Produto</NavDropdown.Item>
                         </NavDropdown>
                         
                         <Nav.Link href="/clientes">Estoque</Nav.Link>
