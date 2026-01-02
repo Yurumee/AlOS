@@ -16,14 +16,16 @@ from models.anexo import Anexo
 from routes.client import view_client
 from routes.product import view_product
 from routes.home import view_home
+from routes.technician import view_technician
 
 # registrando blueprints
 app.register_blueprint(view_client)
 app.register_blueprint(view_product)
 app.register_blueprint(view_home)
+app.register_blueprint(view_technician)
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
+        
     app.run()

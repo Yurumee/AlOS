@@ -1,5 +1,5 @@
 from config import db
-from sqlalchemy import VARCHAR, INTEGER
+from sqlalchemy import VARCHAR, INTEGER, BOOLEAN
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.ordemServico import OrdemServico
@@ -8,11 +8,14 @@ class Tecnico(db.Model):
 
     # COLUNAS
     # chave primaria
-    cpf_tecnico: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=False) # max 11
-    
-    nome_tecnico: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
-    contato_tecnico: Mapped[str] = mapped_column(VARCHAR(20))
-    endereco: Mapped[str] = mapped_column(VARCHAR(30))
+    tecnico_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
+
+    cpf_tecnico: Mapped[int] = mapped_column(INTEGER, unique=True) # max 11
+    senha: Mapped[str] = mapped_column(VARCHAR)
+    nome_tecnico: Mapped[str] = mapped_column(VARCHAR(50))
+    contato_tecnico: Mapped[str] = mapped_column(VARCHAR(20), nullable=True)
+    endereco: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)
+    administrador: Mapped[bool] = mapped_column(BOOLEAN, default=False)
 
     # RELACIONAMENTOS
     # relacionamento 1:n com ordemServico
