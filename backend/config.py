@@ -1,10 +1,13 @@
 # importando bibliotecas necessarias
 from os import path, makedirs, getenv
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+from secrets import token_urlsafe
 from dotenv import load_dotenv
 
 # carregando variaveis de ambiente
@@ -29,6 +32,11 @@ bcrypt = Bcrypt(app)
 db_folder = path.join(app.root_path, 'database')
 makedirs(db_folder, exist_ok=True)
 
+# criando a secret key do jwt
+app.config['JWT_SECRET_KEY'] = token_urlsafe(nbytes=32)
+# definindo o tempo de expiração
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
+
 # configurando banco sqlite
 # cria o arquivo de banco na pasta especificada
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/database/alos.db'
@@ -37,6 +45,9 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
                                             'max_overflow': 1,
                                             'pool_timeout': 900
                                           }
+
+
+jwt = JWTManager(app)
 
 # modelo para as tabelas
 class Base(DeclarativeBase):

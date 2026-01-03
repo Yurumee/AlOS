@@ -11,6 +11,7 @@ import ClientsDelete from './ClientsDelete.jsx'
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
 import Home from './Home.jsx';
+import PageNotFound from './NotFound.jsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -43,6 +44,8 @@ createRoot(document.getElementById('root')).render(
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}
+
+        <Route path='*' element={<PageNotFound/>} />
       </Routes>
   </BrowserRouter>
 )
