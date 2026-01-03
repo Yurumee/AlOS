@@ -1,9 +1,10 @@
 # realizando as importações necessarias
 # from config import db, bcrypt, CPF_ADMIN, NOME_ADMIN, SENHA_ADMIN, CONTATO_ADMIN, ENDERECO_ADMIN, IS_ADMIN
 from config import db, bcrypt
-from datetime import datetime, timezone
-from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt
+from datetime import datetime, timezone, timedelta
+from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt, get_jwt_identity, jwt_required
 from flask import Blueprint, request, jsonify
+import json
 
 view_technician = Blueprint('view_technician', __name__, url_prefix='/tecnico')
 
@@ -42,7 +43,20 @@ def refresh_expiring_jwt(response):
     try:
         expiration_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
-        # timestamp = 
+        new_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if expiration_timestamp < new_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+
+            data = response.get_json()
+            if type(data) == dict:
+                data['access_token'] = access_token
+                response.data = json.dumps(data)
+            
+        return response
+    
+    except (RuntimeError, KeyError):
+        # caso o token ainda nao tehna expirado, retorne o original
+        return response
 
 # rota para login
 @view_technician.route('/login', methods=['POST'])
@@ -68,15 +82,15 @@ def tech_login():
         # senao, tente fazer login
         # cheque se os hashes de senha sao iguais
         if not bcrypt.check_password_hash(tech_exists.senha, senha):
-
             # se nao forem, nao faça login
             # nao autorizado
             return '', 401
         
         # se for autorizado
+        # cria o token
         token_access = create_access_token(identity=tech_exists.nome_tecnico)
         resp = {"access_token":token_access}
-        return resp, 200
+        return resp
     
 
 # rota para logout do tecnico
@@ -85,3 +99,9 @@ def tech_logout():
     response = jsonify({'mensage':'DELETADO'})
     unset_jwt_cookies(response)
     return response
+
+@view_technician.route('/test', methods=['GET'])
+@jwt_required()
+def teste():
+    resp_body = jsonify({'body':'rota teste ok'})
+    return resp_body
