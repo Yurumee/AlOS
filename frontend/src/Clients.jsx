@@ -9,7 +9,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
-function Clients() 
+function Clients(props) 
 {
     // guarda os clientes
     const [clients, setClients] = useState([])
@@ -32,8 +32,15 @@ function Clients()
 
             // url da api
             const URL = 'http://127.0.0.1:5000/cliente/'
-            const response = await fetch(URL)
+            const response = await fetch(URL, {
+                    headers: {Authorization: 'Bearer ' + props.token}
+                }
+            )
             const data = await response.json();
+            
+            // definindo o token de autenticação
+            data.access_token && props.setToken(data.access_token)
+            
             const list = Object.values(data)
             setClients(list)
 

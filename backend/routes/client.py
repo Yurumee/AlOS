@@ -1,6 +1,7 @@
 # realizando importações necessárias
 from config import db
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
 # criando uma blueprint
 view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
@@ -8,6 +9,7 @@ view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
 # rota get all clients
 # essa rota deve exibir todos os clientes em lista na tela inicial do modulo de clientes
 @view_client.route('/', methods=['GET'])
+@jwt_required()
 def all_clients():
     from models.cliente import Cliente
 
@@ -96,6 +98,7 @@ def all_clients():
 # esta rota deve exibir o formulário de clientes
 # quando o formulario for enviado, deve cadastrar o cliente no banco
 @view_client.route('/novo', methods=['POST'])
+@jwt_required()
 def new_client():
     if request.method == 'POST':
         from models.cliente import Cliente
@@ -189,6 +192,7 @@ def new_client():
 # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
 # 
 @view_client.route('/editar/<int:id_desejado>', methods=['POST'])
+@jwt_required()
 def patch_client(id_desejado):
     from models.cliente import Cliente
 
@@ -268,6 +272,7 @@ def patch_client(id_desejado):
 
 # rota para deletar um cliente com base no cpf/cnpj informado
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
+@jwt_required()
 def delete_client(id_desejado):
     from models.cliente import Cliente
 
@@ -293,6 +298,7 @@ def delete_client(id_desejado):
 
 # esta rota pesquisa o id do cliente
 @view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
+@jwt_required()
 def getClient(id_desejado):
     from models.cliente import Cliente
 

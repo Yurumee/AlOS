@@ -65,7 +65,7 @@ function ClientsNew()
             <div className='container'>
 
             <Form onSubmit={submit}>
-                <Form.Group controlId='form.inputCpfCnpj'>
+                <Form.Group>
                     <Form.Label>CPF/CNPJ</Form.Label>
                     <Form.Control type='number' placeholder='00000000000' maxLength={14} required onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
                 </Form.Group>

@@ -1,5 +1,6 @@
 # realizando importações necessárias
 from config import db
+from flask_jwt_extended import jwt_required
 from flask import Blueprint, jsonify, request
 
 # criando uma blueprint
@@ -8,6 +9,7 @@ view_product = Blueprint('view_product', __name__, url_prefix='/produto')
 # rota get all products
 # essa rota deve exibir todos os produtos em lista na tela inicial do modulo de produtos
 @view_product.route('/', methods=['GET'])
+@jwt_required()
 def all_products():
     from models.produto import Produto
     from models.cliente import Cliente
@@ -109,6 +111,7 @@ def all_products():
 # esta rota deve exibir o formulário de produtos
 # quando o formulario for enviado, deve cadastrar o produto no banco e ligá-lo ao cliente especificado
 @view_product.route('/novo', methods=['POST'])
+@jwt_required()
 def new_client():
     if request.method == 'POST':
         from models.produto import Produto
@@ -190,6 +193,7 @@ def new_client():
 # esta rota deve alterar os dados do produto desejado baseado no id
 # 
 @view_product.route('/editar/<int:id_desejado>', methods=['POST'])
+@jwt_required()
 def patch_product(id_desejado):
     from models.produto import Produto
 
@@ -256,6 +260,7 @@ def patch_product(id_desejado):
 
 # rota para deletar um produto com base no id informado
 @view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
+@jwt_required()
 def delete_client(id_desejado):
     from models.produto import Produto
 
@@ -280,6 +285,7 @@ def delete_client(id_desejado):
         
 # rota usada para pesquisar produtos com base no id para ser utilizado para edição ou exclusão
 @view_product.route('/pesquisar/<int:id_desejado>', methods=['GET'])
+@jwt_required()
 def getProduct(id_desejado):
     from models.produto import Produto
     from models.cliente import Cliente

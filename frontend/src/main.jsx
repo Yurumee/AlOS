@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
+
 import Clients from './Clients.jsx'
 import Products from './Products.jsx';
 import ProductsNew from './ProductsNew.jsx';
@@ -11,9 +12,13 @@ import ClientsDelete from './ClientsDelete.jsx'
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
 import Home from './Home.jsx';
+import Login from './Login.jsx';
+
 import PageNotFound from './NotFound.jsx';
+import useToken from './components/useToken.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 <link
   rel="stylesheet"
@@ -22,30 +27,45 @@ import 'bootstrap/dist/css/bootstrap.min.css';
   crossorigin="anonymous"
 />
 
-createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+// eslint-disable-next-line react-refresh/only-export-components
+function Main(){
+  const {token, removeToken, setToken} = useToken()
+
+  return(
+    <BrowserRouter>
+    { !token && token !=='' && token !== undefined ?
+    <Login setToken={setToken} /> :(
+      <>
       <Routes>
-        <Route index element={<Home />} />
-        
+        <Route index element={<Home token={removeToken} />} />
         <Route path='/clientes' element={<Clients />}/>
         <Route path='/novo-cliente' element={<ClientsNew />}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit />}/>
         <Route path='/deletar-cliente/:id' element={<ClientsDelete />}/>
         <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
-
         <Route path='/produtos' element={<Products />}/>
         <Route path='/novo-produto' element={<ProductsNew />}/>
         <Route path='/editar-produto/:id' element={<ProductsEdit />}/>
         <Route path='/deletar-produto/:id' element={<ProductsDelete />}/>
         <Route path='/editar-produto' element={<ModalProd operation={'edit'}/>}/>
         <Route path='/deletar-produto' element={<ModalProd operation={'delete'} />}/>
-
+          
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}
-
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
+      </>
+    )
+  }
   </BrowserRouter>
+  )
+}
+
+// const {token, removeToken, setToken} = useToken()
+
+createRoot(document.getElementById('root')).render(
+  <Main />
+  
 )
