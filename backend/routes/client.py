@@ -164,7 +164,6 @@ def new_client():
         try:
             # realizando transação
             # criando o cliente a ser inserido
-            print('iniciando cadastro de cliente')
             client = Cliente(
                                 cpf_cnpj = cpf_cnpj,
                                 nome_completo = nome,
