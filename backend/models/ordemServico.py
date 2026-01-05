@@ -14,7 +14,7 @@ class OrdemServico(db.Model):
     ordem_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    tecnico_cpf: Mapped[int] = mapped_column(INTEGER, ForeignKey('tecnico.cpf_tecnico'))
+    tecnico_cpf: Mapped[str] = mapped_column(VARCHAR, ForeignKey('tecnico.cpf_tecnico'))
     produto_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('produto.produto_id'))
     cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 

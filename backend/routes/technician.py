@@ -17,7 +17,6 @@ def create_admin():
     tecnico_exists = db.session.query(Tecnico).filter_by(cpf_tecnico=CPF_ADMIN).one_or_none()
 
     SENHA_ADMIN_HASH = bcrypt.generate_password_hash(SENHA_ADMIN)
-    print(SENHA_ADMIN_HASH)
 
     IS_ADMIN_TRUE = bool(IS_ADMIN)
 
@@ -115,6 +114,7 @@ def new_technician():
 
         # pegando o id do tecnico do token logado atualmente
         # convertendo para um int
+        
         tech_id = int(get_jwt_identity())
 
         # pesquisando pelo tecnico
@@ -125,6 +125,7 @@ def new_technician():
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
+            # print(tech_exists)
             return '', 404
         
         # caso o tecnico exista

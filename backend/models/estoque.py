@@ -17,4 +17,4 @@ class Estoque(db.Model):
     descricao_item: Mapped[str] = mapped_column(VARCHAR(30))
     quantidade: Mapped[int] = mapped_column(INTEGER, default=0, nullable=False)
     preco_unitario: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), default=0.01, nullable=False)
-    cod_barras: Mapped[int] = mapped_column(INTEGER)
+    cod_barras: Mapped[str] = mapped_column(VARCHAR)
