@@ -29,19 +29,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // eslint-disable-next-line react-refresh/only-export-components
 function Main(){
-  const {token, removeToken, setToken} = useToken()
+  const {token, setToken} = useToken()
 
   return(
     <BrowserRouter>
     { !token && token !=='' && token !== undefined ?
     <Login setToken={setToken} /> :(
       <>
+      {/* <NavBar token={removeToken}></NavBar> */}
       <Routes>
-        <Route index element={<Home token={removeToken} />} />
-        <Route path='/clientes' element={<Clients />}/>
-        <Route path='/novo-cliente' element={<ClientsNew />}/>
-        <Route path='/editar-cliente/:id' element={<ClientsEdit />}/>
-        <Route path='/deletar-cliente/:id' element={<ClientsDelete />}/>
+        <Route index element={<Home/>} />
+        <Route path='/clientes' element={<Clients token={token} />}/>
+        <Route path='/novo-cliente' element={<ClientsNew token={token}/>}/>
+        <Route path='/editar-cliente/:id' element={<ClientsEdit token={token}/>}/>
+        <Route path='/deletar-cliente/:id' element={<ClientsDelete token={token}/>}/>
         <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
         <Route path='/produtos' element={<Products />}/>

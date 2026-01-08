@@ -8,7 +8,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-function ClientsNew()
+function ClientsNew(props)
 {
 
     // guardando valores na variavel
@@ -37,7 +37,8 @@ function ClientsNew()
             method: 'POST',
             headers: 
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.token
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({

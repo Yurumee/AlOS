@@ -1,5 +1,6 @@
 import './styles/NavBar.css'
 import './styles/index.css'
+import useToken from './components/useToken';
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -9,6 +10,19 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function NavBar() {
+    const { removeToken } = useToken()
+
+    async function logout(){
+        const URL = 'http://localhost:5000/tecnico/logout'
+        await fetch(URL, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(() => {removeToken()})
+        .catch((error) => console.log(error))
+
+        window.location.href = '/'
+    }
 
     // function goto_home() {
     //     window.location.href = '/'
@@ -83,6 +97,8 @@ function NavBar() {
                             aria-label="Search" />
                         <Button variant="outline-success">Search</Button>
                     </Form>
+                    
+                    <Button variant='danger' onClick={logout} style={{'marginLeft':'8px'}}>Sair</Button>
 
                 </Navbar.Collapse>
             </Container>

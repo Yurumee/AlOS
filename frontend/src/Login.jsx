@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import { useState } from "react";
+import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 
 function Login(props){
     const [loginCPF, setLoginCPF] = useState()
@@ -30,10 +31,13 @@ function Login(props){
         )
         .then(res => res.json())
         .then((res) => {props.setToken(res.access_token)}) // se bem sucedida, guarda o token
+        // .then(data => console.log(data.teste))
         .catch((error) => console.log(error))
 
         setLoginCPF('')
         setLoginSenha('')
+        
+        // window.location.href = '/'
     }
 
     return (
@@ -43,15 +47,17 @@ function Login(props){
 
             <Form onSubmit={loginTech}>
                 <Form.Group>
-                    <Form.Label>CPF</Form.Label>
-                    <Form.Control type='number' placeholder='Insira seu CPF' maxLength={14} required onChange={(event) => setLoginCPF(event.target.value)}></Form.Control>
+                    <FloatingLabel label='CPF' className='mb-3'>
+                        <Form.Control type='number' placeholder='Insira seu CPF' maxLength={14} required onChange={(event) => setLoginCPF(event.target.value)}></Form.Control>
+                    </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Senha</Form.Label>
-                    <Form.Control type='password' placeholder='Insira sua senha' required onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
+                    <FloatingLabel label='Senha' className='mb-3'>
+                        <Form.Control type='password' placeholder='Insira sua senha' required onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
+                    </FloatingLabel>
                 </Form.Group>
-
+                
                 <Button variant='outline-primary' type='submit'>Login</Button>
 
             </Form>

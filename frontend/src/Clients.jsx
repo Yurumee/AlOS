@@ -33,13 +33,16 @@ function Clients(props)
             // url da api
             const URL = 'http://127.0.0.1:5000/cliente/'
             const response = await fetch(URL, {
-                    headers: {Authorization: 'Bearer ' + props.token}
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + props.token
+                    }
                 }
             )
             const data = await response.json();
             
             // definindo o token de autenticação
-            data.access_token && props.setToken(data.access_token)
+            // data.access_token && props.setToken(data.access_token)
             
             const list = Object.values(data)
             setClients(list)
@@ -114,6 +117,8 @@ function Clients(props)
 
             
             <NavBar search='http://127.0.0.1:5000/cliente/pesquisar/' search_str/>
+
+            {/* ALERTA */}
 
             <div className='buttons'>
 

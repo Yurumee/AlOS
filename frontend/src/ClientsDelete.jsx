@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/esm/Button'
 
-function ClientsDelete() {
+function ClientsDelete(props) {
     let params = useParams()
     const id = params.id
     const [client, setClient] = useState()
@@ -36,7 +36,8 @@ function ClientsDelete() {
                 method: 'POST',
                 headers: 
                     {
-                        'Content-Type':'application/json'
+                        'Content-Type':'application/json',
+                        'Authorization': 'Bearer ' + props.token
                     },
             })
 

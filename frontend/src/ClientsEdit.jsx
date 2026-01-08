@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom'
 
-function ClientsEdit() 
+function ClientsEdit(props) 
 {
     let params = useParams()
     const id = params.id
@@ -43,14 +43,6 @@ function ClientsEdit()
         // previne de ir vazio
         event.preventDefault()
 
-        console.log(new_cliente_nome)
-        console.log(new_empresa_nome)
-        console.log(new_cliente_endereco)
-        console.log(new_cliente_bairro)
-        console.log(new_cliente_cidade)
-        console.log(new_cliente_cep)
-        console.log(new_cliente_tel)
-        console.log(new_cliente_credito)
 
         // url para backend
         const URL = `http://localhost:5000/cliente/editar/${id}`
@@ -60,7 +52,8 @@ function ClientsEdit()
             method: 'POST',
             headers: 
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.token
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({
@@ -75,7 +68,9 @@ function ClientsEdit()
                 })
 
         })
-
+        .then(res => res.json())
+        .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
+        
         window.location.href = '/clientes'
     }
 

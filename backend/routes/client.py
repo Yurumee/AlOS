@@ -11,6 +11,7 @@ view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
 @view_client.route('/', methods=['GET'])
 @jwt_required()
 def all_clients():
+
     from models.cliente import Cliente
 
     clients = db.session.query(Cliente).all()
@@ -94,6 +95,7 @@ def all_clients():
 #         except Exception as e:
 #             return '', 500
 
+
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes
 # quando o formulario for enviado, deve cadastrar o cliente no banco
@@ -118,21 +120,24 @@ def new_client():
             cep = data.get('cep_cliente')
             telefone = data.get('telefone_cliente')
             lim_credito = float(data.get('limite_credito'))
-        
+
         except Exception as e:
             return jsonify({'error':str(e)})
 
         # cpf/cnpj nao deve ser nulo
         if cpf_cnpj == '' or cpf_cnpj == None:
+            print('erro de cpf')
             return jsonify({'message':'cpf/cnpj nao pode ser nulo'})
 
         # cpf/cnpj devem ter a quantidade de caracteres desejada
         if len(cpf_cnpj) != 11 and flag_cnpj == False:
+            print('erro de cpf (length)')
             return jsonify({
                             'message':'cpf invalido'
                             })
         
         if len(cpf_cnpj) != 14 and flag_cnpj == True:
+            print('erro de cnpj (length)')
             return jsonify({
                             'message':'cnpj invalido'
                             })
@@ -142,23 +147,28 @@ def new_client():
             cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj).first()
             
             if cliente_exists:
+                print('cliente existe')
                 return jsonify({'message':'cliente existe'})    
         except:
             return jsonify({'message':'error'})
         
         # verifica se campo telefone possui apenas numeros
         if all(char.isdigit() for char in telefone) != True:
+            print('erro de telefone')
             return jsonify({'message':'telefone deve conter apenas numeros'})
         
         # verifica se o limite de credito é um valor negativo
         if lim_credito < 0:
+            print('erro de lim credito')
             return jsonify({'message':'limite de credito nao deve ser um valor negativo'})
         
         # verifica se o nome é nulo
         if not nome:
+            print('erro de nome nulo')
             return jsonify({'message':'nome nao deve ser nulo'})
         
         if not nome_fantasia and flag_cnpj == True:
+            print('erro de nome fantasia')
             return jsonify({'message':'informe o nome fantasia da empresa'})
         
         try:
@@ -226,13 +236,19 @@ def patch_client(id_desejado):
         #     return '', 406
         
         if lim_credito != None and float(lim_credito) < 0:
-            return '', 406
+            return '', 400
         
         if telefone != None and all(char.isdigit() for char in telefone) != True:
-            return '', 406
+            return '', 400
         
-        # if not endereco or not bairro or not cidade:
-        #     return '', 406
+        if endereco != None and not endereco or endereco == '':
+            return '', 400
+        
+        if bairro != None and not bairro or bairro == '':
+            return '', 400
+        
+        if cidade != None and not cidade or cidade == '':
+            return '', 400
         
         # realizando modificações
         try:
@@ -267,7 +283,8 @@ def patch_client(id_desejado):
             print(str(e))
             return '', 500
         
-        return '', 200
+        response = {'status':'success', 'msg':'Cliente editado com sucesso!'}
+        return response, 200
 
 # rota para deletar um cliente com base no cpf/cnpj informado
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
@@ -297,7 +314,7 @@ def delete_client(id_desejado):
 
 # esta rota pesquisa o id do cliente
 @view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def getClient(id_desejado):
     from models.cliente import Cliente
 
@@ -322,4 +339,6 @@ def getClient(id_desejado):
                                         "pessoa_juridica": cliente_exists.pessoa_juridica
                                     }
         # jsonify({cliente_exists.cliente_id:result})
-        return result, 200
+        return result, 302
+    
+    return '', 404
