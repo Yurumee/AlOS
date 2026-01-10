@@ -3,11 +3,14 @@ import './styles/index.css'
 import NavBar from './NavBar'
 import ClientsVisualize from './ClientsVisualize'
 import ModalId from './ModalId'
+
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
+
 
 function Clients(props) 
 {
@@ -23,6 +26,8 @@ function Clients(props)
     const [modalClient, setModalClient] = useState({})
     // operação realizada
     const [operation, setOperation] = useState('')
+
+    const location = useLocation()
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -51,41 +56,8 @@ function Clients(props)
             }
 
         getClients()
+        console.log(location.state)
     }, [])
-
-    // async function getClients() {
-    //     setIsLoading(true)
-
-    //     // url da api
-    //     URL = 'http://127.0.0.1:5000/cliente/'
-    //     // realiza GET na api
-    //     // depois busca apenas o json
-    //     // depois insere os dados do json no setClients
-    //     // setClients vai receber e guardar tudo em clients
-    //     await fetch(URL).then(resp => resp.json()).then(data => setClients(data.clientes))
-    //     .catch(e => console.log(e)).finally(setIsLoading(false))
-    //     // se tiver erros, mostra no terminal
-    // }
-
-    // function ClientRows(props)
-    // {
-    //     const client = props.clients
-    //     if (client && !isLoading)
-    //     {
-    //         return <>
-    //             {client.map(client => (
-    //                 <tr>
-    //                     <td key={client.nome_completo}> {client.nome_completo} </td>
-    //                     <td key={client.nome_fantasia}> {client.nome_fantasia} </td>
-    //                     <td key={client.telefone}> {client.telefone} </td>
-    //                     <td key={client.limite_credito}> {client.limite_credito} </td>
-    //                 </tr>
-    //             )
-    //             )
-    //         }
-    //         </>         
-    //     }
-    // }
 
     function new_client()
     {

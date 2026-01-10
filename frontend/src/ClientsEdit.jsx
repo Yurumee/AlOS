@@ -1,19 +1,22 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
+import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 function ClientsEdit(props) 
 {
     let params = useParams()
+    const navigation  = useNavigate()
     const id = params.id
     const [client, setClient] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [response, setResponse] = useState({status:'', msg:''})
 
     // guardando valores na variavel
     const [new_cliente_nome, setNewClienteNome] = useState()
@@ -69,9 +72,10 @@ function ClientsEdit(props)
 
         })
         .then(res => res.json())
-        .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
+        .then(res => setResponse(res))
+        // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
         
-        window.location.href = '/clientes'
+        // window.location.href = '/clientes'
     }
 
     return(
@@ -80,7 +84,7 @@ function ClientsEdit(props)
 
         { !isLoading &&
 
-            <div className='container'>
+            <div className='container' >
 
             <h1>Editando Cliente - {client.cpf_cnpj}</h1>
 
@@ -88,11 +92,11 @@ function ClientsEdit(props)
 
                 <Form.Group>
                     <Form.Label>Nome do Ciente</Form.Label>
-                    <Form.Control type='text' defaultValue={client.nome_completo} placeholder='João Maria' required onChange={(event) => setNewClienteNome(event.target.value)} />
+                    <Form.Control type='text' defaultValue={client.nome_completo} placeholder='João Maria' onChange={(event) => setNewClienteNome(event.target.value)} />
                 </Form.Group>
 
                 {
-                    client.flag_cnpj && <Form.Group>
+                    client.pessoa_juridica && <Form.Group>
                                             <Form.Label>Nome Fantasia</Form.Label>
                                             <Form.Control type='text' defaultValue={client.nome_fantasia} placeholder='Empresa Fulana' onChange={(event) => setNewEmpresaNome(event.target.value)} />
                                         </Form.Group>
@@ -100,27 +104,27 @@ function ClientsEdit(props)
 
                 <Form.Group>
                     <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' defaultValue={client.telefone} placeholder='84912345678' required onChange={(event) => setNewClienteTel(event.target.value)} />
+                    <Form.Control type='number' defaultValue={client.telefone} placeholder='84912345678' onChange={(event) => setNewClienteTel(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' defaultValue={client.limite_credito} placeholder='99.99' step={0.01} required onChange={(event) => setNewClienteCredito(event.target.value)} />
+                    <Form.Control type='number' defaultValue={client.limite_credito} placeholder='99.99' step={0.01} onChange={(event) => setNewClienteCredito(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' defaultValue={client.endereco} placeholder='Rua Exemplo, 001' required onChange={(event) => setNewClienteEndereco(event.target.value)} />
+                    <Form.Control type='text' defaultValue={client.endereco} placeholder='Rua Exemplo, 001' onChange={(event) => setNewClienteEndereco(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Bairro</Form.Label>
-                    <Form.Control type='text' defaultValue={client.bairro} placeholder='Centro' required onChange={(event) => setNewClienteBairro(event.target.value)} />
+                    <Form.Control type='text' defaultValue={client.bairro} placeholder='Centro' onChange={(event) => setNewClienteBairro(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Cidade</Form.Label>
-                    <Form.Control type='text' defaultValue={client.cidade} placeholder='Campos Neutrais' required onChange={(event) => setNewClienteCidade(event.target.value)} />
+                    <Form.Control type='text' defaultValue={client.cidade} placeholder='Campos Neutrais' onChange={(event) => setNewClienteCidade(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -131,8 +135,21 @@ function ClientsEdit(props)
                 <Button variant='outline-warning' type='submit'>Editar cliente</Button>
             </Form>
 
+            {/* CHECA O ALERTA A SER MOSTRADO */}
+            { (response.status != '' && response.status == 'success') && 
+                navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                ||
+                (response.status != '' && response.status == 'error') &&
+                <AlertPopUp status={response.status} msg={response.msg} close={() => {setResponse({status:'', msg:''})}}/>
+            }
+
             </div>
+            
         }
+        
+        
+
+        
         </>
     )
 }

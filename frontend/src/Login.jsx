@@ -48,13 +48,13 @@ function Login(props){
             <Form onSubmit={loginTech}>
                 <Form.Group>
                     <FloatingLabel label='CPF' className='mb-3'>
-                        <Form.Control type='number' placeholder='Insira seu CPF' maxLength={14} required onChange={(event) => setLoginCPF(event.target.value)}></Form.Control>
+                        <Form.Control type='number' placeholder='Insira seu CPF' onChange={(event) => setLoginCPF(event.target.value)}></Form.Control>
                     </FloatingLabel>
                 </Form.Group>
 
                 <Form.Group>
                     <FloatingLabel label='Senha' className='mb-3'>
-                        <Form.Control type='password' placeholder='Insira sua senha' required onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
+                        <Form.Control type='password' placeholder='Insira sua senha' onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
                     </FloatingLabel>
                 </Form.Group>
                 

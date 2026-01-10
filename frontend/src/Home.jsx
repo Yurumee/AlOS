@@ -1,4 +1,4 @@
-import './styles/Home.css'
+// import './styles/Home.css'
 import './styles/index.css'
 import Navbar from './NavBar'
 import Button from 'react-bootstrap/Button'

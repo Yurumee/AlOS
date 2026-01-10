@@ -1,8 +1,9 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
+import AlertPopUp from './AlertPopUp'
 
-import {useParams} from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import Card from 'react-bootstrap/Card'
@@ -10,9 +11,11 @@ import Button from 'react-bootstrap/esm/Button'
 
 function ClientsDelete(props) {
     let params = useParams()
+    const navigation  = useNavigate()
     const id = params.id
     const [client, setClient] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [response, setResponse] = useState({status:'', msg:''})
 
     useEffect(() => 
     {
@@ -40,8 +43,10 @@ function ClientsDelete(props) {
                         'Authorization': 'Bearer ' + props.token
                     },
             })
+            .then(res => res.json())
+            .then(res => setResponse(res))
 
-        window.location.href = '/clientes'
+        // window.location.href = '/clientes'
     }
 
     function cancel()
@@ -52,6 +57,14 @@ function ClientsDelete(props) {
     return (
 
         <>
+                {/* CHECA O ALERTA A SER MOSTRADO */}
+                { (response.status != '' && response.status == 'success') && 
+                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    ||
+                    (response.status != '' && response.status == 'error') &&
+                    <AlertPopUp status={response.status} msg={response.msg} />
+                }
+
             <NavBar />
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
             <div>

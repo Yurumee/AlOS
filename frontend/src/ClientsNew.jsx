@@ -1,12 +1,13 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import './styles/ClientsNew.css'
 import NavBar from './NavBar'
+import AlertPopUp from './AlertPopUp'
 
 import { useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { useNavigate } from 'react-router-dom'
 
 function ClientsNew(props)
 {
@@ -22,6 +23,9 @@ function ClientsNew(props)
     const [cliente_cep, setClienteCep] = useState()
     const [cliente_tel, setClienteTel] = useState()
     const [cliente_credito, setClienteCredito] = useState()
+
+    const [response, setResponse] = useState({status:'', msg:''})
+    const navigation  = useNavigate()
 
 
     async function submit(event) 
@@ -55,25 +59,40 @@ function ClientsNew(props)
                 })
 
         })
+        .then(res => res.json())
+        .then(res => setResponse(res))
 
-        window.location.href = '/clientes'
+        // window.location.href = '/clientes'
     }
 
     return(
         <>
+                {/* CHECA O ALERTA A SER MOSTRADO */}
+                { (response.status != '' && response.status == 'success') && 
+                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    ||
+                    (response.status != '' && response.status == 'error') &&
+                    <AlertPopUp status={response.status} msg={response.msg} />
+                }
+
             <NavBar/>
 
             <div className='container'>
 
+                <div style={{'marginBottom':'15px'}}>
+                    <p className='h2'>Cadastro de novo cliente</p> 
+                    <span style={{'color':'red'}}>* representam campos obrigatórios</span>
+                </div>
+
             <Form onSubmit={submit}>
                 <Form.Group>
-                    <Form.Label>CPF/CNPJ</Form.Label>
-                    <Form.Control type='number' placeholder='00000000000' maxLength={14} required onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
+                    <Form.Label>CPF/CNPJ <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='number' placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Nome do Ciente</Form.Label>
-                    <Form.Control type='text' placeholder='João Maria' required onChange={(event) => setClienteNome(event.target.value)} />
+                    <Form.Label>Nome do Ciente <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' placeholder='João Maria' onChange={(event) => setClienteNome(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -83,34 +102,34 @@ function ClientsNew(props)
 
                 {flag_cnpj && 
                     <Form.Group>
-                        <Form.Label>Nome Fantasia</Form.Label>
+                        <Form.Label>Nome Fantasia <span style={{'color':'red'}}>*</span></Form.Label>
                         <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
                     </Form.Group>
                 }
 
                 <Form.Group>
-                    <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' placeholder='84912345678' required onChange={(event) => setClienteTel(event.target.value)} />
+                    <Form.Label>Telefone <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='number' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' placeholder='99.99' step={0.01} required onChange={(event) => setClienteCredito(event.target.value)} />
+                    <Form.Control type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' placeholder='Rua Exemplo, 001' required onChange={(event) => setClienteEndereco(event.target.value)} />
+                    <Form.Label>Endereço <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' placeholder='Rua Exemplo, 001' onChange={(event) => setClienteEndereco(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Bairro</Form.Label>
-                    <Form.Control type='text' placeholder='Centro' required onChange={(event) => setClienteBairro(event.target.value)} />
+                    <Form.Label>Bairro <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' placeholder='Centro' onChange={(event) => setClienteBairro(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Cidade</Form.Label>
-                    <Form.Control type='text' placeholder='Campos Neutrais' required onChange={(event) => setClienteCidade(event.target.value)} />
+                    <Form.Label>Cidade <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' placeholder='Campos Neutrais' onChange={(event) => setClienteCidade(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -122,42 +141,6 @@ function ClientsNew(props)
             </Form>
 
             </div>
-
-            {/* <div className='forms'>
-                <form onSubmit={submit}>
-                    <span>CPF/CNPJ</span>
-                    <input type='number' placeholder='CPF/CNPJ' required onChange={(event) => setCpfCnpj(event.target.value)} />
-                    
-                    <span>É Pessoa Jurídica?</span>
-                    <input type="checkbox" onChange={(event) => setFlagCnpj(event.target.checked)} />
-                    
-                    <span>Nome do Cliente</span>
-                    <input type="text" placeholder='Nome' required onChange={(event) => setClienteNome(event.target.value)} />
-                    
-                    <span>Nome Fantasia</span>
-                    <input type="text" placeholder='Nome Fantasia' onChange={(event) => setEmpresaNome(event.target.value)} />
-                    
-                    <span>Endereço</span>
-                    <input type="text" placeholder='Endereço, Número' required onChange={(event) => setClienteEndereco(event.target.value)} />
-                    
-                    <span>Bairro</span>
-                    <input type="text" placeholder='Bairro' required onChange={(event) => setClienteBairro(event.target.value)} />
-                    
-                    <span>Cidade</span>
-                    <input type="text" placeholder='Cidade' required onChange={(event) => setClienteCidade(event.target.value)} />
-                    
-                    <span>CEP</span>
-                    <input type="number" placeholder='CEP' onChange={(event) => setClienteCep(event.target.value)} />
-                    
-                    <span>Telefone</span>
-                    <input type="tel" placeholder='Telefone' required onChange={(event) => setClienteTel(event.target.value)} />
-                    
-                    <span>Limite de Crédito</span>
-                    <input type='number' step={0.01} placeholder='Limite de Crédito' required onChange={(event) => setClienteCredito(event.target.value)} />
-
-                    <button type='submit'>Cadastrar Cliente</button>
-                </form>
-            </div> */}
         </>
     )
 
