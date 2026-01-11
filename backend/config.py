@@ -12,12 +12,13 @@ from dotenv import load_dotenv
 
 # carregando variaveis de ambiente
 load_dotenv()
-CPF_ADMIN = getenv('CPF_ADMIN')
-SENHA_ADMIN = getenv('SENHA_ADMIN')
-NOME_ADMIN = getenv('NOME_ADMIN')
-CONTATO_ADMIN = getenv('CONTATO_ADMIN')
-ENDERECO_ADMIN = getenv('ENDERECO_ADMIN')
-IS_ADMIN = getenv('IS_ADMIN')
+__CPF_ADMIN__ = getenv('CPF_ADMIN')
+__USER_ADMIN__ = getenv('USER_ADMIN')
+__SENHA_ADMIN__ = getenv('SENHA_ADMIN')
+__NOME_ADMIN__ = getenv('NOME_ADMIN')
+__CONTATO_ADMIN__ = getenv('CONTATO_ADMIN')
+__ENDERECO_ADMIN__ = getenv('ENDERECO_ADMIN')
+__IS_ADMIN__ = getenv('IS_ADMIN')
 
 # criando uma instancia flask
 app = Flask(__name__)

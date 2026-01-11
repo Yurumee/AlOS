@@ -14,12 +14,26 @@ function ModalId(props) {
     {
         if(flag_operation == 'edit') 
         {
-            window.location.href = `/editar-cliente/${idCliente}`
+            if(idCliente != undefined)
+            {
+                window.location.href = `/editar-cliente/${idCliente}`
+            }
+            else
+            {
+                window.location.href = '*'
+            }
         }
 
         if(flag_operation == 'delete') 
         {
-            window.location.href = `/deletar-cliente/${idCliente}`    
+            if(idCliente != undefined)
+            {
+                window.location.href = `/deletar-cliente/${idCliente}`    
+            }
+            else
+            {
+                window.location.href = '*'
+            }
         }
     }
 
@@ -37,7 +51,7 @@ function ModalId(props) {
     
                 <Modal.Body>
                     <FloatingLabel label="ID" className="mb-3">
-                        <Form.Control type="number" required placeholder="ID" onChange={(event) => setIdCliente(event.target.value)} />
+                        <Form.Control type="number" placeholder="ID" onChange={(event) => setIdCliente(event.target.value)} />
                     </FloatingLabel>
                 </Modal.Body>
     

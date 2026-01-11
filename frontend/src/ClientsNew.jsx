@@ -61,20 +61,14 @@ function ClientsNew(props)
         })
         .then(res => res.json())
         .then(res => setResponse(res))
+        .catch(error => console.log(error))
 
         // window.location.href = '/clientes'
     }
 
     return(
         <>
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                { (response.status != '' && response.status == 'success') && 
-                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
-
+                
             <NavBar/>
 
             <div className='container'>
@@ -133,13 +127,20 @@ function ClientsNew(props)
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>CEP</Form.Label>
+                    <Form.Label>CEP <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control type='number' placeholder='12345000' onChange={(event) => setClienteCep(event.target.value)} />
                 </Form.Group>
                 
                 <Button variant='outline-primary' type='submit'>Cadastrar cliente</Button>
             </Form>
 
+                {/* CHECA O ALERTA A SER MOSTRADO */}
+                { (response.status != '' && response.status == 'success') && 
+                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    ||
+                    (response.status != '' && response.status == 'error') &&
+                    <AlertPopUp status={response.status} msg={response.msg} />
+                }
             </div>
         </>
     )

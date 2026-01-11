@@ -102,7 +102,7 @@ def new_client():
             return response, 400 
         
         # verifica se o limite de credito é um valor negativo
-        if lim_credito < 0:
+        if lim_credito and lim_credito < 0:
             response = {'status':'error', 'msg':'O LIMITE DE CRÉDITO NÃO PODE SER NEGATIVO'}
             return response, 400 
         
@@ -141,13 +141,13 @@ def new_client():
             db.session.add(client)
             db.session.commit()
             # fim da transação
-
+            
+            response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
+            return response, 201
+        
         except Exception as e:
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
-        
-        response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
-        return response, 201
 
 # rota para alterar um cliente existente
 # esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
@@ -286,7 +286,8 @@ def getClient(id_desejado):
     try:
         cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
     except Exception as e:
-        return '', 500
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
     
     if cliente_exists:
         result = {}
@@ -306,7 +307,9 @@ def getClient(id_desejado):
         # jsonify({cliente_exists.cliente_id:result})
         return result, 302
     
-    return '', 404
+    
+    response = {'status':'error', 'msg':'NENHUM CLIENTE ENCONTRADO COM ESTE ID'}
+    return response, 404
 
 # rota pesquisa de cliente por nome/cpf/cnpj
 # esta rota é utilizada pela barra de pesquisa

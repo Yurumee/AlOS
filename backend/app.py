@@ -26,6 +26,10 @@ app.register_blueprint(view_technician)
 
 if __name__ == '__main__':
     with app.app_context():
+        from insert_sup import __insert_sup
+
         db.create_all()
+        __insert_sup()
+
         
     app.run()

@@ -14,12 +14,26 @@ function ModalProd(props) {
     {
         if(flag_operation == 'edit') 
         {
-            window.location.href = `/editar-produto/${idProduct}`
+            if(idProduct != undefined) 
+            {
+                window.location.href = `/editar-produto/${idProduct}`
+            }
+            else
+            {
+                window.location.href = '*'
+            }
         }
 
         if(flag_operation == 'delete') 
         {
-            window.location.href = `/deletar-produto/${idProduct}`    
+            if(idProduct != undefined) 
+            {
+                window.location.href = `/deletar-produto/${idProduct}`    
+            }
+            else
+            {
+                window.location.href = '*'
+            }
         }
     }
 

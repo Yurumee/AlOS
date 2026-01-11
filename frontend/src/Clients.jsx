@@ -5,7 +5,7 @@ import ClientsVisualize from './ClientsVisualize'
 import ModalId from './ModalId'
 
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+// import { useLocation } from 'react-router-dom'
 
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -27,7 +27,7 @@ function Clients(props)
     // operação realizada
     const [operation, setOperation] = useState('')
 
-    const location = useLocation()
+    // const location = useLocation()
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -56,16 +56,17 @@ function Clients(props)
             }
 
         getClients()
-        console.log(location.state)
-    }, [])
+
+    }, [props.token])
 
     function new_client()
     {
         window.location.href = '/novo-cliente'
     }
 
-    function edit_client()
+    function edit_client(event)
     {
+        event.preventDefault()
         setOperation('edit')
         setModalOperationOpen(!modalOperationOpen)
     }

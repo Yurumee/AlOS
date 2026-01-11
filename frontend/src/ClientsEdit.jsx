@@ -30,9 +30,10 @@ function ClientsEdit(props)
 
     useEffect(() => {
         async function getClient()
-        {
+        {   
             const URL = `http://localhost:5000/cliente/pesquisar/${id}`
             const resp = await fetch(URL).then(resp => resp.json())
+            console.log(resp)
             const list = Object.values(resp)
             setClient(list[0])
             setIsLoading(false)
@@ -73,6 +74,7 @@ function ClientsEdit(props)
         })
         .then(res => res.json())
         .then(res => setResponse(res))
+        .catch(error => console.log(error))
         // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
         
         // window.location.href = '/clientes'
