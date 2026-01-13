@@ -1,7 +1,8 @@
 # realizando importações necessárias
-from config import db
+from config import db, log_path
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 # criando uma blueprint
 view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
@@ -34,8 +35,6 @@ def all_clients():
                                 }
         
     return result, 200
-    # return resp
-
 
 # rota cadastro de cliente
 # esta rota deve exibir o formulário de clientes
@@ -63,64 +62,164 @@ def new_client():
             lim_credito = float(data.get('limite_credito'))
 
         except Exception as e:
-            response = {'status':'error', 'msg':'FALTAM DADOS A SEREM CADASTRADOS'}
-            return response, 500
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+                
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            
+            finally:
+                response = {'status':'error', 'msg':'FALTAM DADOS A SEREM CADASTRADOS'}
+                return response, 500
         
         # cpf/cnpj nao deve ser nulo
         if cpf_cnpj == '' or cpf_cnpj == None:
-            response = {'status':'error', 'msg':'O CPF/CNPJ NÃO PODE SER VAZIO'}
-            return response, 400
-
+            print(f'{log_path}\\log_cli_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt')
+            try:
+                with open(f'{log_path}\\log_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
+                    file.write(f'BACKEND CLIENT ERROR: CPF/CNPJ NULO')
+                print('LOG ESCRITO COM SUCESSO')
+                
+            except Exception as e:
+                print('LOG NAO PODE SER CRIADO')
+                print(str(e))
+            finally:
+                response = {'status':'error', 'msg':'O CPF/CNPJ NÃO PODE SER VAZIO'}
+                return response, 400
+            
         # cpf/cnpj devem ter a quantidade de caracteres desejada
         if len(cpf_cnpj) != 11 and flag_cnpj == False:
-            response = {'status':'error', 'msg':'O CPF DEVE TER 11 CARACTERES'}
-            return response, 400
+
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM CPF INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+                
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            
+            finally:
+                response = {'status':'error', 'msg':'O CPF DEVE TER 11 CARACTERES'}
+                return response, 406
         
         if len(cpf_cnpj) != 14 and flag_cnpj == True:
-            response = {'status':'error', 'msg':'O CNPJ DEVE TER 14 CARACTERES'}
-            return response, 400
-
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM CNPJ INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+                
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            
+            finally:
+                response = {'status':'error', 'msg':'O CNPJ DEVE TER 14 CARACTERES'}
+                return response, 406
+            
         # verifica se o cliente ja existe no banco
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj).first()
-            
-            if cliente_exists:
+        except Exception as e:
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+
+            finally:
+
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
+        
+        if cliente_exists:
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM CPF/CNPJ JA EXISTENTE')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+
+            finally:
                 response = {'status':'error', 'msg':'O CLIENTE JÁ CADASTRADO'}
                 return response, 409    
-        except:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        
         
         # verifica se o telefone é nulo
         if not telefone or telefone == '':
-            response = {'status':'error', 'msg':'O TELEFONE NÃO PODE SER VAZIO'}
-            return response, 400 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM TELEFONE INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O TELEFONE NÃO PODE SER VAZIO'}
+                return response, 406
         
         # verifica se campo telefone possui apenas numeros
         if all(char.isdigit() for char in telefone) != True:
-            response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
-            return response, 400 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM TELEFONE INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
+                return response, 406
         
         # verifica se o limite de credito é um valor negativo
         if lim_credito and lim_credito < 0:
-            response = {'status':'error', 'msg':'O LIMITE DE CRÉDITO NÃO PODE SER NEGATIVO'}
-            return response, 400 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM LIMITE DE CREDITO INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O LIMITE DE CRÉDITO NÃO PODE SER NEGATIVO'}
+                return response, 406
         
         # verifica se o nome é nulo
         if not nome:
-            response = {'status':'error', 'msg':'O NOME NÃO PODE SER NULO'}
-            return response, 400 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM NOME INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O NOME NÃO PODE SER NULO'}
+                return response, 406
         
         # verifica se o nome fantasia é nulo
         if not nome_fantasia and flag_cnpj == True:
-            response = {'status':'error', 'msg':'O NOME FANTASIA NÃO PODE SER NULO'}
-            return response, 400 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM NOME FAFNTASIA INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O NOME FANTASIA NÃO PODE SER NULO'}
+                return response, 406
         
         # verifica se o endereço, bairro ou cidade é nulo
-        if not endereco or not cidade or not bairro:
-            response = {'status':'error', 'msg':'ENDEREÇO, CIDADE E BAIRRO NÃO PODEM SER NULOS'}
-            return response, 400 
-        
+        if not endereco or not cidade or not bairro or not cep:
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM ENDERECO, CIDADE, BAIRRO E/OU CEP INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'ENDEREÇO, CIDADE, CEP E BAIRRO NÃO PODEM SER NULOS'}
+                return response, 406 
+
         try:
             # realizando transação
             # criando o cliente a ser inserido
@@ -142,15 +241,31 @@ def new_client():
             db.session.commit()
             # fim da transação
             
-            response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
-            return response, 201
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT CREATED: NOVO CLIENTE CADASTRADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
+                return response, 201
         
         except Exception as e:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
 
 # rota para alterar um cliente existente
-# esta rota deve alterar os dados do cliente desejado baseado no cpf/cnpj
+# esta rota deve alterar os dados do cliente desejado baseado no id
 # 
 @view_client.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
@@ -174,43 +289,136 @@ def patch_client(id_desejado):
         # checa se o cliente existe
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
+
         except:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
         
         if not cliente_exists:
-            response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
-            return response, 404
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: CLIENTE PESQUISADO NAO CADASTRADO NO BANCO DE DADOS. ID: {id_desejado}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+
+                response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
+                return response, 404
         
         # checar se os dados estao corretos
-        if not nome:
-            response = {'status':'error', 'msg':'O NOME NÃO PODE SER VAZIO'}
-            return response, 400
+        # cheque se o nome não esta vazio
+        if nome == '':
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE NOME NULO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O NOME NÃO PODE SER VAZIO'}
+                return response, 406
         
+        # cheque se ele possui nome fantasia caso seja cnpj
         if not nome_fantasia and cliente_exists.pessoa_juridica == True:
-            response = {'status':'error', 'msg':'O NOME FANTASIA NÃO PODE SER NULO'}
-            return response, 400
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE NOME FANTASIA NULO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+
+            finally:
+                response = {'status':'error', 'msg':'O NOME FANTASIA NÃO PODE SER NULO'}
+                return response, 406
         
+        # cheque se o limite de credito é negativo ou nulo
         if lim_credito != None and float(lim_credito) < 0:
-            response = {'status':'error', 'msg':'O LIMITE DE CRÉDITO NÃO PODE SER NEGATIVO'}
-            return response, 400
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE LIMITE DE CREDITO INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O LIMITE DE CRÉDITO NÃO PODE SER NEGATIVO'}
+                return response, 406
         
+        # cheque se o telefone contem apenas numeros e nao é vazio
         if telefone != None and all(char.isdigit() for char in telefone) != True:
-            response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
-            return response, 400
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE TELEFONE INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
+                return response, 406
         
-        if endereco != None and not endereco or endereco == '':
-            response = {'status':'error', 'msg':'O ENDEREÇO NÃO PODE SER VAZIO'}
-            return response, 400
+        # cheque se o endereco, bairro, cep ou cidade sao nulos
+        if endereco == '':
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE ENDERECO INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O ENDEREÇO NÃO PODE SER VAZIO'}
+                return response, 406
         
-        if bairro != None and not bairro or bairro == '':
-            response = {'status':'error', 'msg':'O BAIRRO NÃO PODE SER VAZIO'}
-            return response, 400
+        if bairro == '':
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE BAIRRO INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O BAIRRO NÃO PODE SER VAZIO'}
+                return response, 406
         
-        if cidade != None and not cidade or cidade == '':
-            response = {'status':'error', 'msg':'O CIDADE NÃO PODE SER VAZIO'}
-            return response, 400
+        if cidade == '':
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE CIDADE INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O CIDADE NÃO PODE SER VAZIO'}
+                return response, 406
         
+        if cep == '':
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRO DE CEP INVALIDO')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O CEP NÃO PODE SER VAZIO'}
+                return response, 406
+        
+
         # realizando modificações
         try:
             if nome != None and nome != cliente_exists.nome_completo:
@@ -239,14 +447,31 @@ def patch_client(id_desejado):
 
             db.session.commit()
 
-        except Exception as e:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
-        
-        response = {'status':'success', 'msg':'CLIENTE EDITADO COM SUCESSO!'}
-        return response, 200
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT PATCH: CLIENTE ID {id_desejado} EDITADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                print('LOG ESCRITO COM SUCESSO')
 
-# rota para deletar um cliente com base no cpf/cnpj informado
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            
+            finally:
+                response = {'status':'success', 'msg':'CLIENTE EDITADO COM SUCESSO!'}
+                return response, 200
+
+        except Exception as e:
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
+
+# rota para deletar um cliente com base no id informado
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_client(id_desejado):
@@ -257,37 +482,77 @@ def delete_client(id_desejado):
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
         except:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
         
         if not cliente_exists:
-            response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
-            return response, 404
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: CLIENTE PESQUISADO NAO CADASTRADO NO BANCO DE DADOS')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
+                return response, 404
         
         # exclui o cliente
         try:
-                db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
-                db.session.commit()
+            db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
+            db.session.commit()
                 
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT DELETE: CLIENTE ID {id_desejado} DELETADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+
+            finally:
                 response = {'status':'success', 'msg':'CLIENTE APAGADO COM SUCESSO!'}
-                return response, 500
+                return response, 200
     
         except Exception as e:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+            try:
+                with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+                print('LOG ESCRITO COM SUCESSO')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            finally:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
         
 
 # esta rota pesquisa o id do cliente
 @view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def getClient(id_desejado):
     from models.cliente import Cliente
 
     try:
         cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
     except Exception as e:
-        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-        return response, 500
+        try:
+            with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                file.write(f'BACKEND CLIENT ERROR: {str(e)}')
+            print('LOG ESCRITO COM SUCESSO')
+        except:
+            print('LOG NAO PODE SER CRIADO')
+        finally:
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
     
     if cliente_exists:
         result = {}

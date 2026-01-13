@@ -1,16 +1,24 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
 
+import Technicians from './Technicians.jsx';
+import TechniciansNew from './TechniciansNew.jsx';
+import TechniciansEdit from './TechniciansEdit.jsx';
+import TechniciansDelete from './TechniciansDelete.jsx';
+
 import Clients from './Clients.jsx'
+import ClientsNew from './ClientsNew.jsx';
+import ClientsEdit from './ClientsEdit.jsx';
+import ClientsDelete from './ClientsDelete.jsx'
+
 import Products from './Products.jsx';
 import ProductsNew from './ProductsNew.jsx';
 import ProductsEdit from './ProductsEdit.jsx'
 import ProductsDelete from './ProductsDelete.jsx'
-import ClientsNew from './ClientsNew.jsx';
-import ClientsEdit from './ClientsEdit.jsx';
-import ClientsDelete from './ClientsDelete.jsx'
+
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
+import ModalTech from './ModalTech.jsx';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 
@@ -34,7 +42,7 @@ function Main(){
   return(
     <BrowserRouter>
     { !token && token !=='' && token !== undefined ?
-    <Login setToken={setToken} /> :(
+    <Login path='/login' setToken={setToken} /> :(
       <>
       {/* <NavBar token={removeToken}></NavBar> */}
       <Routes>
@@ -45,12 +53,20 @@ function Main(){
         <Route path='/deletar-cliente/:id' element={<ClientsDelete token={token}/>}/>
         <Route path='/editar-cliente/' element={<ModalId operation={'edit'}/>}/>
         <Route path='/deletar-cliente/' element={<ModalId operation={'delete'}/>}/>
-        <Route path='/produtos' element={<Products />}/>
-        <Route path='/novo-produto' element={<ProductsNew />}/>
-        <Route path='/editar-produto/:id' element={<ProductsEdit />}/>
-        <Route path='/deletar-produto/:id' element={<ProductsDelete />}/>
+
+        <Route path='/produtos' element={<Products token={token}/>}/>
+        <Route path='/novo-produto' element={<ProductsNew token={token}/>}/>
+        <Route path='/editar-produto/:id' element={<ProductsEdit token={token}/>}/>
+        <Route path='/deletar-produto/:id' element={<ProductsDelete token={token}/>}/>
         <Route path='/editar-produto' element={<ModalProd operation={'edit'}/>}/>
         <Route path='/deletar-produto' element={<ModalProd operation={'delete'} />}/>
+        
+        <Route path='/tecnicos' element={<Technicians token={token}/>}/>
+        <Route path='/novo-tecnico' element={<TechniciansNew token={token}/>}/>
+        <Route path='/editar-tecnico/:id' element={<TechniciansEdit token={token}/>}/>
+        <Route path='/deletar-tecnico/:id' element={<TechniciansDelete token={token}/>}/>
+        <Route path='/editar-tecnico' element={<ModalTech operation={'edit'}/>}/>
+        <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} />}/>
           
         {/* <Route path='/estoque' element={<Stocks />}/> */}
         {/* <Route path='/servicos' element={<Services />}/> */}

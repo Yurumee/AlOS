@@ -32,7 +32,12 @@ function ClientsEdit(props)
         async function getClient()
         {   
             const URL = `http://localhost:5000/cliente/pesquisar/${id}`
-            const resp = await fetch(URL).then(resp => resp.json())
+            const resp = await fetch(URL, {
+                                            headers:{
+                                                'Authorization': 'Bearer ' + props.token
+                                            }
+                                        }
+                                    ).then(resp => resp.json())
             console.log(resp)
             const list = Object.values(resp)
             setClient(list[0])

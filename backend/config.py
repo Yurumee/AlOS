@@ -33,6 +33,12 @@ bcrypt = Bcrypt(app)
 db_folder = path.join(app.root_path, 'database')
 makedirs(db_folder, exist_ok=True)
 
+# cria a pasta para logs
+logs_folder = path.join(app.root_path, 'logs')
+makedirs(logs_folder, exist_ok=True)
+
+log_path = f'{app.root_path}\logs'
+
 # criando a secret key do jwt
 app.config['JWT_SECRET_KEY'] = token_urlsafe(nbytes=32)
 # definindo o tempo de expiração
@@ -46,7 +52,6 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
                                             'max_overflow': 1,
                                             'pool_timeout': 900
                                           }
-
 
 jwt = JWTManager(app)
 
