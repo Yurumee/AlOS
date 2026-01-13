@@ -12,7 +12,7 @@ class Categoria(db.Model):
     # chave primaria
     categoria_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
-    titulo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
+    titulo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, unique=True)
     tipo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     descricao: Mapped[str] = mapped_column(VARCHAR(100))
 

@@ -1,8 +1,8 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import TechniciansVisualize from './TechniciansVisualize'
-import ModalTech from './ModalTech'
+import CategoriesVisualize from './CategoriesVisualize.jsx'
+import ModalCat from './ModalCat.jsx'
 
 import { useEffect, useState } from 'react'
 // import { useLocation } from 'react-router-dom'
@@ -12,18 +12,18 @@ import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
 
-function Technicians(props) 
+function Categories(props) 
 {
-    // guarda os tecnicos
-    const [technicians, setTechnicians] = useState([])
+    // guarda as categorias
+    const [categories, setCategories] = useState([])
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
-    // esconde ou mostra modal do tecnico
+    // esconde ou mostra modal de categoria
     const [modalOpen, setModalOpen] = useState(false)
-    // esconde ou mostra modal para editar ou excluir um tecnico
+    // esconde ou mostra modal para editar ou excluir uma categoria
     const [modalOperationOpen, setModalOperationOpen] = useState(false)
-    // tecnico do modal
-    const [modalTechnician, setModalTechnician] = useState({})
+    // categoria do modal
+    const [modalCategory, setModalCategory] = useState({})
     // operação realizada
     const [operation, setOperation] = useState('')
 
@@ -32,11 +32,11 @@ function Technicians(props)
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
     {
-            async function getTechnicians() {
+            async function getCategories() {
             setIsLoading(true)
 
             // url da api
-            const URL = 'http://127.0.0.1:5000/tecnico/'
+            const URL = 'http://127.0.0.1:5000/categoria/'
             const response = await fetch(URL, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,37 +47,36 @@ function Technicians(props)
             const data = await response.json();
             
             const list = Object.values(data)
-            setTechnicians(list)
+            setCategories(list)
 
             setIsLoading(false)
             }
 
-        getTechnicians()
+        getCategories()
 
     }, [props.token])
 
-    function new_tech()
+    function new_category()
     {
-        window.location.href = '/novo-tecnico'
+        window.location.href = '/nova-categoria'
     }
 
-    function edit_tech(event)
+    function edit_category()
     {
-        event.preventDefault()
         setOperation('edit')
         setModalOperationOpen(!modalOperationOpen)
     }
 
-    function delete_tech()
+    function delete_category()
     {
         
         setOperation('delete')
         setModalOperationOpen(!modalOperationOpen)
     }
 
-    function visualize_tech(technician)
+    function visualize_category(category)
     {
-        setModalTechnician(technician)
+        setModalCategory(category)
         setModalOpen(!modalOpen)
     }
 
@@ -86,25 +85,25 @@ function Technicians(props)
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
             
-            <NavBar search='http://127.0.0.1:5000/tecnico/pesquisar/' search_str/>
+            <NavBar search='http://127.0.0.1:5000/categoria/pesquisar/' search_str/>
 
             {/* ALERTA */}
 
             <div className='buttons'>
 
-                <Button bsPrefix='button-client' variant='warning' onClick={new_tech}>
+                <Button bsPrefix='button-client' variant='warning' onClick={new_category}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
-                    Novo Técnico
+                    Nova Categoria
                 </Button>
 
-                <Button bsPrefix='button-client' onClick={edit_tech}>
+                <Button bsPrefix='button-client' onClick={edit_category}>
                     <span className="material-icons md-24 md-primary">edit</span>
-                    Editar Técnico
+                    Editar Categoria
                 </Button>
                 
-                <Button bsPrefix='button-client' onClick={delete_tech}>
+                <Button bsPrefix='button-client' onClick={delete_category}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
-                    Excluir Técnico
+                    Excluir Categoria
                 </Button>
 
             </div>
@@ -119,31 +118,32 @@ function Technicians(props)
             {/* tabela de clientes existentes*/}
             { !isLoading && 
                 <div className="clientsCreated container">
-                    <p className='h2'>TÉCNICOS CADASTRADOS</p>
+                    <p className='h2'>CATEGORIAS CADASTRADAS</p>
 
                     <Table striped bordered hover responsive variant='warning'>
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nome Completo</th>
-                                <th>Telefone</th>
-                                <th>Endereço</th>
-                                {/* <th>Usuário Cadastrado</th> */}
+                                <th>Título</th>
+                                <th>Descrição</th>
+                                <th>Tipo</th>
                                 <th>#</th>
                             </tr>
                         </thead>
 
-                        <tbody>
-                            {!isLoading && technicians.map(tech => (
-                                    <>
-                                        <tr key={tech.id}>
-                                            <td> {tech.id} </td>
-                                            <td> {tech.nome_completo} </td>
-                                            {/* <td> {tech.usuario} </td> */}
-                                            <td> {tech.telefone} </td>
-                                            <td> {tech.endereco} </td>
+                            {/* {!isLoading && <ClientRows Categories={Categories} />} */}
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_tech(tech)}>unfold_more</Button> </td> 
+                        <tbody>
+                            {!isLoading && categories.map(category => (
+                                    <>
+                                        <tr key={category.id}>
+                                            <td> {category.id} </td>
+                                            <td> {category.titulo} </td>
+                                            <td> {category.descricao} </td>
+                                            <td> {category.tipo} </td>
+
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_category(category)}>unfold_more</Button> </td> 
+                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                         </tr>
                                     </>
                                 )
@@ -155,10 +155,10 @@ function Technicians(props)
                 </div>
             }
 
-            {modalOpen && <TechniciansVisualize technician={modalTechnician} show={modalOpen} close={() => setModalOpen(false)}/>}
-            {modalOperationOpen && <ModalTech operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
+            {modalOpen && <CategoriesVisualize client={modalCategory} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOperationOpen && <ModalCat operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )
 }
 
-export default Technicians
+export default Categories

@@ -81,7 +81,7 @@ def tech_login():
         else:
             try:
                 with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.timestamp()}')
+                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                 print('LOG ESCRITO COM SUCESSO')
             
             except Exception as f:
@@ -96,7 +96,7 @@ def tech_login():
         if not usuario or not senha:
             try:
                 with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.timestamp()}')
+                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                 print('LOG ESCRITO COM SUCESSO')
             
             except Exception as f:
@@ -127,7 +127,7 @@ def tech_login():
         if not bcrypt.check_password_hash(tech_exists.senha, senha):
             try:
                 with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: ERRO AO LOGAR. TENTATIVA REALIZADA POR {usuario} COM A SENHA {senha} AS {datetime.timestamp()}')
+                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: ERRO AO LOGAR. TENTATIVA REALIZADA POR {usuario} COM A SENHA {senha} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                 print('LOG ESCRITO COM SUCESSO')
                 
             except Exception as f:
@@ -144,7 +144,7 @@ def tech_login():
         # response = {"access_token":token_access}
         try:
             with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                file.write(f'BACKEND TECHNICIAN LOGIN SUCCESS: USUARIO {usuario} LOGADO AS {datetime.timestamp()}')
+                file.write(f'BACKEND TECHNICIAN LOGIN SUCCESS: USUARIO {usuario} LOGADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
             print('LOG ESCRITO COM SUCESSO')
             
         except Exception as f:
@@ -181,7 +181,7 @@ def tech_logout():
 
     try:
         with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-            file.write(f'BACKEND TECHNICIAN LOGOUT: LOGOUT REALIZADO POR {tech_nome} AS {datetime.timestamp()}')
+            file.write(f'BACKEND TECHNICIAN LOGOUT: LOGOUT REALIZADO POR {tech_nome} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
         print('LOG ESCRITO COM SUCESSO')
         
     except Exception as f:
@@ -446,7 +446,7 @@ def new_technician():
                 
                 try:
                     with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN CREATED: NOVO TECNICO CADASTRADO POR {tech_exists.nome_tecnico} AS {datetime.timestamp()}')
+                        file.write(f'BACKEND TECHNICIAN CREATED: NOVO TECNICO CADASTRADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                     print('LOG ESCRITO COM SUCESSO')
 
                 except Exception as f:
@@ -690,7 +690,7 @@ def patch_technician(id_desejado):
 
             try:
                 with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN PATCH: TECNICO ID {id_desejado} EDITADO POR {tech_exists.nome_tecnico} AS {datetime.timestamp()}')
+                    file.write(f'BACKEND TECHNICIAN PATCH: TECNICO ID {id_desejado} EDITADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                     print('LOG ESCRITO COM SUCESSO')
                 
             except Exception as f:
@@ -804,7 +804,7 @@ def delete_technician(id_desejado):
 
                     try:
                         with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                            file.write(f'BACKEND TECHNICIAN DELETE: TECNICO ID {id_desejado} DELETADO POR {tech_exists.nome_tecnico} AS {datetime.timestamp()}')
+                            file.write(f'BACKEND TECHNICIAN DELETE: TECNICO ID {id_desejado} DELETADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                         print('LOG ESCRITO COM SUCESSO')
 
                     except Exception as f:

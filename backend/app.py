@@ -17,12 +17,16 @@ from routes.client import view_client
 from routes.product import view_product
 from routes.home import view_home
 from routes.technician import view_technician
+from routes.storage import view_storage
+from routes.category import view_category
 
 # registrando blueprints
 app.register_blueprint(view_client)
 app.register_blueprint(view_product)
 app.register_blueprint(view_home)
 app.register_blueprint(view_technician)
+app.register_blueprint(view_storage)
+app.register_blueprint(view_category)
 
 if __name__ == '__main__':
     with app.app_context():

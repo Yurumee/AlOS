@@ -1,4 +1,4 @@
-logs/*.txt
+logs/
 insert_sup.py
 alos.db
 *.db

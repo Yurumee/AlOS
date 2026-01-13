@@ -4,35 +4,30 @@ from flask_jwt_extended import jwt_required
 from flask import Blueprint, jsonify, request
 
 # criando uma blueprint
-view_product = Blueprint('view_product', __name__, url_prefix='/produto')
+view_storage = Blueprint('view_storage', __name__, url_prefix='/estoque')
 
-# rota get all products
+# rota get all storage
 # essa rota deve exibir todos os produtos em lista na tela inicial do modulo de produtos
-@view_product.route('/', methods=['GET'])
+@view_storage.route('/', methods=['GET'])
 @jwt_required()
-def all_products():
-    from models.produto import Produto
-    from models.cliente import Cliente
+def all_storage():
+    from models.estoque import Estoque
+    from models.categoria import Categoria
 
-    products = db.session.query(Produto).all()
+    storage = db.session.query(Estoque).all()
     result = {}
     
     # retorna clientes em formato json
-    for product in products:
-        cliente_nome = db.session.query(Cliente).filter_by(cliente_id=product.cliente_id).one_or_none().nome_completo
-        result[product.produto_id] = {
-                                    "id":product.produto_id,
-                                    "cliente_nome": cliente_nome,
-                                    "modelo": product.modelo,
-                                    "num_serie": product.num_serie,
-                                    "cor": product.cor,
-                                    "sis_operacional": product.sis_operacional,
-                                    "avaria": 'Sim' if product.avaria == True else 'Não',
-                                    "liga": 'Sim' if product.liga == True else 'Não',
-                                    "carrega": 'Sim' if product.carrega == True else 'Não',
-                                    "backup": 'Sim' if product.backup == True else 'Não',
-                                    "acessorios": product.acessorios,
-                                    "obs": product.observacoes,
+    for item in storage:
+        item_categoria = db.session.query(Categoria).filter_by(categoria_id=item.categoria_id).one_or_none().titulo
+        result[item.item_id] = {
+                                    "id":item.produto_id,
+                                    "categoria": item_categoria,
+                                    "nome_item": item.nome_item,
+                                    "descricao": item.descricao_item,
+                                    "quantidade": item.quantidade,
+                                    "preco_un": item.preco_unitario,
+                                    "codigo_barras": item.cod_barras
                                 }
         
     return result, 200
@@ -41,7 +36,7 @@ def all_products():
 # rota pesquisa de produto por modelo/id
 # rota utilizada pela barra de pesquisa
 # essa rota deve exibir os produtos com base no numero de serie ou id
-# @view_product.route('/pesquisar/<str_pesquisa>', methods=['GET'])
+# @view_storage.route('/pesquisar/<str_pesquisa>', methods=['GET'])
 # def search_product(str_pesquisa):
 #     from models.produto import Produto
 #     from models.cliente import Cliente
@@ -110,75 +105,79 @@ def all_products():
 # rota cadastro de produto
 # esta rota deve exibir o formulário de produtos
 # quando o formulario for enviado, deve cadastrar o produto no banco e ligá-lo ao cliente especificado
-@view_product.route('/novo', methods=['POST'])
+@view_storage.route('/novo', methods=['POST'])
 @jwt_required()
-def new_product():
+def new_item():
     if request.method == 'POST':
-        from models.produto import Produto
-        from models.cliente import Cliente
+        from models.estoque import Estoque
+        from models.categoria import Categoria
 
         try:
             # guarda dados do frontend
             data = request.json
-            print(data)
 
             # separando em variaveis
-            cliente_id = data.get('cliente_id')
-            modelo = data.get('modelo')
-            num_serie = data.get('num_serie')
-            cor = data.get('cor')
-            so = data.get('sis_operacional')
-            avaria = data.get('avaria')
-            liga = data.get('liga')
-            carrega = data.get('carrega')
-            backup = data.get('backup')
-            acessorios = data.get('acessorios')
-            observacoes = data.get('obs')
-        
+            # cliente_id = data.get('cliente_id')
+            nome_item = data.get('nome_item')
+            categoria = data.get('categoria_item')
+            descricao = data.get('descicao_item')
+            quantidade = int(data.get('quantidade'))
+            preco_un = float(data.get('valor_un'))
+            cod_barra = data.get('codigo_barras')
+
+            print(data)
+            
         except Exception as e:
             return jsonify({'error':str(e)})
 
         try:
-            cliente_desejado = db.session.query(Cliente).filter_by(cliente_id=cliente_id).first()
-            print(cliente_desejado)
+            categoria_desejada = db.session.query(Categoria).filter_by(categoria_id=categoria).first()
         except:
             return '', 500
 
         # cliente deve existir
-        if not cliente_desejado:
+        if not categoria_desejada:
             return '', 404
 
         # verifica se o produto ja existe no banco
         try:
-            product_exists = db.session.query(Produto).filter_by(num_serie=num_serie).first()
+            item_exists = db.session.query(Estoque).filter_by(cod_barras=cod_barra).first()
             
-            if product_exists:
+            if item_exists:
                 return '', 409
                 
         except:
             return '', 500
         
+        if not nome_item or nome_item == '' or len(nome_item) < 3:
+            response = {'status':'error', 'msg':'NOME DO ITEM INVÁLIDO'}
+            return response, 406
+        
+        if not quantidade or quantidade == '' or quantidade < 0:
+            response = {'status':'error', 'msg':'QUANTIDADE DO ITEM INVÁLIDA'}
+            return response, 406
+        
+        if not preco_un or preco_un == '' or preco_un < 0:
+            response = {'status':'error', 'msg':'PREÇO DO ITEM INVÁLIDO'}
+            return response, 406
+        
         
         try:
             # realizando transação
             # criando o produto a ser inserido
-            product = Produto(
-                                modelo = modelo,
-                                num_serie = num_serie,
-                                cor = cor,
-                                sis_operacional = so,
-                                avaria = avaria,
-                                liga = liga,
-                                carrega = carrega,
-                                backup = backup,
-                                acessorios = acessorios,
-                                observacoes = observacoes,
-                                cliente_id = cliente_id
+            item = Estoque(
+                                nome_item = nome_item,
+                                descricao_item = descricao,
+                                quantidade = quantidade,
+                                preco_unitario = preco_un,
+                                cod_barras = cod_barra,
+                                categoria_id = categoria_desejada.categoria_id
                             )
 
             # inserindo e realizando commit
-            db.session.add(product)
+            db.session.add(item)
 
+            print(item)
             # product.cliente.append(cliente_desejado)
 
             db.session.commit()
@@ -192,63 +191,75 @@ def new_product():
 # rota para alterar um produto existente
 # esta rota deve alterar os dados do produto desejado baseado no id
 # 
-@view_product.route('/editar/<int:id_desejado>', methods=['POST'])
+@view_storage.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
-def patch_product(id_desejado):
-    from models.produto import Produto
+def patch_item(id_desejado):
+    from models.estoque import Estoque
+    from models.categoria import Categoria
 
     if request.method == 'POST':
         # recebe dados do frontend
         data = request.get_json()
 
         # separando em variaveis
-        modelo = data.get('modelo_dispositivo')
-        cor = data.get('cor_dispositivo')
-        sistema = data.get('sistema_dispositivo')
-        avaria = data.get('avaria')
-        liga = data.get('liga')
-        carrega = data.get('carrega')
-        backup = data.get('backup_dispositivo')
-        acessorio = data.get('acessorio_dispositivo')
-        observacoes = data.get('obs_dispositivo')
+        nome_item = data.get('nome_item')
+        categoria = data.get('categoria_item')
+        descricao = data.get('descicao_item')
+        quantidade = data.get('quantidade')
+        preco_un = data.get('valor_un')
+        cod_barra = data.get('codigo_barras')
 
         # checa se o produto existe
         try:
-            produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
+            item_exists = db.session.query(Estoque).filter_by(item_id=id_desejado).one_or_none()
         except:
             return '', 500
         
-        if not produto_exists:
+        if not item_exists:
             return '', 404
+        
+        try:
+            categoria_desejada = db.session.query(Categoria).filter_by(titulo=categoria).first()
+            print(categoria_desejada)
+        except:
+            return '', 500
+
+        # cliente deve existir
+        if not categoria_desejada:
+            return '', 404
+        
+        if nome_item == '' or nome_item < 3:
+            response = {'status':'error', 'msg':'NOME DO ITEM INVÁLIDO'}
+            return response, 406
+        
+        if quantidade == '' or quantidade < 0:
+            response = {'status':'error', 'msg':'QUANTIDADE DO ITEM INVÁLIDA'}
+            return response, 406
+        
+        if preco_un == '' or preco_un < 0:
+            response = {'status':'error', 'msg':'PREÇO DO ITEM INVÁLIDO'}
+            return response, 406
         
         # realizando modificações
         try:
-            if modelo != None and modelo != produto_exists.modelo:
-                produto_exists.modelo = modelo
+            if nome_item != None and nome_item != item_exists.nome_item:
+                item_exists.nome_item = nome_item
             
-            if cor != None and cor != produto_exists.cor:
-                produto_exists.cor = cor
+            if descricao != None and descricao != item_exists.descricao_item:
+                item_exists.descricao_item = descricao
             
-            if sistema != None and sistema != produto_exists.sis_operacional:
-                produto_exists.sis_operacional = sistema
+            if quantidade != None and quantidade != item_exists.quantidade:
+                item_exists.quantidade = quantidade
             
-            if avaria != None and avaria != produto_exists.avaria:
-                produto_exists.avaria = avaria
+            if preco_un != None and preco_un != item_exists.preco_unitario:
+                item_exists.preco_unitario = preco_un
 
-            if liga != None and liga != produto_exists.liga:
-                produto_exists.liga = liga
+            if cod_barra != None and cod_barra != item_exists.cod_barras:
+                item_exists.cod_barras = cod_barra
 
-            if carrega != None and carrega != produto_exists.carrega:
-                produto_exists.carrega = carrega
-            
-            if backup != None and backup != produto_exists.backup:
-                produto_exists.backup = backup
-            
-            if acessorio != None and acessorio != produto_exists.acessorios:
-                produto_exists.acessorios = acessorio
-            
-            if observacoes != None and observacoes != produto_exists.observacoes:
-                            produto_exists.observacoes = observacoes
+            if categoria_desejada.categoria_id != None and categoria_desejada.categoria_id != item_exists.categoria_id:
+                item_exists.categoria_id = categoria_desejada.categoria_id
+        
 
             db.session.commit()
 
@@ -259,24 +270,24 @@ def patch_product(id_desejado):
         return '', 200
 
 # rota para deletar um produto com base no id informado
-@view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_storage.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
-def delete_product(id_desejado):
-    from models.produto import Produto
+def delete_item(id_desejado):
+    from models.estoque import Estoque
 
     if request.method == 'POST':
         # checa se o produto existe
         try:
-            produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
+            item_exists = db.session.query(Estoque).filter_by(item_id=id_desejado).one_or_none()
         except:
             return '', 500
         
-        if not produto_exists:
+        if not item_exists:
             return '', 404
         
         # exclui o produto
         try:
-                db.session.query(Produto).filter_by(produto_id=id_desejado).delete()
+                db.session.query(Estoque).filter_by(item_id=id_desejado).delete()
                 db.session.commit()
                 return '', 200
     
@@ -284,41 +295,36 @@ def delete_product(id_desejado):
             return jsonify({'err':str(e)})
         
 # rota usada para pesquisar produtos com base no id para ser utilizado para edição ou exclusão
-@view_product.route('/pesquisar/<int:id_desejado>', methods=['GET'])
+@view_storage.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
-def getProduct(id_desejado):
-    from models.produto import Produto
-    from models.cliente import Cliente
+def getItem(id_desejado):
+    from models.estoque import Estoque
+    from models.categoria import Categoria
 
     try:
-        produto_desejado = db.session.query(Produto).filter_by(produto_id=id_desejado).first()
+        item_desejado = db.session.query(Estoque).filter_by(item_id=id_desejado).first()
     
     except Exception:
         return '', 500
     
     try:
         # caso o produto exista
-        if produto_desejado:
+        if item_desejado:
             # pega o nome do cliente do produto especifico
-            cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+            categoria_nome = db.session.query(Categoria).filter_by(categoria_id=item_desejado.categoria_id).one_or_none().titulo
         else:
             return '', 404
     except Exception:
         return '', 500
     
     result = {
-                "id":produto_desejado.produto_id,
-                "cliente_nome": cliente_nome,
-                "modelo": produto_desejado.modelo,
-                "num_serie": produto_desejado.num_serie,
-                "cor": produto_desejado.cor,
-                "sis_operacional": produto_desejado.sis_operacional,
-                "avaria": produto_desejado.avaria,
-                "liga": produto_desejado.liga,
-                "carrega": produto_desejado.carrega,
-                "backup": produto_desejado.backup,
-                "acessorios": produto_desejado.acessorios,
-                "obs": produto_desejado.observacoes,
+                "id":item_desejado.item_id,
+                "nome_item": item_desejado.nome_item,
+                "descricao": item_desejado.descricao_item,
+                "quantidade": item_desejado.quantidade,
+                "valor_un": item_desejado.preco_unitario,
+                "codigo_barras": item_desejado.cod_barras,
+                "categoria": categoria_nome,
             }
                 
     return result, 302

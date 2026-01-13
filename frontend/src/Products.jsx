@@ -12,7 +12,7 @@ import Spinner from 'react-bootstrap/Spinner'
 
 function Products() 
 {
-    // guarda os clientes
+    // guarda os produtos
     const [products, setProducts] = useState([])
     // carregamento
     const [isLoading, setIsLoading] = useState(true)

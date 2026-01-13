@@ -200,7 +200,7 @@ def new_client():
         if not nome_fantasia and flag_cnpj == True:
             try:
                 with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM NOME FAFNTASIA INVALIDO')
+                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM NOME FANTASIA INVALIDO')
                 print('LOG ESCRITO COM SUCESSO')
             except:
                 print('LOG NAO PODE SER CRIADO')
@@ -243,7 +243,7 @@ def new_client():
             
             try:
                 with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT CREATED: NOVO CLIENTE CADASTRADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                    file.write(f'BACKEND CLIENT CREATED: NOVO CLIENTE CADASTRADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
                 print('LOG ESCRITO COM SUCESSO')
 
             except:
@@ -449,7 +449,7 @@ def patch_client(id_desejado):
 
             try:
                 with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT PATCH: CLIENTE ID {id_desejado} EDITADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                    file.write(f'BACKEND CLIENT PATCH: CLIENTE ID {id_desejado} EDITADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
                 print('LOG ESCRITO COM SUCESSO')
 
             except:
@@ -512,7 +512,7 @@ def delete_client(id_desejado):
                 
             try:
                 with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT DELETE: CLIENTE ID {id_desejado} DELETADO AS {datetime.timestamp()} PELO TECNICO ID {int(get_jwt_identity())}')
+                    file.write(f'BACKEND CLIENT DELETE: CLIENTE ID {id_desejado} DELETADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
                 print('LOG ESCRITO COM SUCESSO')
 
             except:

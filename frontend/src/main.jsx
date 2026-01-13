@@ -16,16 +16,23 @@ import ProductsNew from './ProductsNew.jsx';
 import ProductsEdit from './ProductsEdit.jsx'
 import ProductsDelete from './ProductsDelete.jsx'
 
+import Categories from './Categories.jsx';
+import CategoriesNew from './CategoriesNew.jsx';
+
+import Storages from './Storages.jsx';
+import StoragesNew from './StoragesNew.jsx';
+
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
 import ModalTech from './ModalTech.jsx';
+import ModalCat from './ModalCat.jsx';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 
 import PageNotFound from './NotFound.jsx';
 import useToken from './components/useToken.js';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 <link
@@ -46,7 +53,7 @@ function Main(){
       <>
       {/* <NavBar token={removeToken}></NavBar> */}
       <Routes>
-        <Route index element={<Home/>} />
+        <Route index element={<Home />} />
         <Route path='/clientes' element={<Clients token={token} />}/>
         <Route path='/novo-cliente' element={<ClientsNew token={token}/>}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit token={token}/>}/>
@@ -68,7 +75,14 @@ function Main(){
         <Route path='/editar-tecnico' element={<ModalTech operation={'edit'}/>}/>
         <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} />}/>
           
-        {/* <Route path='/estoque' element={<Stocks />}/> */}
+        <Route path='/estoque' element={<Storages token={token}/>}/>
+        <Route path='/novo-item' element={<StoragesNew token={token}/>}/>
+
+        <Route path='/categorias' element={<Categories token={token}/>}/>
+        <Route path='/nova-categoria' element={<CategoriesNew token={token}/>}/>
+        <Route path='/editar-categoria' element={<ModalCat operation={'edit'}/>}/>
+        <Route path='/deletar-categoria' element={<ModalCat operation={'delete'} />}/>
+
         {/* <Route path='/servicos' element={<Services />}/> */}
         {/* <Route path='/os' element={<OS />}/> */}
         <Route path='*' element={<PageNotFound/>} />
