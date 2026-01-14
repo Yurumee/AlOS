@@ -496,7 +496,7 @@ def delete_client(id_desejado):
         if not cliente_exists:
             try:
                 with open(f'{log_path}/log_cli_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: CLIENTE PESQUISADO NAO CADASTRADO NO BANCO DE DADOS')
+                    file.write(f'BACKEND CLIENT ERROR: CLIENTE PESQUISADO NAO CADASTRADO NO BANCO DE DADOS. ID {id_desejado}')
                 print('LOG ESCRITO COM SUCESSO')
 
             except:

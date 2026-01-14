@@ -1,8 +1,9 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import ItemsVisualize from './StoragesVisualize'
-// import ModalProd from './ModalProd'
+import StoragesVisualize from './StoragesVisualize'
+import ModalItem from './ModalItem'
+import ManageItem from './ManageItem'
 
 import { useEffect, useState } from 'react'
 
@@ -20,6 +21,8 @@ function Storages(props)
     const [modalOpen, setModalOpen] = useState(false)
     // esconde ou mostra modal para editar ou excluir um item
     const [modalOperationOpen, setModalOperationOpen] = useState(false)
+    // esconde ou mostra modal para gerenciar um item
+    const [modalManageOpen, setModalManageOpen] = useState(false)
     // item do modal
     const [modalItem, setModalItem] = useState({})
     // operação realizada
@@ -50,6 +53,52 @@ function Storages(props)
         getItems()
     }, [props.token])
 
+    async function reposition_item(event, flag, quantidade, id)
+    {
+        event.preventDefault()
+        
+        const URL = `http://localhost:5000/estoque/gerenciamento/${id}`
+        await fetch (URL, 
+            {
+                method: 'POST',
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                },
+                body: JSON.stringify({
+                    quantidade: quantidade,
+                    isRepo: flag
+                })
+            }
+        )
+
+        setModalManageOpen(!modalManageOpen)
+
+        async function getItems() {
+            setIsLoading(true)
+
+            // url da api
+            const URL = 'http://127.0.0.1:5000/estoque/'
+            const response = await fetch(URL, {
+                                                headers: 
+                                                {
+                                                    'Content-Type': 'application/json',
+                                                    'Authorization': 'Bearer ' + props.token
+                                                }
+                                            })
+            const data = await response.json();
+            const list = Object.values(data)
+            setItems(list)
+
+            setIsLoading(false)
+            }
+
+        getItems()
+        
+
+    }
+
     function new_item()
     {
         window.location.href = '/novo-item'
@@ -71,6 +120,12 @@ function Storages(props)
     {
         setModalItem(item)
         setModalOpen(!modalOpen)
+    }
+
+    function manage_item(item)
+    {
+        setModalItem(item)
+        setModalManageOpen(!modalManageOpen)
     }
 
     return (
@@ -122,7 +177,8 @@ function Storages(props)
                                 <th>Valor Unitário</th>
                                 {/* <th>Categoria</th> */}
                                 <th>Cod. Barras</th>
-                                <th>#</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -136,7 +192,8 @@ function Storages(props)
                                             <td> {item.preco_un} </td>
                                             <td> {item.codigo_barras} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td> 
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
                                         </tr>
                                     </>
                                 )
@@ -146,8 +203,9 @@ function Storages(props)
                 </div>
             }
 
-            {modalOpen && <ItemsVisualize product={modalItem} show={modalOpen} close={() => setModalOpen(false)}/>}
-            {modalOperationOpen && <modalItem operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
+            {modalOpen && <StoragesVisualize item={modalItem} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOperationOpen && <ModalItem operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
+            {modalManageOpen && <ManageItem item={modalItem} token={props.token} show={modalManageOpen} reposition={(event, flag, quantidade, id)=> reposition_item(event, flag, quantidade, id)} close={() => setModalManageOpen(false)}/>}    
         </div>
     )
 }

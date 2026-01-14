@@ -21,18 +21,21 @@ import CategoriesNew from './CategoriesNew.jsx';
 
 import Storages from './Storages.jsx';
 import StoragesNew from './StoragesNew.jsx';
+import StoragesEdit from './StoragesEdit.jsx';
+import StoragesDelete from './StoragesDelete.jsx';
 
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
 import ModalTech from './ModalTech.jsx';
 import ModalCat from './ModalCat.jsx';
+import ModalItem from './ModalItem.jsx';
+
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 
 import PageNotFound from './NotFound.jsx';
 import useToken from './components/useToken.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 
 <link
@@ -77,6 +80,10 @@ function Main(){
           
         <Route path='/estoque' element={<Storages token={token}/>}/>
         <Route path='/novo-item' element={<StoragesNew token={token}/>}/>
+        <Route path='/editar-item/:id' element={<StoragesEdit token={token}/>}/>
+        <Route path='/deletar-item/:id' element={<StoragesDelete token={token}/>}/>
+        <Route path='/editar-item' element={<ModalItem operation={'edit'}/>}/>
+        <Route path='/deletar-item' element={<ModalItem operation={'delete'} />}/>
 
         <Route path='/categorias' element={<Categories token={token}/>}/>
         <Route path='/nova-categoria' element={<CategoriesNew token={token}/>}/>

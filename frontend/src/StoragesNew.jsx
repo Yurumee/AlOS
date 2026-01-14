@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 function ItemsNew(props)
 {
 
-    // guarda os items do estoque
+    // guarda as categorias do estoque
     const [categories, setCategories] = useState([])
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
@@ -31,7 +31,7 @@ function ItemsNew(props)
      // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
     {
-            async function getItems() {
+            async function getCategories() {
             setIsLoading(true)
 
             // url da api
@@ -50,7 +50,7 @@ function ItemsNew(props)
             setIsLoading(false)
             }
 
-        getItems()
+        getCategories()
     }, [props.token])
 
 
@@ -61,8 +61,6 @@ function ItemsNew(props)
 
         // url para backend
         const URL = 'http://localhost:5000/estoque/novo'
-
-        console.log(categoria_item)
         await fetch (URL, 
         {
             method: 'POST',
@@ -104,7 +102,7 @@ function ItemsNew(props)
             <Form onSubmit={submit}>
                 <Form.Group>
                     <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
+                    <Form.Control type='number'min={0} placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
                 </Form.Group>
 
                 <Form.Group>
@@ -137,12 +135,12 @@ function ItemsNew(props)
 
                 <Form.Group>
                     <Form.Label>Quantidade <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='5' onChange={(event) => setQuantidade(event.target.value)} />
+                    <Form.Control type='number' min={0} placeholder='5' onChange={(event) => setQuantidade(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Valor Unitário <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
+                    <Form.Control type='number' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
                 </Form.Group>
 
                 <Button variant='outline-primary' type='submit'>Cadastrar item no estoque</Button>
@@ -150,7 +148,7 @@ function ItemsNew(props)
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
                 { (response.status != '' && response.status == 'success') && 
-                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    navigation("/estoque", {state: {'status':response.status, 'msg':response.msg}})
                     ||
                     (response.status != '' && response.status == 'error') &&
                     <AlertPopUp status={response.status} msg={response.msg} />

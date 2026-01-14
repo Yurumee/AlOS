@@ -21,7 +21,7 @@ def all_storage():
     for item in storage:
         item_categoria = db.session.query(Categoria).filter_by(categoria_id=item.categoria_id).one_or_none().titulo
         result[item.item_id] = {
-                                    "id":item.produto_id,
+                                    "id":item.item_id,
                                     "categoria": item_categoria,
                                     "nome_item": item.nome_item,
                                     "descricao": item.descricao_item,
@@ -198,6 +198,7 @@ def patch_item(id_desejado):
     from models.categoria import Categoria
 
     if request.method == 'POST':
+        
         # recebe dados do frontend
         data = request.get_json()
 
@@ -219,24 +220,35 @@ def patch_item(id_desejado):
             return '', 404
         
         try:
-            categoria_desejada = db.session.query(Categoria).filter_by(titulo=categoria).first()
-            print(categoria_desejada)
+            categoria_desejada = db.session.query(Categoria).filter_by(categoria_id=categoria).first()
         except:
             return '', 500
 
         # cliente deve existir
-        if not categoria_desejada:
+        if categoria and not categoria_desejada:
             return '', 404
         
-        if nome_item == '' or nome_item < 3:
+        if nome_item and nome_item == '':
             response = {'status':'error', 'msg':'NOME DO ITEM INVÁLIDO'}
             return response, 406
         
-        if quantidade == '' or quantidade < 0:
+        if nome_item and len(nome_item) < 3:
+            response = {'status':'error', 'msg':'NOME DO ITEM INVÁLIDO'}
+            return response, 406
+        
+        if quantidade and quantidade == '':
             response = {'status':'error', 'msg':'QUANTIDADE DO ITEM INVÁLIDA'}
             return response, 406
         
-        if preco_un == '' or preco_un < 0:
+        if quantidade and int(quantidade) < 0:
+            response = {'status':'error', 'msg':'QUANTIDADE DO ITEM INVÁLIDA'}
+            return response, 406
+        
+        if preco_un and preco_un == '':
+            response = {'status':'error', 'msg':'PREÇO DO ITEM INVÁLIDO'}
+            return response, 406
+        
+        if preco_un and float(preco_un) < 0:
             response = {'status':'error', 'msg':'PREÇO DO ITEM INVÁLIDO'}
             return response, 406
         
@@ -257,7 +269,7 @@ def patch_item(id_desejado):
             if cod_barra != None and cod_barra != item_exists.cod_barras:
                 item_exists.cod_barras = cod_barra
 
-            if categoria_desejada.categoria_id != None and categoria_desejada.categoria_id != item_exists.categoria_id:
+            if categoria_desejada != None and categoria_desejada.categoria_id != item_exists.categoria_id:
                 item_exists.categoria_id = categoria_desejada.categoria_id
         
 
@@ -311,7 +323,7 @@ def getItem(id_desejado):
         # caso o produto exista
         if item_desejado:
             # pega o nome do cliente do produto especifico
-            categoria_nome = db.session.query(Categoria).filter_by(categoria_id=item_desejado.categoria_id).one_or_none().titulo
+            categoria_id = db.session.query(Categoria).filter_by(categoria_id=item_desejado.categoria_id).one_or_none().categoria_id
         else:
             return '', 404
     except Exception:
@@ -324,7 +336,42 @@ def getItem(id_desejado):
                 "quantidade": item_desejado.quantidade,
                 "valor_un": item_desejado.preco_unitario,
                 "codigo_barras": item_desejado.cod_barras,
-                "categoria": categoria_nome,
+                "categoria": categoria_id,
             }
-                
+    
     return result, 302
+
+# rota usada para gerenciar itens com base no id para repor ou retiar sua quantidade
+@view_storage.route('/gerenciamento/<int:id_desejado>', methods=['POST'])
+@jwt_required()
+def manageItem(id_desejado):
+    from models.estoque import Estoque
+
+    data = request.json
+    quant = int(data.get('quantidade'))
+    reposicao = data.get('isRepo')
+
+    print(data)
+
+    try:
+        item_desejado = db.session.query(Estoque).filter_by(item_id=id_desejado).first()
+    
+    except Exception:
+        return '', 500
+    
+    if not item_desejado:
+        return '', 404
+    
+    if reposicao == True:
+        item_desejado.quantidade = item_desejado.quantidade + quant
+        db.session.commit()
+        return '', 201
+    
+    else:
+        if quant > item_desejado.quantidade:
+            return '',  406
+        
+        else:
+            item_desejado.quantidade = item_desejado.quantidade - quant
+            db.session.commit()
+            return '', 201

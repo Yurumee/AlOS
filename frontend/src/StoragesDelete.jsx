@@ -9,36 +9,36 @@ import { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/esm/Button'
 
-function TechniciansDelete(props) {
+function StoragesDelete(props) {
     let params = useParams()
     const navigation  = useNavigate()
     const id = params.id
-    const [technician, setTechnician] = useState()
+    const [item, setItem] = useState()
     const [isLoading, setIsLoading] = useState(true)
     const [response, setResponse] = useState({status:'', msg:''})
 
     useEffect(() => 
     {
-        async function getTechnician()
+        async function getItem()
         {
-            const URL = `http://localhost:5000/tecnico/pesquisar/${id}`
+            const URL = `http://localhost:5000/estoque/pesquisar/${id}`
             const resp = await fetch(URL, {
                                             headers: 
                                             {
                                                 'Authorization': 'Bearer ' + props.token
                                             }
                                         }).then(resp => resp.json())
-            const list = Object.values(resp)
-            setTechnician(list[0])
+            // const list = Object.values(resp)
+            setItem(resp)
             setIsLoading(false)
         }
 
-        getTechnician()
-    }, [props.token, id])
+        getItem()
+    }, [])
 
     async function confirm()
     {
-        const URL = `http://localhost:5000/tecnico/excluir/${id}`
+        const URL = `http://localhost:5000/estoque/excluir/${id}`
         await fetch(URL, 
             {
                 method: 'POST',
@@ -56,7 +56,7 @@ function TechniciansDelete(props) {
 
     function cancel()
     {
-        window.location.href = '/tecnicos'
+        window.location.href = '/estoque'
     }
 
     return (
@@ -78,19 +78,19 @@ function TechniciansDelete(props) {
                 }
             </div>
 
-            {!isLoading && technician &&
+            {!isLoading && item &&
                 <>
 
                 <div className="container mt-3">
 
                     <Card>
-                        <Card.Header>Deseja realmente deletar este técnico?</Card.Header>
+                        <Card.Header>Deseja realmente deletar este item?</Card.Header>
                             <Card.Body>
-                                <Card.Title>{technician.cpf}</Card.Title>
+                                <Card.Title>{item.nome_item} - COD BARRAS {item.codigo_barras}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {technician.nome_completo}</p>
-                                    <p>Usuário: {technician.usuario}</p>
-                                    <p>É Administrador: {technician.admin ? 'Sim' : 'Não'}</p>
+                                    <p>Nome: {item.nome_item}</p>
+                                    <p>Descrição: {item.descricao}</p>
+                                    <p>Quantidade em estoque: {item.quantidade}</p>
                                 </Card.Text>
                             <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
 
@@ -107,4 +107,4 @@ function TechniciansDelete(props) {
     )
 }
 
-export default TechniciansDelete
+export default StoragesDelete

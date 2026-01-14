@@ -95,7 +95,7 @@ function NavBar() {
                             <NavDropdown.Item href='/deletar-produto'>Deletar Produto</NavDropdown.Item>
                         </NavDropdown>
                         
-                        <Nav.Link href="/clientes">Estoque</Nav.Link>
+                        <Nav.Link href="/estoque">Estoque</Nav.Link>
                         <Nav.Link href="/clientes">Serviços</Nav.Link>
 
                         <NavDropdown title='Técnicos'>

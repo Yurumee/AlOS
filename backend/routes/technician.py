@@ -454,6 +454,7 @@ def new_technician():
                     print(str(f))
 
                 finally:
+                    # response = {'status':'success', 'msg':'PRODUTO CADASTRADO COM SUCESSO!'}
                     return '', 201
             
             except Exception as e:
