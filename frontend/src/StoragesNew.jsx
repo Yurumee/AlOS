@@ -114,18 +114,14 @@ function ItemsNew(props)
                     {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Select onChange={(event) => setCategoriaItem(event.target.value)}>
-                      <option>---Selecione uma categoria---</option>
+                      <option disabled selected>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
                                         <option value={category.id}>{category.titulo}</option>
                                     </>
                                 )
                             )}
-                       {/* <option value="1">One</option>
-                       <option value="2">Two</option>
-                       <option value="3">Three</option> */}
                     </Form.Select>
-                    {/* <Form.Control type='' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} /> */}
                 </Form.Group>
 
                 <Form.Group>

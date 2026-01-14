@@ -1,35 +1,44 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
+import AlertPopUp from './AlertPopUp'
 
-import {useParams} from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/esm/Button'
 
-function ProductsDelete(props) {
+function CategoriesDelete(props) {
     let params = useParams()
+    const navigation  = useNavigate()
     const id = params.id
-    const [product, setProduct] = useState()
+    const [category, setCategory] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [response, setResponse] = useState({status:'', msg:''})
 
     useEffect(() => 
     {
-        async function getProduct()
+        async function getCategory()
         {
-            const URL = `http://localhost:5000/produto/pesquisar/${id}`
-            const resp = await fetch(URL).then(resp => resp.json())
-            setProduct(resp)
+            const URL = `http://localhost:5000/categoria/pesquisar/${id}`
+            const resp = await fetch(URL,{
+                headers: 
+                    {
+                        'Authorization': 'Bearer ' + props.token
+                    },
+            }).then(resp => resp.json())
+            // const list = Object.values(resp)
+            setCategory(resp)
             setIsLoading(false)
         }
 
-        getProduct()
+        getCategory()
     }, [])
 
     async function confirm()
     {
-        const URL = `http://localhost:5000/produto/excluir/${id}`
+        const URL = `http://localhost:5000/categoria/excluir/${id}`
         await fetch(URL, 
             {
                 method: 'POST',
@@ -39,18 +48,28 @@ function ProductsDelete(props) {
                         'Authorization': 'Bearer ' + props.token
                     },
             })
+            .then(res => res.json())
+            .then(res => setResponse(res))
 
-        window.location.href = '/produtos'
+        // window.location.href = '/clientes'
     }
 
     function cancel()
     {
-        window.location.href = '/produtos'
+        window.location.href = '/categorias'
     }
 
     return (
 
         <>
+                {/* CHECA O ALERTA A SER MOSTRADO */}
+                { (response.status != '' && response.status == 'success') && 
+                    navigation("/categorias", {state: {'status':response.status, 'msg':response.msg}})
+                    ||
+                    (response.status != '' && response.status == 'error') &&
+                    <AlertPopUp status={response.status} msg={response.msg} />
+                }
+
             <NavBar />
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
             <div>
@@ -59,18 +78,17 @@ function ProductsDelete(props) {
                 }
             </div>
 
-            {!isLoading && product &&
+            {!isLoading && category &&
                 <>
 
                 <div className="container mt-3">
 
                     <Card>
-                        <Card.Header>Deseja realmente deletar este produto?</Card.Header>
+                        <Card.Header>Deseja realmente deletar esta categoria?</Card.Header>
                             <Card.Body>
-                                <Card.Title>{product.num_serie}</Card.Title>
+                                <Card.Title>{category.titulo}</Card.Title>
                                 <Card.Text>
-                                    <p>Modelo: {product.modelo}</p>
-                                    <p>Pertencente a: {product.cliente_nome}</p>
+                                    <p>Descrição: {category.descricao}</p>
                                 </Card.Text>
                             <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
 
@@ -87,4 +105,4 @@ function ProductsDelete(props) {
     )
 }
 
-export default ProductsDelete
+export default CategoriesDelete

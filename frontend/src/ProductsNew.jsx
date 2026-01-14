@@ -8,7 +8,7 @@ import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-function ProductsNew()
+function ProductsNew(props)
 {
 
     // guardando valores na variavel
@@ -38,7 +38,8 @@ function ProductsNew()
             method: 'POST',
             headers: 
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.token
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({
@@ -69,17 +70,17 @@ function ProductsNew()
 
                 <Form.Group>
                     <Form.Label>ID do Cliente</Form.Label>
-                    <Form.Control type='number' placeholder='1' required onChange={(event) => setClienteId(event.target.value)} />
+                    <Form.Control type='number' placeholder='1' onChange={(event) => setClienteId(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Modelo</Form.Label>
-                    <Form.Control type='text' placeholder='M0D3-L0' required onChange={(event) => setModelo(event.target.value)}></Form.Control>
+                    <Form.Control type='text' placeholder='M0D3-L0' onChange={(event) => setModelo(event.target.value)}></Form.Control>
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Número de Série</Form.Label>
-                    <Form.Control type='text' placeholder='S3R14LNUMB3R' required onChange={(event) => setNumSerie(event.target.value)} />
+                    <Form.Control type='text' placeholder='S3R14LNUMB3R' onChange={(event) => setNumSerie(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
@@ -89,7 +90,18 @@ function ProductsNew()
 
                 <Form.Group>
                     <Form.Label>Sistema Operacional</Form.Label>
-                    <Form.Control type='text' placeholder='Win 10' onChange={(event) => setSisOperacional(event.target.value)} />
+                    <Form.Select defaultValue={''} onChange={(event) => setSisOperacional(event.target.value)}>
+                        <option disabled value={''}>---Selecione um sistema---</option>
+                        <option value={"WIN 11"}>WIN 11</option>
+                        <option value={"WIN 10"}>WIN 10</option>
+                        <option value={"WIN 8.5"}>WIN 8.5</option>
+                        <option value={"WIN 8"}>WIN 8</option>
+                        <option value={"WIN 7"}>WIN 7</option>
+                        <option value={"LINUX"}>LINUX</option>
+                        <option value={"CHROME OS"}>CHROME OS</option>
+                        <option value={"OUTRO"}>OUTRO</option>
+                    </Form.Select>
+                    {/* <Form.Control type='text' placeholder='Win 10' onChange={(event) => setSisOperacional(event.target.value)} /> */}
                 </Form.Group>
 
                 <Form.Group>

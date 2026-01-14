@@ -71,8 +71,14 @@ function CategoriesNew(props)
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Tipo <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Serviço' onChange={(event) => setTipo(event.target.value)}></Form.Control>
+                    <Form.Label>Tipo da categoria</Form.Label>
+                    <Form.Select defaultValue={''} onChange={(event) => setTipo(event.target.value)}>
+                        <option disabled value={''}>---Selecione um tipo---</option>
+                        <option value={"Serviço"}>Serviço</option>
+                        <option value={"Estoque"}>Estoque</option>
+                        <option value={"Geral"}>Geral</option>
+                    </Form.Select>
+                    {/* <Form.Control type='text' placeholder='Serviço' onChange={(event) => setTipo(event.target.value)}></Form.Control> */}
                 </Form.Group>
 
                 <Form.Group>
@@ -85,7 +91,7 @@ function CategoriesNew(props)
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
                 { (response.status != '' && response.status == 'success') && 
-                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    navigation("/categorias", {state: {'status':response.status, 'msg':response.msg}})
                     ||
                     (response.status != '' && response.status == 'error') &&
                     <AlertPopUp status={response.status} msg={response.msg} />

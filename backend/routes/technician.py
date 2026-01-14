@@ -110,6 +110,7 @@ def tech_login():
         # checando se o cpf existe
         try:
             tech_exists = db.session.query(Tecnico).filter_by(usuario=usuario).first()
+
         except Exception as e:
             try:
                 with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
@@ -189,7 +190,7 @@ def tech_logout():
         print(str(f))
     
     finally:
-        response = jsonify({'mensage':'DELETADO'})
+        response = {'status':'success', 'msg':'LOGOUT REALIZADO COM SUCESSO'}
         unset_jwt_cookies(response)
         return response, 200
 
@@ -252,17 +253,8 @@ def new_technician():
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: TECNICO ADMINISTRADOR NAO PODE SER ENCONTRADO. ID: {tech_id}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                return '', 404
+            response = {'status':'error', 'msg':'TECNICO NÃO ENCONTRADO'}
+            return '', 404
         
         # caso o tecnico exista
         # cheque se ele é admin
@@ -282,21 +274,10 @@ def new_technician():
             endereco_tech = data.get('endereco_tecnico')
             is_admin = data.get('admin')
 
-            print(data)
-
             # checa se o cpf é valido
             if len(cpf_tech) != 11:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CPF INVALIDO FORNECIDO')
-                    print('LOG ESCRITO COM SUCESSO')
-                    
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
+                response = {'status':'error', 'msg':'CPF INVÁLIDO '}
+                return response, 406
 
             # checa se o cpf desejado ja esta cadastrado
             try:
@@ -309,123 +290,41 @@ def new_technician():
                         file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
                     print('LOG ESCRITO COM SUCESSO')
                     
-                except Exception as f:
+                except:
                     print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
                     
                 finally:
                     response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    print(str(e))   
                     return response, 500
             
             # se ja estiver registrado, retorne erro
             if is_registered:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRO DE CPF JA REGISTRADO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 409
+                response = {'status':'error', 'msg':'O CPF JÁ FOI CADASTRADO'}
+                return response, 409
             
             if user_registered:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRO DE USUARIO JA REGISTRADO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 409
+                response = {'status':'error', 'msg':'NOME DE USUÁRIO JÁ EM USO'}
+                return response, 409
             
             
             # senao, continue tentando cadastrar
             # cheque se as senhas sao iguais
             if senha_tech != senha_confirma_tech:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: SENHAS NAO COINCIDEM')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
+                response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}
+                return response, 406
             
             # cheque se possui um nome valido
-            if nome_tech == None or nome_tech == '':
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CADASTRO DE NOME INVALIDO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
+            if not nome_tech or len(nome_tech) < 3 or nome_tech == '':
+                response = {'status':'error', 'msg':'NOME DO TÉCNICO INVÁLIDO'}
+                return response, 406
             
-            if len(nome_tech) < 3:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CADASTRO DE NOME INVALIDO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    return '', 406
-            
-            if len(user_tech) < 3:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CADASTRO DE USUARIO INVALIDO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
-            
-            if not user_tech or user_tech ==  '':
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CADASTRO DE USUARIO INVALIDO')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
+            if not user_tech or len(user_tech) < 3 or user_tech ==  '':
+                response = {'status':'error', 'msg':'NOME DE USUÁRIO DO TÉCNICO INVÁLIDO'}
+                return response, 406
             
             if not contato_tech or all(char.isdigit() for char in contato_tech) != True:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: CADASTRO DE TELEFONE INVALIDO ')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-                
-                finally:
-                    return '', 406
+                response = {'status':'error', 'msg':'TELEFONE INVÁLIDO'}
+                return response, 406
 
             # tenta cadastrar um tecnico
             try:
@@ -454,8 +353,8 @@ def new_technician():
                     print(str(f))
 
                 finally:
-                    # response = {'status':'success', 'msg':'PRODUTO CADASTRADO COM SUCESSO!'}
-                    return '', 201
+                    response = {'status':'success', 'msg':'TÉCNICO CADASTRADO COM SUCESSO!'}
+                    return response, 201
             
             except Exception as e:
                 try:
@@ -473,16 +372,8 @@ def new_technician():
 
         # caso nao, retorne nao autorizado
         else:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: AUTORIZAÇÃO NÃO FORNECIDA. ID: {tech_id}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-
-            return '', 401
+            response = {'status':'error', 'msg':'TÉCNICO NÃO POSSUI PERMISSÃO DE ADMINISTRADOR'}
+            return response, 401
 
         # return '', 201
 
@@ -518,18 +409,8 @@ def patch_technician(id_desejado):
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: TECNICO ADMINISTRADOR NAO PODE SER ENCONTRADO. ID: {tech_id}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-
-            finally:
-                response = {'status':'error','msg':'TÉCNICO INFORMADO NÃO EXISTE OU NÃO AUTENTICADO'}
-                return '', 404
+            response = {'status':'error','msg':'TÉCNICO INFORMADO NÃO EXISTE OU NÃO AUTENTICADO'}
+            return '', 404
         
         # caso o tecnico exista
         # cheque se ele é admin
@@ -571,93 +452,33 @@ def patch_technician(id_desejado):
             
             # se nao existir, retorne erro
             if not is_registered:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TECNICO PESQUISADO NAO CADASTRADO NO BANCO DE DADOS. ID: {id_desejado}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'TECNICO PESQUISADO NÃO EXISTE'}
-                    return response, 404
+                response = {'status':'error','msg':'TECNICO PESQUISADO NÃO EXISTE'}
+                return response, 404
             
             # senao, continue tentando editar
             # cheque se possui um nome valido
             if nome_tech == '':
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRAR NOME NULO NO TECNICO ID {id_desejado} POR {tech_exists.nome_tecnico}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'O NOME NÃO PODE SER VAZIO'}
-                    return response, 406
+                response = {'status':'error','msg':'O NOME NÃO PODE SER VAZIO'}
+                return response, 406
             
-            if nome_tech != None and len(nome_tech) < 3:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRAR NOME INCORRETO NO TECNICO ID {id_desejado} POR {tech_exists.nome_tecnico}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'O NOME É CURTO DEMAIS'}
-                    return response, 406
+            if nome_tech and len(nome_tech) < 3:
+                response = {'status':'error','msg':'O NOME É CURTO DEMAIS'}
+                return response, 406
             
             # cheque se o telefone é valido
             if contato_tech == '':
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRAR TELEFONE NULO NO TECNICO ID {id_desejado} POR {tech_exists.nome_tecnico}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error', 'msg':'TELEFONE NÃO PODE SER NULO'}
-                    return response, 406
+                response = {'status':'error', 'msg':'TELEFONE NÃO PODE SER NULO'}
+                return response, 406
 
             # cheque se o telefone contem apenas numeros
             if contato_tech != None and all(char.isdigit() for char in contato_tech) != True:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRAR TELEFONE INVALIDO NO TECNICO ID {id_desejado} POR {tech_exists.nome_tecnico}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
-                    return response, 406
+                response = {'status':'error', 'msg':'TELEFONE DEVE CONTER APENAS NÚMEROS'}
+                return response, 406
             
             # cheque se endereco é vazio
             if endereco_tech == '':
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE CADASTRAR ENDERECO NULO NO TECNICO ID {id_desejado} POR {tech_exists.nome_tecnico}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error', 'msg':'O ENDEREÇO NÃO PODE SER VAZIO'}
-                    return response, 400
+                response = {'status':'error', 'msg':'O ENDEREÇO NÃO PODE SER VAZIO'}
+                return response, 400
             
             # realizando modificacoes
             try:
@@ -703,18 +524,8 @@ def patch_technician(id_desejado):
                 return response, 200
         # caso nao, retorne nao autorizado
         else:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: TENTATIVA DE AUTENTICAÇÃO POR {tech_id}')
-                print('LOG ESCRITO COM SUCESSO')
-            
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                response = {'status':'error','msg':'TÉCNICO NÃO AUTENTICADO'}
-                return '', 401
+            response = {'status':'error','msg':'TÉCNICO NÃO AUTENTICADO'}
+            return '', 401
 
 
 
@@ -748,18 +559,8 @@ def delete_technician(id_desejado):
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: TECNICO ADMINISTRADOR NAO PODE SER ENCONTRADO. ID: {tech_id}')
-                print('LOG ESCRITO COM SUCESSO')
-            
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                response = {'status':'error','msg':'TÉCNICO INFORMADO NÃO EXISTE OU NÃO AUTENTICADO'}
-                return '', 404
+            response = {'status':'error','msg':'TÉCNICO INFORMADO NÃO EXISTE OU NÃO AUTENTICADO'}
+            return response, 404
         
         # caso o tecnico exista
         # cheque se ele é admin
@@ -785,18 +586,8 @@ def delete_technician(id_desejado):
                     return response, 500
 
             if not tecnico_exists:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: TECNICO PESQUISADO NAO EXISTE. ID: {id_desejado}')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error', 'msg':'O TECNICO PESQUISADO NÃO EXISTE'}
-                    return response, 404
+                response = {'status':'error', 'msg':'O TECNICO PESQUISADO NÃO EXISTE'}
+                return response, 404
 
             # exclui o tecnico
             try:
@@ -808,12 +599,10 @@ def delete_technician(id_desejado):
                             file.write(f'BACKEND TECHNICIAN DELETE: TECNICO ID {id_desejado} DELETADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
                         print('LOG ESCRITO COM SUCESSO')
 
-                    except Exception as f:
+                    except:
                         print('LOG NAO PODE SER CRIADO')
-                        print(str(f))
 
                     finally:
-
                         response = {'status':'success', 'msg':'TECNICO APAGADO COM SUCESSO!'}
                         return response, 500
 
@@ -837,8 +626,6 @@ def delete_technician(id_desejado):
 @jwt_required()
 def getTechnician(id_desejado):
     from models.tecnico import Tecnico
-
-    print(id_desejado)
 
     try:
         tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()

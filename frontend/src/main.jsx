@@ -18,6 +18,8 @@ import ProductsDelete from './ProductsDelete.jsx'
 
 import Categories from './Categories.jsx';
 import CategoriesNew from './CategoriesNew.jsx';
+import CategoriesEdit from './CategoriesEdit.jsx';
+import CategoriesDelete from './CategoriesDelete.jsx';
 
 import Storages from './Storages.jsx';
 import StoragesNew from './StoragesNew.jsx';
@@ -87,6 +89,8 @@ function Main(){
 
         <Route path='/categorias' element={<Categories token={token}/>}/>
         <Route path='/nova-categoria' element={<CategoriesNew token={token}/>}/>
+        <Route path='/editar-categoria/:id' element={<CategoriesEdit token={token}/>}/>
+        <Route path='/deletar-categoria/:id' element={<CategoriesDelete token={token}/>}/>
         <Route path='/editar-categoria' element={<ModalCat operation={'edit'}/>}/>
         <Route path='/deletar-categoria' element={<ModalCat operation={'delete'} />}/>
 

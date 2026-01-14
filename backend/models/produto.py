@@ -15,16 +15,16 @@ class Produto(db.Model):
     # chave estrangeira
     cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 
-    modelo: Mapped[str] = mapped_column(VARCHAR(20))
-    num_serie: Mapped[str] = mapped_column(VARCHAR(20))
-    cor: Mapped[str] = mapped_column(VARCHAR(20))
+    modelo: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
+    num_serie: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
+    cor: Mapped[str] = mapped_column(VARCHAR(20), nullable=True)
     sis_operacional: Mapped[str] = mapped_column(VARCHAR(20))
     avaria: Mapped[bool] = mapped_column(BOOLEAN)
     liga: Mapped[bool] = mapped_column(BOOLEAN)
     carrega: Mapped[bool] = mapped_column(BOOLEAN)
     backup: Mapped[bool] = mapped_column(BOOLEAN)
-    acessorios: Mapped[str] = mapped_column(VARCHAR)
-    observacoes: Mapped[str] = mapped_column(VARCHAR)
+    acessorios: Mapped[str] = mapped_column(VARCHAR, nullable=True)
+    observacoes: Mapped[str] = mapped_column(VARCHAR, nullable=True)
 
     # RELACIONAMENTOS
     # relacionamento 1:n com ordemServico

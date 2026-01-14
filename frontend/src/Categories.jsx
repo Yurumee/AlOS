@@ -139,7 +139,7 @@ function Categories(props)
                                         <tr key={category.id}>
                                             <td> {category.id} </td>
                                             <td> {category.titulo} </td>
-                                            <td> {category.descricao} </td>
+                                            <td style={{'overflow':'hidden', 'textOverflow':'ellipsis', 'whiteSpace':'nowrap', 'maxWidth':'300px'}}> {category.descricao} </td>
                                             <td> {category.tipo} </td>
 
                                             <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_category(category)}>unfold_more</Button> </td> 
@@ -155,7 +155,7 @@ function Categories(props)
                 </div>
             }
 
-            {modalOpen && <CategoriesVisualize client={modalCategory} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOpen && <CategoriesVisualize category={modalCategory} show={modalOpen} close={() => setModalOpen(false)}/>}
             {modalOperationOpen && <ModalCat operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )

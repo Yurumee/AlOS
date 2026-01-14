@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useParams } from 'react-router-dom'
 
-function ProductsEdit() 
+function ProductsEdit(props) 
 {
     let params = useParams()
     const id = params.id
@@ -52,7 +52,8 @@ function ProductsEdit()
             method: 'POST',
             headers: 
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.token
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({

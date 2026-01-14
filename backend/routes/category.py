@@ -140,13 +140,13 @@ def new_category():
         except:
             return '', 500
         
-        if nome_categoria == None or nome_categoria == '' or len(nome_categoria) < 3:
+        if not nome_categoria or nome_categoria == '' or len(nome_categoria) < 3:
             response = {'status':'error', 'msg':'O TÍTULO PARA A CATEGORIA É INVÁLIDO'}
             return response, 406
         
-        if tipo == None or tipo == '':
-            response = {'status':'error', 'msg':'O TIPO DA CATEGORIA É INVÁLIDO'}
-            return response, 406
+        # if tipo == None or tipo == '':
+        #     response = {'status':'error', 'msg':'O TIPO DA CATEGORIA É INVÁLIDO'}
+        #     return response, 406
         
         
         try:
@@ -188,7 +188,8 @@ def patch_categoria(id_desejado):
         nome_categoria = data.get('nome_categoria')
         tipo = data.get('tipo_categoria')
         descricao = data.get('descicao_categoria')
-        # checa se o produto existe
+        
+        # checa se a categoria existe
         try:
             categoria_exists = db.session.query(Categoria).filter_by(categoria_id=id_desejado).one_or_none()
         except:
@@ -197,13 +198,13 @@ def patch_categoria(id_desejado):
         if not categoria_exists:
             return '', 404
         
-        if len(nome_categoria) < 3 or nome_categoria == '':
+        if nome_categoria and len(nome_categoria) < 3 or nome_categoria == '':
             response = {'status':'error', 'msg':'O TÍTULO PARA A CATEGORIA É INVÁLIDO'}
             return response, 406
         
-        if tipo == '':
-            response = {'status':'error', 'msg':'O TIPO DA CATEGORIA É INVÁLIDO'}
-            return response, 406
+        # if tipo == '':
+        #     response = {'status':'error', 'msg':'O TIPO DA CATEGORIA É INVÁLIDO'}
+        #     return response, 406
         
         # realizando modificações
         try:
@@ -228,12 +229,12 @@ def patch_categoria(id_desejado):
 @view_category.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_categoria(id_desejado):
-    from models.estoque import Estoque
+    from models.categoria import Categoria
 
     if request.method == 'POST':
         # checa se o produto existe
         try:
-            categoria_exists = db.session.query(Estoque).filter_by(categoria_id=id_desejado).one_or_none()
+            categoria_exists = db.session.query(Categoria).filter_by(categoria_id=id_desejado).one_or_none()
         except:
             return '', 500
         
@@ -242,7 +243,7 @@ def delete_categoria(id_desejado):
         
         # exclui o produto
         try:
-                db.session.query(Estoque).filter_by(categoria_id=id_desejado).delete()
+                db.session.query(Categoria).filter_by(categoria_id=id_desejado).delete()
                 db.session.commit()
                 return '', 200
     
@@ -253,7 +254,7 @@ def delete_categoria(id_desejado):
 @view_category.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def getcategoria(id_desejado):
-    from models.estoque import Estoque
+    # from models.estoque import Estoque
     from models.categoria import Categoria
 
     try:

@@ -121,7 +121,6 @@ def new_product():
         try:
             # guarda dados do frontend
             data = request.json
-            print(data)
 
             # separando em variaveis
             cliente_id = data.get('cliente_id')
@@ -137,14 +136,23 @@ def new_product():
             observacoes = data.get('obs')
         
         except Exception as e:
-            return jsonify({'error':str(e)})
+            try:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
+
+            except:
+                print('LOG NAO PODE SER CRIADO')
+            
+            finally:
+                response = {'status':'error', 'msg':'AINDA HÁ DADOS QUE NÃO FORAM CADASTRADOS'}
+                return response, 500
 
         try:
             cliente_desejado = db.session.query(Cliente).filter_by(cliente_id=cliente_id).first()
         
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -156,36 +164,20 @@ def new_product():
 
         # cliente deve existir
         if not cliente_desejado:
-            try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT ERROR: TENTATIVA DE CADASTRO DE PRODUTO PARA UM ID DE CLIENTE NÃO CADASTRADO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            
-            finally:
-                response = {'status':'error','msg':'O CLIENTE SOLICITADO NÃO ESTÁ CADASTRADO'}
-                return response, 404
+            response = {'status':'error','msg':'O CLIENTE SOLICITADO NÃO ESTÁ CADASTRADO'}
+            return response, 404
 
         # verifica se o produto ja existe no banco
         try:
             product_exists = db.session.query(Produto).filter_by(num_serie=num_serie).first()
             
             if product_exists:
-                try:
-                    with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                        file.write(f'BACKEND PRODUCT ERROR: TENTATIVA DE CADASTRO DE PRODUTO JÁ EXISTENTE')
-
-                except:
-                    print('LOG NAO PODE SER CRIADO')
-            
-                finally:
-                    response = {'status':'error', 'msg':'PRODUTO JÁ CADASTRADO'}
-                    return response, 409
+                response = {'status':'error', 'msg':'PRODUTO JÁ CADASTRADO'}
+                return response, 409
                 
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -194,8 +186,7 @@ def new_product():
             finally:
                 response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
                 return response, 500
-        
-        
+            
         try:
             # realizando transação
             # criando o produto a ser inserido
@@ -222,11 +213,12 @@ def new_product():
             # fim da transação
 
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT CREATED: CADASTRO DE NOVO PRODUTO REALIZADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now.strftime('%d/%m/%Y AS %H:%M:%S')}')
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND PRODUCT CREATED: CADASTRO DE NOVO PRODUTO REALIZADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
 
-            except:
+            except Exception as e:
                 print('LOG NAO PODE SER CRIADO')
+                print(str(e))
             
             finally:
                 response = {'status':'success', 'msg':'PRODUTO CADASTRADO COM SUCESSO!'}
@@ -234,7 +226,7 @@ def new_product():
 
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -272,7 +264,7 @@ def patch_product(id_desejado):
             produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -283,16 +275,8 @@ def patch_product(id_desejado):
                 return response, 500
         
         if not produto_exists:
-            try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT ERROR: O PRODUTO ID {id_desejado} NÃO ESTÁ CADASTRADO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            
-            finally:
-                response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO EXISTE'}
-                return response, 404
+            response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO EXISTE'}
+            return response, 404
         
         # realizando modificações
         try:
@@ -326,8 +310,8 @@ def patch_product(id_desejado):
             db.session.commit()
 
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT PATCHED: PRODUTO ID {id_desejado} EDITADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now.strftime('%d/%m/%Y AS %H:%M:%S')}')
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND PRODUCT PATCHED: PRODUTO ID {id_desejado} EDITADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
 
             except:
                 print('LOG NAO PODE SER CRIADO')
@@ -338,8 +322,8 @@ def patch_product(id_desejado):
 
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT PATCHED: PRODUTO ID {id_desejado} EDITADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now.strftime('%d/%m/%Y AS %H:%M:%S')}')
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                    file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
                 print('LOG NAO PODE SER CRIADO')
@@ -360,7 +344,7 @@ def delete_product(id_desejado):
             produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -371,16 +355,8 @@ def delete_product(id_desejado):
                 return response, 500
         
         if not produto_exists:
-            try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT ERROR: PRODUTO ID {id_desejado} NÃO CADASTRADO NO BANCO DE DADOS')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            
-            finally:
-                response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO ESTÁ CADASTRADO'}
-                return '', 404
+            response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO ESTÁ CADASTRADO'}
+            return '', 404
         
         # exclui o produto
         try:
@@ -388,8 +364,8 @@ def delete_product(id_desejado):
                 db.session.commit()
     
                 try:
-                    with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                        file.write(f'BACKEND PRODUCT DELETED: PRODUTO ID {id_desejado} DELETADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now.strftime('%d/%m/%Y AS %H:%M:%S')}')
+                    with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                        file.write(f'BACKEND PRODUCT DELETED: PRODUTO ID {id_desejado} DELETADO PELO TECNICO ID {int(get_jwt_identity())} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
 
                 except:
                     print('LOG NAO PODE SER CRIADO')
@@ -400,7 +376,7 @@ def delete_product(id_desejado):
     
         except Exception as e:
             try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                     file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
 
             except:
@@ -421,7 +397,7 @@ def getProduct(id_desejado):
     
     except Exception as e:
         try:
-            with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+            with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
                 file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
         except:
             print('LOG NAO PODE SER CRIADO')
@@ -435,19 +411,21 @@ def getProduct(id_desejado):
         if produto_desejado:
             # pega o nome do cliente do produto especifico
             cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
-        else:
-            try:
-                with open(f'{log_path}/log_prod_{datetime.now.strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND PRODUCT ERROR: PRODUTO ID {id_desejado} NÃO CADASTRADO NO BANCO DE DADOS')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
             
-            finally:
-                response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO ESTÁ CADASTRADO'}
-                return '', 404
-    except Exception:
-        return '', 500
+        else:
+            response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO ESTÁ CADASTRADO'}
+            return response, 404
+        
+    except Exception as e:
+        try:
+            with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
+                file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
+        except:
+            print('LOG NAO PODE SER CRIADO')
+        
+        finally:
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
     
     result = {
                 "id":produto_desejado.produto_id,
