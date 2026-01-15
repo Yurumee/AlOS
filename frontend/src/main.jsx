@@ -26,11 +26,17 @@ import StoragesNew from './StoragesNew.jsx';
 import StoragesEdit from './StoragesEdit.jsx';
 import StoragesDelete from './StoragesDelete.jsx';
 
+import Services from './Services.jsx'
+import ServicesNew from './ServicesNew.jsx';
+import ServicesEdit from './ServicesEdit.jsx';
+import ServicesDelete from './ServicesDelete.jsx';
+
 import ModalId from './ModalId.jsx';
 import ModalProd from './ModalProd.jsx';
 import ModalTech from './ModalTech.jsx';
 import ModalCat from './ModalCat.jsx';
 import ModalItem from './ModalItem.jsx';
+import ModalServ from './ModalServ.jsx';
 
 import Home from './Home.jsx';
 import Login from './Login.jsx';
@@ -94,7 +100,13 @@ function Main(){
         <Route path='/editar-categoria' element={<ModalCat operation={'edit'}/>}/>
         <Route path='/deletar-categoria' element={<ModalCat operation={'delete'} />}/>
 
-        {/* <Route path='/servicos' element={<Services />}/> */}
+        <Route path='/servicos' element={<Services token={token}/>}/>
+        <Route path='/novo-servico' element={<ServicesNew token={token}/>}/>
+        <Route path='/editar-servico/:id' element={<ServicesEdit token={token}/>}/>
+        <Route path='/deletar-servico/:id' element={<ServicesDelete token={token}/>}/>
+        <Route path='/editar-servico' element={<ModalServ operation={'edit'}/>}/>
+        <Route path='/deletar-servico' element={<ModalServ operation={'delete'} />}/>
+
         {/* <Route path='/os' element={<OS />}/> */}
         <Route path='*' element={<PageNotFound/>} />
       </Routes>

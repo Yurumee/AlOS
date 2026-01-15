@@ -9,21 +9,19 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
 
-function ItemsNew(props)
+function ServicesNew(props)
 {
 
-    // guarda as categorias do estoque
+    // guarda as categorias do servico
     const [categories, setCategories] = useState([])
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
 
     // guardando valores na variavel
-    const [nome_item, setNomeItem] = useState()
-    const [categoria_item, setCategoriaItem] = useState()
-    const [descricao_item, setDescricaoItem] = useState()
-    const [quantidade, setQuantidade] = useState()
-    const [valor_un, setValorUn] = useState()
-    const [codigo_barras, setCodigoBarras] = useState()
+    const [nome_servico, setNomeServico] = useState()
+    const [categoria_servico, setCategoriaServico] = useState()
+    const [descricao_servico, setDescricaoServico] = useState()
+    const [valor, setValor] = useState()
     
     const [response, setResponse] = useState({status:'', msg:''})
     const navigation  = useNavigate()
@@ -36,7 +34,8 @@ function ItemsNew(props)
 
             // url da api
             const URL = 'http://127.0.0.1:5000/categoria/'
-            const response = await fetch(URL + 'storage', {
+            // URL.search = new URLSearchParams({'category-type':'service'})
+            const response = await fetch(URL + 'service', {
                                                 headers: 
                                                 {
                                                     'Content-Type': 'application/json',
@@ -60,7 +59,7 @@ function ItemsNew(props)
         event.preventDefault()
 
         // url para backend
-        const URL = 'http://localhost:5000/estoque/novo'
+        const URL = 'http://localhost:5000/servico/novo'
         await fetch (URL, 
         {
             method: 'POST',
@@ -71,12 +70,10 @@ function ItemsNew(props)
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({
-                    nome_item: nome_item,
-                    categoria_item: categoria_item,
-                    descricao_item: descricao_item,
-                    quantidade: quantidade,
-                    valor_un: valor_un,
-                    codigo_barras: codigo_barras                
+                    nome_servico: nome_servico,
+                    categoria_servico: categoria_servico,
+                    descricao_servico: descricao_servico,
+                    custo_servico: valor            
                 })
 
         })
@@ -95,25 +92,20 @@ function ItemsNew(props)
             <div className='container'>
 
                 <div style={{'marginBottom':'15px'}}>
-                    <p className='h2'>Cadastro de novo item</p> 
+                    <p className='h2'>Cadastro de novo serviço</p> 
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
             <Form onSubmit={submit}>
                 <Form.Group>
-                    <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number'min={0} placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
-                </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Nome do Item <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='SSD 240GB' onChange={(event) => setNomeItem(event.target.value)} />
+                    <Form.Label>Nome do Serviço <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' placeholder='Formatação' onChange={(event) => setNomeServico(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => setCategoriaItem(event.target.value)}>
+                    <Form.Select onChange={(event) => setCategoriaServico(event.target.value)}>
                       <option disabled selected>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
@@ -126,25 +118,20 @@ function ItemsNew(props)
 
                 <Form.Group>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' placeholder='SSD da marca X' onChange={(event) => setDescricaoItem(event.target.value)} />
+                    <Form.Control as='textarea' rows={2} placeholder='Formatação e instalação de aplicativos' onChange={(event) => setDescricaoServico(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Quantidade <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' min={0} placeholder='5' onChange={(event) => setQuantidade(event.target.value)} />
+                    <Form.Label>Valor do Serviço Prestado <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='number' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValor(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Valor Unitário <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
-                </Form.Group>
-
-                <Button variant='outline-primary' type='submit'>Cadastrar item no estoque</Button>
+                <Button variant='outline-primary' type='submit'>Cadastrar Serviço</Button>
             </Form>
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
                 { (response.status != '' && response.status == 'success') && 
-                    navigation("/estoque", {state: {'status':response.status, 'msg':response.msg}})
+                    navigation("/servicos", {state: {'status':response.status, 'msg':response.msg}})
                     ||
                     (response.status != '' && response.status == 'error') &&
                     <AlertPopUp status={response.status} msg={response.msg} />
@@ -155,4 +142,4 @@ function ItemsNew(props)
 
 }
 
-export default ItemsNew
+export default ServicesNew

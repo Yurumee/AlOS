@@ -120,7 +120,7 @@ def new_item():
             # cliente_id = data.get('cliente_id')
             nome_item = data.get('nome_item')
             categoria = data.get('categoria_item')
-            descricao = data.get('descicao_item')
+            descricao = data.get('descricao_item')
             quantidade = int(data.get('quantidade'))
             preco_un = float(data.get('valor_un'))
             cod_barra = data.get('codigo_barras')
@@ -176,8 +176,6 @@ def new_item():
 
             # inserindo e realizando commit
             db.session.add(item)
-
-            print(item)
             # product.cliente.append(cliente_desejado)
 
             db.session.commit()

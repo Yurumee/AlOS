@@ -95,8 +95,23 @@ function NavBar() {
                             <NavDropdown.Item href='/deletar-produto'>Deletar Produto</NavDropdown.Item>
                         </NavDropdown>
                         
-                        <Nav.Link href="/estoque">Estoque</Nav.Link>
-                        <Nav.Link href="/clientes">Serviços</Nav.Link>
+                        {/* <Nav.Link href="/estoque">Estoque</Nav.Link> */}
+                        <NavDropdown title='Estoque'>
+                            <NavDropdown.Item href='/estoque'>Ir para Estoque</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/novo-item'>Novo Item</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-item'>Editar um Item</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-item'>Deletar um Item</NavDropdown.Item>
+                        </NavDropdown>
+
+                        {/* <Nav.Link href="/servicos">Serviços</Nav.Link> */}
+                        <NavDropdown title='Serviços'>
+                            <NavDropdown.Item href='/servicos'>Ir para Serviços</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/novo-servico'>Novo Serviço</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-servico'>Editar Serviço</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-servico'>Deletar Serviço</NavDropdown.Item>
+                        </NavDropdown>
 
                         <NavDropdown title='Técnicos'>
                             <NavDropdown.Item href='/tecnicos'>Ir para Técnicos</NavDropdown.Item>

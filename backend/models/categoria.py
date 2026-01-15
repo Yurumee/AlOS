@@ -14,7 +14,7 @@ class Categoria(db.Model):
 
     titulo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, unique=True)
     tipo: Mapped[str] = mapped_column(VARCHAR(20), nullable=False, default='Geral')
-    descricao: Mapped[str] = mapped_column(VARCHAR(100))
+    descricao: Mapped[str] = mapped_column(VARCHAR(100), nullable=True)
 
     # RELACIONAMENTOS
     # relacionamento 1:n com estoque

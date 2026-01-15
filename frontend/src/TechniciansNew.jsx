@@ -122,7 +122,7 @@ function TechniciansNew(props)
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
                 { (response.status != '' && response.status == 'success') && 
-                    navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
+                    navigation("/tecnicos", {state: {'status':response.status, 'msg':response.msg}})
                     ||
                     (response.status != '' && response.status == 'error') &&
                     <AlertPopUp status={response.status} msg={response.msg} />

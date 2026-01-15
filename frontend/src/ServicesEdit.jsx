@@ -9,24 +9,22 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useParams, useNavigate } from 'react-router-dom'
 
-function StoragesEdit(props) 
+function ServicesEdit(props) 
 {
     let params = useParams()
     const navigation  = useNavigate()
     const id = params.id
-    const [item, setItem] = useState()
+    const [service, setService] = useState()
     const [isLoading, setIsLoading] = useState(true)
     const [response, setResponse] = useState({status:'', msg:''})
 
     // guarda as categorias do estoque
     const [categories, setCategories] = useState([])
     // guardando valores na variavel
-    const [new_item_nome, setNewItemNome] = useState()
+    const [new_service_nome, setNewServiceNome] = useState()
     const [new_categoria, setNewCategoria] = useState()
     const [new_descricao, setNewDescricao] = useState()
-    const [new_quantidade, setNewQuantidade] = useState()
     const [new_preco, setNewPreco] = useState()
-    const [new_cod_barra, setNewCodBarra] = useState()
 
     useEffect(() => {
 
@@ -35,7 +33,7 @@ function StoragesEdit(props)
 
             // url da api
             const URL = 'http://127.0.0.1:5000/categoria/'
-            const response = await fetch(URL + 'storage', {
+            const response = await fetch(URL + 'service', {
                                                 headers: 
                                                 {
                                                     'Content-Type': 'application/json',
@@ -47,9 +45,9 @@ function StoragesEdit(props)
             setCategories(list)
         }
 
-        async function getItem()
+        async function getService()
         {   
-            const URL = `http://localhost:5000/estoque/pesquisar/${id}`
+            const URL = `http://localhost:5000/servico/pesquisar/${id}`
             const resp = await fetch(URL, {
                                             headers: 
                                             {
@@ -59,12 +57,12 @@ function StoragesEdit(props)
                                         }).then(resp => resp.json())
             // console.log(resp)
             // const list = Object.values(resp)
-            setItem(resp)
+            setService(resp)
             setIsLoading(false)
         }
 
         getCategories()
-        getItem()
+        getService()
 
     }, [props.token, id])
 
@@ -75,7 +73,7 @@ function StoragesEdit(props)
 
 
         // url para backend
-        const URL = `http://localhost:5000/estoque/editar/${id}`
+        const URL = `http://localhost:5000/servico/editar/${id}`
 
         await fetch (URL, 
         {
@@ -87,13 +85,10 @@ function StoragesEdit(props)
             },
             // transformando variaveis do forms em json
             body: JSON.stringify({
-                    nome_item: new_item_nome,
-                    categoria_item: new_categoria,
-                    descicao_item: new_descricao,
-                    quantidade: new_quantidade,
-                    valor_un: new_preco,
-                    codigo_barras: new_cod_barra
-                    
+                    nome_servico: new_service_nome,
+                    categoria_servico: new_categoria,
+                    descicao_servico: new_descricao,
+                    valor_servico: new_preco
                 })
 
         })
@@ -113,24 +108,20 @@ function StoragesEdit(props)
 
             <div className='container' >
 
-            <h1>Editando Item - {item.codigo_barras}</h1>
+            <h1>Editando Serviço - {service.nome_servico}</h1>
 
             <Form onSubmit={submit}>
+                
                 <Form.Group>
-                    <Form.Label>Código de Barras</Form.Label>
-                    <Form.Control type='number' defaultValue={item.codigo_barras} placeholder='84912345678' onChange={(event) => setNewCodBarra(event.target.value)} />
-                </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Nome do Item</Form.Label>
-                    <Form.Control type='text' defaultValue={item.nome_item} placeholder='SSD 240GB' onChange={(event) => setNewItemNome(event.target.value)} />
+                    <Form.Label>Nome do Serviço</Form.Label>
+                    <Form.Control type='text' defaultValue={service.nome_servico} placeholder='Manutenção de Notebook' onChange={(event) => setNewServiceNome(event.target.value)} />
                 </Form.Group>
 
 
                 <Form.Group>
                     {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select defaultValue={item.categoria} onChange={(event) => setNewCategoria(event.target.value)}>
+                    <Form.Select defaultValue={service.categoria} onChange={(event) => setNewCategoria(event.target.value)}>
                       <option>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
@@ -143,27 +134,21 @@ function StoragesEdit(props)
 
                 <Form.Group>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' defaultValue={item.descricao} placeholder='SSD DA MARCA X 240GB NOVO' onChange={(event) => setNewDescricao(event.target.value)} />
+                    <Form.Control type='text' defaultValue={service.descricao} placeholder='Check-up geral no aparelho' onChange={(event) => setNewDescricao(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Quantidade</Form.Label>
-                    <Form.Control type='number' defaultValue={item.quantidade} placeholder='5' onChange={(event) => setNewQuantidade(event.target.value)} />
+                    <Form.Label>Valor do Serviço</Form.Label>
+                    <Form.Control type='number' defaultValue={service.valor} placeholder='19.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
                 </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Valor Unitário</Form.Label>
-                    <Form.Control type='number' defaultValue={item.valor_un} placeholder='9.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
-                </Form.Group>
-
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Item</Button>
+                <Button variant='outline-warning' type='submit'>Editar Serviço</Button>
             </Form>
 
             {/* CHECA O ALERTA A SER MOSTRADO */}
             { (response.status != '' && response.status == 'success') && 
-                navigation("/estoque", {state: {'status':response.status, 'msg':response.msg}})
+                navigation("/servicos", {state: {'status':response.status, 'msg':response.msg}})
                 ||
                 (response.status != '' && response.status == 'error') &&
                 <AlertPopUp status={response.status} msg={response.msg} close={() => {setResponse({status:'', msg:''})}}/>
@@ -180,4 +165,4 @@ function StoragesEdit(props)
     )
 }
 
-export default StoragesEdit
+export default ServicesEdit

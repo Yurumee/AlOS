@@ -2,6 +2,7 @@
 from config import db
 from flask_jwt_extended import jwt_required
 from flask import Blueprint, jsonify, request
+from sqlalchemy import or_
 
 # criando uma blueprint
 view_category = Blueprint('view_category', __name__, url_prefix='/categoria')
@@ -12,10 +13,9 @@ view_category = Blueprint('view_category', __name__, url_prefix='/categoria')
 @jwt_required()
 def all_category():
     from models.categoria import Categoria
-
     categories = db.session.query(Categoria).all()
-    result = {}
     
+    result = {}
     # retorna clientes em formato json
     for category in categories:
         result[category.categoria_id] = {
@@ -24,9 +24,37 @@ def all_category():
                                     "tipo": category.tipo,
                                     "descricao": category.descricao
                                     }
-        
     return result, 200
     # return resp
+
+# rota get all category
+# essa rota deve exibir todos os produtos em lista na tela inicial do modulo de produtos
+@view_category.route('/<path:path>', methods=['GET'])
+@jwt_required()
+def all_typed_category(path=None):
+    from models.categoria import Categoria
+
+    type_for = path
+    
+    if type_for == 'service':
+        categories = db.session.query(Categoria).filter(or_(Categoria.tipo == 'Geral', Categoria.tipo == 'Serviço')).all()
+
+    if type_for == 'storage':
+        categories = db.session.query(Categoria).filter(or_(Categoria.tipo == 'Geral', Categoria.tipo == 'Estoque')).all()
+
+    # if not type_for:
+    #     categories = db.session.query(Categoria).all()
+    
+    result = {}
+    # retorna clientes em formato json
+    for category in categories:
+        result[category.categoria_id] = {
+                                    "id":category.categoria_id,
+                                    "titulo": category.titulo,
+                                    "tipo": category.tipo,
+                                    "descricao": category.descricao
+                                    }
+    return result, 200
 
 # rota pesquisa de produto por modelo/id
 # rota utilizada pela barra de pesquisa
@@ -122,7 +150,7 @@ def new_category():
 
         # verifica se a categoria ja existe no banco
         try:
-            categoria_exists = db.session.query(Categoria).filter(Categoria.titulo.ilike(f'%{nome_categoria}%')).first()
+            categoria_exists = db.session.query(Categoria).filter(Categoria.titulo == nome_categoria).first()
             
             if categoria_exists:
                 return '', 409
@@ -130,15 +158,15 @@ def new_category():
         except:
             return '', 500
         
-        # verifica se o tipo da categoria ja existe no banco
-        try:
-            categoria_exists = db.session.query(Categoria).filter(Categoria.tipo.ilike(f'%{tipo}%')).first()
+        # # verifica se o tipo da categoria ja existe no banco
+        # try:
+        #     categoria_exists = db.session.query(Categoria).filter(Categoria.tipo.ilike(f'%{tipo}%')).first()
             
-            if categoria_exists:
-                return '', 409
+        #     if categoria_exists:
+        #         return '', 409
                 
-        except:
-            return '', 500
+        # except:
+        #     return '', 500
         
         if not nome_categoria or nome_categoria == '' or len(nome_categoria) < 3:
             response = {'status':'error', 'msg':'O TÍTULO PARA A CATEGORIA É INVÁLIDO'}

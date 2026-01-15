@@ -13,6 +13,6 @@ class Servico(db.Model):
     # chave estrangeira
     categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'))
 
-    nome_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=False)
-    descricao_servico: Mapped[str] = mapped_column(VARCHAR(30))
+    nome_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=False, unique=True)
+    descricao_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)
     custo: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), default=0.01 , nullable=False)

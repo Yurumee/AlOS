@@ -108,7 +108,7 @@ function CategoriesEdit(props)
                 </Form.Group>
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar cliente</Button>
+                <Button variant='outline-warning' type='submit'>Editar categoria</Button>
             </Form>
 
             {/* CHECA O ALERTA A SER MOSTRADO */}
