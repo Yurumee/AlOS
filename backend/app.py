@@ -20,6 +20,7 @@ from routes.technician import view_technician
 from routes.storage import view_storage
 from routes.category import view_category
 from routes.service import view_service
+from routes.os import view_os
 
 # registrando blueprints
 app.register_blueprint(view_client)
@@ -29,6 +30,7 @@ app.register_blueprint(view_technician)
 app.register_blueprint(view_storage)
 app.register_blueprint(view_category)
 app.register_blueprint(view_service)
+app.register_blueprint(view_os)
 
 if __name__ == '__main__':
     with app.app_context():

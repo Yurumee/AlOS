@@ -334,58 +334,48 @@ def delete_os(id_desejado):
 # rota usada para pesquisar ordem com base no id para ser utilizado para edição ou exclusão
 @view_os.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
-def getProduct(id_desejado):
+def getOS(id_desejado):
+    from models.ordemServico import OrdemServico
     from models.produto import Produto
     from models.cliente import Cliente
 
     try:
-        produto_desejado = db.session.query(Produto).filter_by(produto_id=id_desejado).first()
+        os_desejada = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).first()
     
     except Exception as e:
-        try:
-            with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
-        except:
-            print('LOG NAO PODE SER CRIADO')
-        
-        finally:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
     
     try:
-        # caso o produto exista
-        if produto_desejado:
-            # pega o nome do cliente do produto especifico
-            cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
+        # caso a ordem de serviço exista
+        if os_desejada:
+            # pega o nome do cliente da os especifica
+            cliente_nome = db.session.query(Cliente).filter_by(cliente_id=os_desejada.cliente_id).one_or_none().nome_completo
+
+            produto_num_serie = db.session.query(Produto).filter_by(produto_id=os_desejada.produto_id).one_or_none().num_serie
             
         else:
-            response = {'status':'error', 'msg':'O PRODUTO SOLICITADO NÃO ESTÁ CADASTRADO'}
+            response = {'status':'error', 'msg':'O CLIENTE OU PRODUTO SOLICITADO NÃO ESTÃO CADASTRADOS'}
             return response, 404
         
     except Exception as e:
-        try:
-            with open(f'{log_path}/log_prod_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                file.write(f'BACKEND PRODUCT ERROR: {str(e)}')
-        except:
-            print('LOG NAO PODE SER CRIADO')
-        
-        finally:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
     
     result = {
-                "id":produto_desejado.produto_id,
+                "id":os_desejada.ordem_id,
                 "cliente_nome": cliente_nome,
-                "modelo": produto_desejado.modelo,
-                "num_serie": produto_desejado.num_serie,
-                "cor": produto_desejado.cor,
-                "sis_operacional": produto_desejado.sis_operacional,
-                "avaria": produto_desejado.avaria,
-                "liga": produto_desejado.liga,
-                "carrega": produto_desejado.carrega,
-                "backup": produto_desejado.backup,
-                "acessorios": produto_desejado.acessorios,
-                "obs": produto_desejado.observacoes,
+                "num serie": produto_num_serie,
+                "tecnico resp": os_desejada.tecnico_cpf,
+                "tipo": os_desejada.tipo_ordem,
+                "data_emissao": os_desejada.emissao,
+                "data_fechamento": os_desejada.fechamento,
+                "validade": os_desejada.validade,
+                "prognostico": os_desejada.prognostico,
+                "diagnostico": os_desejada.diagnostico,
+                "orcamento": os_desejada.orcamento,
+                "is_emitida": os_desejada.emitida,
+                "ult_atualizacao": os_desejada.ultima_atualizacao,
             }
                 
     return result, 302
