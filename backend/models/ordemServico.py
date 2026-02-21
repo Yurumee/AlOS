@@ -1,7 +1,7 @@
 from config import db
 # from typing import Optional
 import datetime
-from sqlalchemy import VARCHAR, INTEGER, NUMERIC, Numeric, DATETIME, DateTime, ForeignKey
+from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # from models.anexo import Anexo
@@ -19,12 +19,20 @@ class OrdemServico(db.Model):
     cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 
     tipo_ordem: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
+    # data de criação da os
     emissao: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now())
+    # data de aprovação/cancelamento da os
     fechamento: Mapped[DateTime] = mapped_column(DATETIME)
-    # validade: Mapped[DateTime] = mapped_column(DATETIME)
+    # data de validade para o orçamento da os
+    # por padrão, adiciona 2 semanas
+    validade: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now() + datetime.timedelta(days=14))
+
     prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2))
+    estado_os: Mapped[str] = mapped_column(VARCHAR, nullable=False)
+    emitida: Mapped[bool] = mapped_column(BOOLEAN, default=False, nullable=False)
+    ultima_atualizacao: Mapped[DateTime] = mapped_column(DATETIME, default=datetime.datetime.now())
 
     # RELACIONAMENTOS
     # relacionamento 1:1 entre ordem e anexo
