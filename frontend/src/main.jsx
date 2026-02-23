@@ -38,6 +38,9 @@ import ModalCat from './ModalCat.jsx';
 import ModalItem from './ModalItem.jsx';
 import ModalServ from './ModalServ.jsx';
 
+import OS from './OS.jsx';
+import OSNew from './OSNew.jsx';
+
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 
@@ -107,7 +110,8 @@ function Main(){
         <Route path='/editar-servico' element={<ModalServ operation={'edit'}/>}/>
         <Route path='/deletar-servico' element={<ModalServ operation={'delete'} />}/>
 
-        {/* <Route path='/os' element={<OS />}/> */}
+        <Route path='/os' element={<OS  token={token}/>}/>
+        <Route path='/nova-os' element={<OSNew  token={token}/>}/>
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
       </>

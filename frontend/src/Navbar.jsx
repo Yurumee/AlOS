@@ -8,10 +8,11 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+// import { useEffect, useState } from 'react';
 
 // import { useNavigate } from 'react-router-dom';
 
-function NavBar() {
+function NavBar(props) {
     // const navigation = useNavigate()
     
     const { removeToken } = useToken()
@@ -67,7 +68,10 @@ function NavBar() {
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
             <Navbar expand="lg" bg='warning'>
             <Container fluid>
-                <Navbar.Brand href='/'>Logo Empresa</Navbar.Brand>
+                <Navbar.Brand href='/'>
+                    <img src={props.img} alt="" />
+                </Navbar.Brand>
+
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
@@ -76,8 +80,14 @@ function NavBar() {
                         navbarScroll
                     >
                         <Nav.Link href="/">Home</Nav.Link>
-                        <Nav.Link href="/clientes">Ordem de Serviço</Nav.Link>
-                        {/* <Nav.Link href="/clientes">Clientes</Nav.Link> */}
+                        
+                        <NavDropdown title='Ordem de Serviço'>
+                            <NavDropdown.Item href='/os'>Ir para OS</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/nova-os'>Nova Ordem</NavDropdown.Item>
+                            <NavDropdown.Item href='/editar-os'>Editar Ordem</NavDropdown.Item>
+                            <NavDropdown.Item href='/deletar-os'>Deletar Ordem</NavDropdown.Item>
+                        </NavDropdown>
                         
                         <NavDropdown title='Clientes'>
                             <NavDropdown.Item href='/clientes'>Ir para Clientes</NavDropdown.Item>
@@ -120,6 +130,7 @@ function NavBar() {
                             <NavDropdown.Item href='/editar-tecnico'>Editar Técnico</NavDropdown.Item>
                             <NavDropdown.Item href='/deletar-tecnico'>Deletar Técnico</NavDropdown.Item>
                         </NavDropdown>
+
                     </Nav>
 
                     <Form className="d-flex">

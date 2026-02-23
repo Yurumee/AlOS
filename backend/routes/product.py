@@ -443,3 +443,31 @@ def getProduct(id_desejado):
             }
                 
     return result, 302
+
+# rota usada para pesquisar produtos com base no id do cliente
+@view_product.route('/cliente/<int:id_desejado>', methods=['GET'])
+@jwt_required()
+def getProductByClient(id_desejado):
+    from models.produto import Produto
+    # from models.cliente import Cliente
+
+    print(id_desejado)
+    try:
+        produtos_desejados = db.session.query(Produto).filter_by(cliente_id=id_desejado).all()
+        print(produtos_desejados)
+
+    except Exception as e:
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
+    
+    result = {}
+
+    for produto in produtos_desejados:
+        result[produto.produto_id] = {
+                    "id":produto.produto_id,
+                    "num_serie": produto.num_serie,
+                }
+
+    print(result)
+                
+    return result, 302

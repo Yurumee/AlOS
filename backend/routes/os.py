@@ -39,6 +39,8 @@ def all_os():
                                     "estado": os.estado_os,
                                     "emitida": os.emitida,
                                     "data_emissao": os.emissao,
+                                    "data_fechamento": os.fechamento,
+                                    "validade": os.validade,
                                     "ult_atualizacao": os.ultima_atualizacao
                                 }
         
