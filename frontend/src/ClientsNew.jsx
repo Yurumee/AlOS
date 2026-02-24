@@ -3,7 +3,7 @@ import './styles/index.css'
 import NavBar from './NavBar'
 import AlertPopUp from './AlertPopUp'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -27,6 +27,39 @@ function ClientsNew(props)
     const [response, setResponse] = useState({status:'', msg:''})
     const navigation  = useNavigate()
 
+    const [lenC, setLenC] = useState(0)
+    const [lenF, setLenF] = useState(0)
+    const [lenEN, setLenEN] = useState(0)
+    const [lenB, setLenB] = useState(0)
+    const [lenCI, setLenCI] = useState(0)
+
+    useEffect(() => {
+        if (cliente_nome != undefined)
+        {
+            setLenC(cliente_nome.length)
+        }
+
+        if (empresa_nome != undefined)
+        {
+            setLenF(empresa_nome.length)
+        }
+
+        if (cliente_endereco != undefined)
+        {
+            setLenEN(cliente_endereco.length)
+        }
+
+        if (cliente_bairro != undefined)
+        {
+            setLenB(cliente_bairro.length)
+        }
+
+        if (cliente_cidade != undefined)
+        {
+            setLenCI(cliente_cidade.length)
+        }
+
+    }, [lenC, lenF, lenEN, lenB, lenCI, cliente_nome, empresa_nome, cliente_endereco, cliente_bairro, cliente_cidade])
 
     async function submit(event) 
     {
@@ -78,60 +111,61 @@ function ClientsNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
+            <Form className='grid-container' onSubmit={submit}>
+                <Form.Group className='grid-child'>
                     <Form.Label>CPF/CNPJ <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
+                    <Form.Control className='grid-input' type='number' placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Ciente <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='João Maria' onChange={(event) => setClienteNome(event.target.value)} />
+                    <Form.Control className='grid-input' style={{'width': lenC+'ch'}} type='text' placeholder='João Maria' onChange={(event) => setClienteNome(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+
+                {flag_cnpj && 
+                    <Form.Group className='grid-child'>
+                        <Form.Label>Nome Fantasia <span style={{'color':'red'}}>*</span></Form.Label>
+                        <Form.Control className='grid-input' style={{'width': lenF+'ch'}} type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
+                    </Form.Group>
+                }
+                
+                <Form.Group className='grid-child'>
                     <Form.Label>Pessoa Jurídica</Form.Label>
                     <Form.Check type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
                 </Form.Group>
 
-                {flag_cnpj && 
-                    <Form.Group>
-                        <Form.Label>Nome Fantasia <span style={{'color':'red'}}>*</span></Form.Label>
-                        <Form.Control type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
-                    </Form.Group>
-                }
-
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Telefone <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Endereço <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Rua Exemplo, 001' onChange={(event) => setClienteEndereco(event.target.value)} />
+                    <Form.Control className='grid-input' style={{'width': lenEN+'ch'}} type='text' placeholder='Rua Exemplo, 001' onChange={(event) => setClienteEndereco(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Bairro <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Centro' onChange={(event) => setClienteBairro(event.target.value)} />
+                    <Form.Control className='grid-input' style={{'width': lenB+'ch'}} type='text' placeholder='Centro' onChange={(event) => setClienteBairro(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Cidade <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Campos Neutrais' onChange={(event) => setClienteCidade(event.target.value)} />
+                    <Form.Control className='grid-input' style={{'width': lenCI+'ch'}} type='text' placeholder='Campos Neutrais' onChange={(event) => setClienteCidade(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>CEP <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='12345000' onChange={(event) => setClienteCep(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' placeholder='12345000' onChange={(event) => setClienteCep(event.target.value)} />
                 </Form.Group>
-                
-                <Button variant='outline-primary' type='submit'>Cadastrar cliente</Button>
+                <br />
+                <Button variant='outline-primary' type='submit' className='grid-child'>Cadastrar cliente</Button>
             </Form>
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
