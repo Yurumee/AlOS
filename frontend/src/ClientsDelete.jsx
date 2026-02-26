@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import AlertPopUp from './AlertPopUp'
 
 import { useParams, useNavigate } from 'react-router-dom'
@@ -76,20 +76,22 @@ function ClientsDelete(props) {
             {!isLoading && client &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar este cliente?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{client.cpf_cnpj}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {client.nome_completo}</p>
+                                    <p className='grid-p-card'>Nome</p>
+                                    <p>{client.nome_completo}</p>
                                     <br />
-                                    <p>Nome Fantasia: {client.nome_fantasia}</p>
+                                    <p className='grid-p-card'>Nome Fantasia</p>
+                                    <p>{client.nome_fantasia}</p>
                                 </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
-
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 

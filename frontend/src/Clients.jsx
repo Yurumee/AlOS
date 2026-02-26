@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import ClientsVisualize from './ClientsVisualize'
 import ModalId from './ModalId'
 
@@ -121,10 +121,10 @@ function Clients(props)
             
             {/* tabela de clientes existentes*/}
             { !isLoading && 
-                <div className="clientsCreated container">
+                <div className="container">
                     <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                    <Table striped bordered hover responsive variant='warning'>
+                    <Table striped bordered hover responsive variant='warning' className='table-client'>
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -143,12 +143,12 @@ function Clients(props)
                                     <>
                                         <tr key={client.id}>
                                             <td> {client.id} </td>
-                                            <td> {client.nome_completo} </td>
-                                            <td> {client.nome_fantasia} </td>
-                                            <td> {client.telefone} </td>
-                                            <td> {client.limite_credito} </td>
+                                            <td className='table-name-cell'> {client.nome_completo} </td>
+                                            <td className='table-name-cell'> {client.nome_fantasia} </td>
+                                            <td className='table-info-cell'> {client.telefone} </td>
+                                            <td className='table-info-cell'> {client.limite_credito} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
                                                 {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                         </tr>
                                     </>

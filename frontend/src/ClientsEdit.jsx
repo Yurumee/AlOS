@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
@@ -46,6 +46,40 @@ function ClientsEdit(props)
 
         getClient()
     }, [])
+
+    const [lenC, setLenC] = useState(0)
+    const [lenF, setLenF] = useState(0)
+    const [lenEN, setLenEN] = useState(0)
+    const [lenB, setLenB] = useState(0)
+    const [lenCI, setLenCI] = useState(0)
+
+    useEffect(() => {
+        if (new_cliente_nome != undefined)
+        {
+            setLenC(new_cliente_nome.length)
+        }
+
+        if (new_empresa_nome != undefined)
+        {
+            setLenF(new_empresa_nome.length)
+        }
+
+        if (new_cliente_endereco != undefined)
+        {
+            setLenEN(new_cliente_endereco.length)
+        }
+
+        if (new_cliente_bairro != undefined)
+        {
+            setLenB(new_cliente_bairro.length)
+        }
+
+        if (new_cliente_cidade != undefined)
+        {
+            setLenCI(new_cliente_cidade.length)
+        }
+
+    }, [lenC, lenF, lenEN, lenB, lenCI, new_cliente_nome, new_empresa_nome, new_cliente_endereco, new_cliente_bairro, new_cliente_cidade])
 
     async function submit(event) 
     {
@@ -95,51 +129,53 @@ function ClientsEdit(props)
 
             <h1>Editando Cliente - {client.cpf_cnpj}</h1>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container' onSubmit={submit}>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Ciente</Form.Label>
-                    <Form.Control type='text' defaultValue={client.nome_completo} placeholder='João Maria' onChange={(event) => setNewClienteNome(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' style={{'width': lenC+'ch'}} defaultValue={client.nome_completo} placeholder='João Maria' onChange={(event) => setNewClienteNome(event.target.value)} />
                 </Form.Group>
 
                 {
-                    client.pessoa_juridica && <Form.Group>
+                    client.pessoa_juridica && <Form.Group className='grid-child'>
                                             <Form.Label>Nome Fantasia</Form.Label>
-                                            <Form.Control type='text' defaultValue={client.nome_fantasia} placeholder='Empresa Fulana' onChange={(event) => setNewEmpresaNome(event.target.value)} />
+                                            <Form.Control className='grid-input' type='text' style={{'width': lenF+'ch'}} defaultValue={client.nome_fantasia} placeholder='Empresa Fulana' onChange={(event) => setNewEmpresaNome(event.target.value)} />
                                         </Form.Group>
                 }
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' defaultValue={client.telefone} placeholder='84912345678' onChange={(event) => setNewClienteTel(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' defaultValue={client.telefone} placeholder='84912345678' onChange={(event) => setNewClienteTel(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control type='number' defaultValue={client.limite_credito} placeholder='99.99' step={0.01} onChange={(event) => setNewClienteCredito(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' defaultValue={client.limite_credito} placeholder='99.99' step={0.01} onChange={(event) => setNewClienteCredito(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' defaultValue={client.endereco} placeholder='Rua Exemplo, 001' onChange={(event) => setNewClienteEndereco(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' style={{'width': lenEN+'ch'}} defaultValue={client.endereco} placeholder='Rua Exemplo, 001' onChange={(event) => setNewClienteEndereco(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Bairro</Form.Label>
-                    <Form.Control type='text' defaultValue={client.bairro} placeholder='Centro' onChange={(event) => setNewClienteBairro(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' style={{'width': lenB+'ch'}} defaultValue={client.bairro} placeholder='Centro' onChange={(event) => setNewClienteBairro(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Cidade</Form.Label>
-                    <Form.Control type='text' defaultValue={client.cidade} placeholder='Campos Neutrais' onChange={(event) => setNewClienteCidade(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' style={{'width': lenCI+'ch'}} defaultValue={client.cidade} placeholder='Campos Neutrais' onChange={(event) => setNewClienteCidade(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>CEP</Form.Label>
-                    <Form.Control type='number' defaultValue={client.cep} placeholder='12345000' onChange={(event) => setNewClienteCep(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' defaultValue={client.cep} placeholder='12345000' onChange={(event) => setNewClienteCep(event.target.value)} />
                 </Form.Group>
+                
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar cliente</Button>
+
+                <Button className='grid-button grid-child' variant='outline-warning' type='submit'>Editar cliente</Button>
             </Form>
 
             {/* CHECA O ALERTA A SER MOSTRADO */}

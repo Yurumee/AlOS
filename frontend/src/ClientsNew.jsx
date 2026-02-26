@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
@@ -129,21 +129,6 @@ function ClientsNew(props)
                         <Form.Control className='grid-input' style={{'width': lenF+'ch'}} type='text' placeholder='Empresa Fulana' onChange={(event) => setEmpresaNome(event.target.value)} />
                     </Form.Group>
                 }
-                
-                <Form.Group className='grid-child'>
-                    <Form.Label>Pessoa Jurídica</Form.Label>
-                    <Form.Check type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
-                </Form.Group>
-
-                <Form.Group className='grid-child'>
-                    <Form.Label>Telefone <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control className='grid-input' type='number' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} />
-                </Form.Group>
-
-                <Form.Group className='grid-child'>
-                    <Form.Label>Limite de Crédito</Form.Label>
-                    <Form.Control className='grid-input' type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
-                </Form.Group>
 
                 <Form.Group className='grid-child'>
                     <Form.Label>Endereço <span style={{'color':'red'}}>*</span></Form.Label>
@@ -164,8 +149,24 @@ function ClientsNew(props)
                     <Form.Label>CEP <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control className='grid-input' type='number' placeholder='12345000' onChange={(event) => setClienteCep(event.target.value)} />
                 </Form.Group>
+
+                <Form.Group className='grid-child'>
+                    <Form.Label>Telefone <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control className='grid-input' type='number' placeholder='84912345678' onChange={(event) => setClienteTel(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group className='grid-child'>
+                    <Form.Label>Limite de Crédito</Form.Label>
+                    <Form.Control className='grid-input' type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group className='grid-child grid-switch'>
+                    <Form.Label>Pessoa Jurídica</Form.Label>
+                    <Form.Check style={{'justifySelf':'center'}} type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
+                </Form.Group>
+
                 <br />
-                <Button variant='outline-primary' type='submit' className='grid-child'>Cadastrar cliente</Button>
+                <Button  className='grid-button grid-child' variant='outline-primary' type='submit'>Cadastrar cliente</Button>
             </Form>
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}
