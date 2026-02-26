@@ -43,23 +43,25 @@ function ModalId(props) {
     }
 
     return (
-        <div className="modal show" style={{ display: 'block'}}>
-            <Modal.Dialog>
-                <Modal.Header closeButton onClick={props.close}>
-                    <Modal.Title>Insira o ID do cliente desejado</Modal.Title>
-                </Modal.Header>
-    
-                <Modal.Body>
-                    <FloatingLabel label="ID" className="mb-3">
-                        <Form.Control type="number" placeholder="ID" onChange={(event) => setIdCliente(event.target.value)} />
-                    </FloatingLabel>
-                </Modal.Body>
-    
-                <Modal.Footer>
-                    <Button onClick={redirect} variant="warning">Continuar</Button>
-                    {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
-                </Modal.Footer>
-            </Modal.Dialog>
+        <div style={{ display: 'block'}}>
+            <Modal show={props.show} onHide={props.close}>
+                {/* <Modal.Dialog> */}
+                    <Modal.Header closeButton>
+                        <Modal.Title>Insira o ID do cliente desejado</Modal.Title>
+                    </Modal.Header>
+        
+                    <Modal.Body>
+                        <FloatingLabel label="ID" className="mb-3">
+                            <Form.Control type="number" placeholder="ID" onChange={(event) => setIdCliente(event.target.value)} />
+                        </FloatingLabel>
+                    </Modal.Body>
+        
+                    <Modal.Footer>
+                        <Button onClick={redirect} variant="warning">Continuar</Button>
+                        {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
+                    </Modal.Footer>
+                {/* </Modal.Dialog> */}
+            </Modal>
         </div>
     )
 }
