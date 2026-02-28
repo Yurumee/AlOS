@@ -143,9 +143,9 @@ def new_os():
             orcamento = data.get('orcamento')
             estado = data.get('estado')
             emitir = data.get('emitir')
-            emissao = data.get('hora-emissao')
-            fechamento = data.get('hora-fechamento')
-            validade = data.get('data-validade')
+            emissao = data.get('hora_emissao')
+            fechamento = data.get('hora_fechamento')
+            validade = data.get('data_validade')
         
         except Exception as e:    
             response = {'status':'error', 'msg':'AINDA HÁ DADOS QUE NÃO FORAM CADASTRADOS'}

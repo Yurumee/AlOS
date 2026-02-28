@@ -1,4 +1,4 @@
-import './styles/Clients.css'
+import './styles/OS.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import AlertPopUp from './AlertPopUp'
@@ -27,7 +27,7 @@ function OSNew(props)
     const [tipo_ordem, setTipoOrdem] = useState()
     const [prognostico_ordem, setPrognosticoOrdem] = useState()
     const [diagnostico_ordem, setDiagnosticoOrdem] = useState()
-    // const [orcamento_ordem, setOrcamentoOrdem] = useState()
+    const [orcamento_ordem, setOrcamentoOrdem] = useState()
     const [estado_ordem, setEstadoOrdem] = useState()
     const [emitir_ordem, setEmitirOrdem] = useState()
     const [criacao_ordem, setCriacaoOrdem] = useState()
@@ -43,7 +43,6 @@ function OSNew(props)
      // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
     {
-        console.log(props)
             async function getClients() {
             setIsLoading(true)
 
@@ -88,33 +87,40 @@ function OSNew(props)
                 }
             }
 
-    async function submit(event) 
-    {
+    async function submit(event) {
         // previne de ir vazio
         event.preventDefault()
 
         // url para backend
-        const URL = 'http://localhost:5000/servico/novo'
-        await fetch (URL, 
-        {
-            method: 'POST',
-            headers: 
+        const URL = 'http://localhost:5000/os/novo'
+
+        await fetch(URL,
             {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + props.token
-            },
-            // transformando variaveis do forms em json
-            body: JSON.stringify({
-                    // nome_servico: nome_servico,
-                    // categoria_servico: categoria_servico,
-                    // descricao_servico: descricao_servico,
-                    // custo_servico: valor            
+                method: 'POST',
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                },
+                // transformando variaveis do forms em json
+                body: JSON.stringify({
+                    cliente_id: cliente_ordem,
+                    produto_id: produto_ordem,
+                    tipo_os: tipo_ordem,
+                    prognostico: prognostico_ordem,
+                    diagnostico: diagnostico_ordem,
+                    orcamento: orcamento_ordem,
+                    estado: estado_ordem,
+                    emitir: emitir_ordem,
+                    hora_emissao: criacao_ordem,
+                    hora_fechamento: fechamento_ordem,
+                    data_validade: validade_ordem
                 })
 
-        })
-        .then(res => res.json())
-        .then(res => setResponse(res))
-        .catch(error => console.log(error))
+            })
+            .then(res => res.json())
+            .then(res => setResponse(res))
+            .catch(error => console.log(error))
 
         // window.location.href = '/clientes'
     }
@@ -130,17 +136,17 @@ function OSNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container' onSubmit={submit}>
                 {/* <Form.Group>
                     <Form.Label>Nome do Serviço <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control type='text' placeholder='Formatação' onChange={(event) => setNomeServico(event.target.value)} />
                 </Form.Group> */}
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                     <Form.Label>Cliente <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => {setClienteOrdem(event.target.value); searchProduct(event.target.value)}}>
-                      <option disabled selected>---Selecione um cliente---</option>
+                    <Form.Select defaultValue={''} onChange={(event) => {setClienteOrdem(event.target.value); searchProduct(event.target.value)}}>
+                      <option value={''} disabled>---Selecione um cliente---</option>
                       {!isLoading && clients.map(client => (
                                     <>
                                         <option value={client.id}>{client.nome_completo}</option>
@@ -150,10 +156,10 @@ function OSNew(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Produto <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => {setProdutoOrdem(event.target.value);}}>
-                      <option disabled selected>---Selecione um produto---</option>
+                    <Form.Select defaultValue={''} onChange={(event) => {setProdutoOrdem(event.target.value);}}>
+                      <option value={''} disabled>---Selecione um produto---</option>
                       {!isLoading && products.map(product => (
                                     <>
                                         <option value={product.id}>{product.num_serie}</option>
@@ -163,19 +169,19 @@ function OSNew(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Tipo da OS <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => setTipoOrdem(event.target.value)}>
-                      <option disabled selected>---Selecione um tipo válido---</option>
+                    <Form.Select defaultValue={''} onChange={(event) => setTipoOrdem(event.target.value)}>
+                      <option value={''} disabled>---Selecione um tipo válido---</option>
                       <option value={'Preventiva'}>Manutenção Preventiva</option>
                       <option value={'Corretiva'}>Manutenção Corretiva</option>
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Estado da OS <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => setEstadoOrdem(event.target.value)}>
-                      <option disabled selected>---Selecione um estado---</option>
+                    <Form.Select defaultValue={''} onChange={(event) => setEstadoOrdem(event.target.value)}>
+                      <option value={''} disabled>---Selecione um estado---</option>
                       <option value={'Criada'}>Criada</option>
                       <option value={'Em análise'}>Em análise</option>
                       <option value={'Autorizada'}>Autorizada</option>
@@ -185,47 +191,47 @@ function OSNew(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-date-create'>
                     <Form.Label>Data de Criação da OS</Form.Label>
                     <Form.Control type='datetime-local' onChange={(event) => setCriacaoOrdem(event.target.value)} ></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Data de Validade do Orçamento da OS</Form.Label>
+                <Form.Group className='grid-child' id='grid-date-expiration'>
+                    <Form.Label>Validade do Orçamento</Form.Label>
                     <Form.Control type='datetime-local' onChange={(event) => setValidadeOrdem(event.target.value)} ></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-date-close'>
                     <Form.Label>Data do Fechamento da OS</Form.Label>
                     <Form.Control type='datetime-local' onChange={(event) => setFechamentoOrdem(event.target.value)} ></Form.Control>
                 </Form.Group>
-
-                <Form.Group>
+                            
+                <Form.Group className='grid-child' id='grid-prognostic'>
                     <Form.Label>Prognóstico</Form.Label>
-                    <Form.Control as='textarea' placeholder='- Carregador &#10; - Bolsa alaranjada &#10; ...' onChange={(event) => setPrognosticoOrdem(event.target.value)} />
+                    <Form.Control as='textarea' rows='10' placeholder='Apresenta comportamento indesejado...' onChange={(event) => setPrognosticoOrdem(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-diagnostic'>
                     <Form.Label>Diagnóstico</Form.Label>
-                    <Form.Control as='textarea' placeholder='- Carregador &#10; - Bolsa alaranjada &#10; ...' onChange={(event) => setDiagnosticoOrdem(event.target.value)} />
+                    <Form.Control as='textarea' rows='10' style={{'width':'100%'}} placeholder='O problema encontrado trata-se de...' onChange={(event) => setDiagnosticoOrdem(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-budget'>
                     <Form.Label>Orçamento</Form.Label>
-                    <Form.Select onChange={seletor}>
-                      <option disabled selected>---Selecione um serviço/insumo---</option>
+                    <Form.Select defaultValue={''} onChange={seletor}>
+                      <option value={''} disabled>---Selecione um serviço/insumo---</option>
                       <option value={'todos'}>Todos</option>
                       <option value={'servico'}>Serviços</option>
                       <option value={'insumo'}>Insumos</option>
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child grid-switch'>
                     <Form.Label>Emitir OS</Form.Label>
                     <Form.Check type='switch' onChange={(event) => setEmitirOrdem(event.target.checked)} />
                 </Form.Group>
 
-                <Button variant='outline-primary' type='submit'>Cadastrar OS</Button>
+                <Button className='grid-child grid-button' variant='outline-primary' type='submit'>Cadastrar OS</Button>
             </Form>
 
                 {/* CHECA O ALERTA A SER MOSTRADO */}

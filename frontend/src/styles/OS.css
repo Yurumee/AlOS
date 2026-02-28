@@ -1,0 +1,85 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: [first] fit-content(25%) [second] fit-content(25%) [third] fit-content(25%) [fourth] fit-content(25%);
+    gap: 5px;
+
+    justify-items: center;
+    justify-content: space-around;
+    align-items: center;
+}
+.grid-child {
+    margin: 5px;
+}
+
+.grid-child label {
+    margin-bottom: 0;
+}
+
+.grid-button {
+    grid-column: 3;
+    grid-row: 6;
+    justify-self: center;
+    align-self: center;
+}
+
+.grid-input {
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.grid-switch {
+    grid-column: 2;
+    grid-row: 6;
+    margin-bottom: 10px;
+    justify-self: center;
+    align-self: center;
+}
+
+#grid-date-create {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-column: span 1;
+}
+
+#grid-date-expiration {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-column: span 2;
+}
+
+#grid-date-close {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-column: span 1;
+}
+
+#grid-prognostic {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: span 2;
+    grid-row: 3;
+    justify-content: center;
+    width: 500px;
+}
+
+#grid-diagnostic {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: span 2;
+    grid-row: 3;
+    justify-content: center;
+    width: 500px;
+}
+
+#grid-budget {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-column: span 4;
+    justify-content: center;
+    max-height: 80%;
+    background-color: blueviolet;
+}

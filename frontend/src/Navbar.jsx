@@ -1,4 +1,3 @@
-import './styles/NavBar.css'
 import './styles/index.css'
 import useToken from './components/useToken';
 

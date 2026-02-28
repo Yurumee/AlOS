@@ -4,7 +4,7 @@ import './styles/index.css'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-function ServicesVisualize(props) {
+function OSVisualize(props) {
     const service = props.service
 
     function edit_current() {
@@ -39,4 +39,4 @@ function ServicesVisualize(props) {
     )
 }
 
-export default ServicesVisualize
+export default OSVisualize

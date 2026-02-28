@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './NavBar.jsx'
 import CategoriesVisualize from './CategoriesVisualize.jsx'
 import ModalCat from './ModalCat.jsx'
 
@@ -12,8 +12,7 @@ import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
 
-function Categories(props) 
-{
+function Categories(props) {
     // guarda as categorias
     const [categories, setCategories] = useState([])
     // carregamento
@@ -30,52 +29,47 @@ function Categories(props)
     // const location = useLocation()
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
-    useEffect(() => 
-    {
-            async function getCategories() {
+    useEffect(() => {
+        async function getCategories() {
             setIsLoading(true)
 
             // url da api
             const URL = 'http://127.0.0.1:5000/categoria/'
             const response = await fetch(URL, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + props.token
-                    }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
                 }
+            }
             )
             const data = await response.json();
-            
+
             const list = Object.values(data)
             setCategories(list)
 
             setIsLoading(false)
-            }
+        }
 
         getCategories()
 
     }, [props.token])
 
-    function new_category()
-    {
+    function new_category() {
         window.location.href = '/nova-categoria'
     }
 
-    function edit_category()
-    {
+    function edit_category() {
         setOperation('edit')
         setModalOperationOpen(!modalOperationOpen)
     }
 
-    function delete_category()
-    {
-        
+    function delete_category() {
+
         setOperation('delete')
         setModalOperationOpen(!modalOperationOpen)
     }
 
-    function visualize_category(category)
-    {
+    function visualize_category(category) {
         setModalCategory(category)
         setModalOpen(!modalOpen)
     }
@@ -84,8 +78,8 @@ function Categories(props)
         <div>
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
-            
-            <NavBar search='http://127.0.0.1:5000/categoria/pesquisar/' search_str/>
+
+            <NavBar search='http://127.0.0.1:5000/categoria/pesquisar/' search_str />
 
             {/* ALERTA */}
 
@@ -100,7 +94,7 @@ function Categories(props)
                     <span className="material-icons md-24 md-primary">edit</span>
                     Editar Categoria
                 </Button>
-                
+
                 <Button bsPrefix='button-client' onClick={delete_category}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
                     Excluir Categoria
@@ -108,15 +102,15 @@ function Categories(props)
 
             </div>
 
-            
-            {isLoading && 
-                <div style={{position: 'absolute', top: '50%', left: '50%'}}>
-                    <Spinner animation="border" variant='warning'/>
+
+            {isLoading &&
+                <div style={{ position: 'absolute', top: '50%', left: '50%' }}>
+                    <Spinner animation="border" variant='warning' />
                 </div>
             }
-            
+
             {/* tabela de clientes existentes*/}
-            { !isLoading && 
+            {!isLoading &&
                 <div className="clientsCreated container">
                     <p className='h2'>CATEGORIAS CADASTRADAS</p>
 
@@ -131,33 +125,33 @@ function Categories(props)
                             </tr>
                         </thead>
 
-                            {/* {!isLoading && <ClientRows Categories={Categories} />} */}
+                        {/* {!isLoading && <ClientRows Categories={Categories} />} */}
 
                         <tbody>
                             {!isLoading && categories.map(category => (
-                                    <>
-                                        <tr key={category.id}>
-                                            <td> {category.id} </td>
-                                            <td> {category.titulo} </td>
-                                            {/* style={{'overflow':'hidden', 'textOverflow':'ellipsis', 'whiteSpace':'nowrap', 'maxWidth':'300px'}} */}
-                                            <td> {category.descricao} </td>
-                                            <td> {category.tipo} </td>
+                                <>
+                                    <tr key={category.id}>
+                                        <td> {category.id} </td>
+                                        <td> {category.titulo} </td>
+                                        {/* style={{'overflow':'hidden', 'textOverflow':'ellipsis', 'whiteSpace':'nowrap', 'maxWidth':'300px'}} */}
+                                        <td> {category.descricao} </td>
+                                        <td> {category.tipo} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_category(category)}>unfold_more</Button> </td> 
-                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
-                                        </tr>
-                                    </>
-                                )
+                                        <td> <Button className="material-icons md-16" style={{ color: '#fff3b7' }} variant='warning' onClick={() => visualize_category(category)}>unfold_more</Button> </td>
+                                        {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
+                                    </tr>
+                                </>
+                            )
                             )}
                         </tbody>
                     </Table>
 
-                        
+
                 </div>
             }
 
-            {modalOpen && <CategoriesVisualize category={modalCategory} show={modalOpen} close={() => setModalOpen(false)}/>}
-            {modalOperationOpen && <ModalCat operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
+            {modalOpen && <CategoriesVisualize category={modalCategory} show={modalOpen} close={() => setModalOpen(false)} />}
+            {modalOperationOpen && <ModalCat operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)} />}
         </div>
     )
 }

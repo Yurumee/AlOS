@@ -1,6 +1,5 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import './styles/ClientsNew.css'
 import NavBar from './NavBar'
 
 import { useState } from 'react'
