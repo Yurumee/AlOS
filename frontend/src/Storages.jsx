@@ -1,4 +1,4 @@
-import './styles/Clients.css'
+import './styles/Storage.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import StoragesVisualize from './StoragesVisualize'
@@ -31,7 +31,6 @@ function Storages(props)
     const [operation, setOperation] = useState('')
 
     const [category, setCategory] = useState([])
-    // const [filterOptions, setFilterOptions] = useState([])
     const [groupSelected, setGroupSelected] = useState('all')
     const [search, setSearch] = useState('')
     const [itemsSearched, setItemsSearched] = useState([])
@@ -174,39 +173,32 @@ function Storages(props)
 
             
             <NavBar />
-            {/* {!isLoading && itemsSearched.map(item => (
-                    <>
-                        <ul>
-                            <li>{item.codigo_barras}</li>
-                            <li>{item.nome_item}</li>
-                            <li>{item.preco_un}</li>
-                        </ul>
-                    </>
-                ))
-            } */}
 
             <div className='buttons'>
-
-                <Button bsPrefix='button-client' variant='warning' onClick={new_item}>
+                <Button bsPrefix='button-storage' variant='warning' onClick={new_item}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
                     Novo Item de Estoque
                 </Button>
 
-                <Button bsPrefix='button-client' onClick={edit_item}>
+                <Button bsPrefix='button-storage' onClick={edit_item}>
                     <span className="material-icons md-24 md-primary">edit</span>
                     Editar Item do Estoque
                 </Button>
                 
-                <Button bsPrefix='button-client' onClick={delete_item}>
+                <Button bsPrefix='button-storage' onClick={delete_item}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
                     Excluir Item do Estoque
                 </Button>
 
+            <div className="search-bar">
+                    <Search search={search} handleSearch={handleSearch}/>        
+                    <Filter handleFilter={handleFilter} options={category}/>
+                    <Button className='button-search' onClick={results}>
+                        Pesquisar
+                    </Button>
             </div>
-
-            <Search search={search} handleSearch={handleSearch} results={results} />        
-            <Filter handleFilter={handleFilter} options={category}/>
-
+            
+            </div>
             
             {isLoading && 
                 <div style={{position: 'absolute', top: '50%', left: '50%'}}>
@@ -217,18 +209,16 @@ function Storages(props)
             {/* tabela de produtos existentes*/}
             { !isLoading &&
                 
-                <div className="clientsCreated container">
+                <div className="container">
                     <p className='h2'>ITEMS EM ESTOQUE</p>
 
-                    <Table striped bordered hover responsive variant='warning'>
+                    <Table striped bordered hover responsive variant='warning' className='table-storage'>
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nome</th>
-                                {/* <th>Descrição</th> */}
                                 <th>Quantidade</th>
                                 <th>Valor Unitário</th>
-                                {/* <th>Categoria</th> */}
                                 <th>Cod. Barras</th>
                                 <th></th>
                                 <th></th>
@@ -239,14 +229,15 @@ function Storages(props)
                             {(!isLoading && itemsSearched == '') && items.map(item => (
                                     <>
                                         <tr key={item.id}>
-                                            <td> {item.id} </td>
-                                            <td> {item.nome_item} </td>
-                                            <td> {item.quantidade} </td>
-                                            <td> {item.preco_un} </td>
-                                            <td> {item.codigo_barras} </td>
+                                            <td className='table-info-cell'> {item.id} </td>
+                                            <td className='table-name-cell'> {item.nome_item} </td>
+                                            <td className='table-info-cell'> {item.quantidade} </td>
+                                            <td className='table-info-cell'> {item.preco_un} </td>
+                                            <td className='table-info-cell'> {item.codigo_barras} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
+                                            
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
                                         </tr>
                                     </>
                                 )
@@ -255,14 +246,15 @@ function Storages(props)
                             {(!isLoading && itemsSearched != '') && itemsSearched.map(item => (
                                     <>
                                         <tr key={item.id}>
-                                            <td> {item.id} </td>
-                                            <td> {item.nome_item} </td>
-                                            <td> {item.quantidade} </td>
-                                            <td> {item.preco_un} </td>
-                                            <td> {item.codigo_barras} </td>
+                                            <td className='table-info-cell'> {item.id} </td>
+                                            <td className='table-name-cell'> {item.nome_item} </td>
+                                            <td className='table-info-cell'> {item.quantidade} </td>
+                                            <td className='table-info-cell'> {item.preco_un} </td>
+                                            <td className='table-info-cell'> {item.codigo_barras} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
+                                            
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
                                         </tr>
                                     </>
                                 )

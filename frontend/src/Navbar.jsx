@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-// import { useEffect, useState } from 'react';
 
 // import { useNavigate } from 'react-router-dom';
 
@@ -132,14 +131,14 @@ function NavBar(props) {
 
                     </Nav>
 
-                    <Form className="d-flex">
+                    {/* <Form className="d-flex">
                         <Form.Control
                             type="search"
                             placeholder="Search"
                             className="me-2"
                             aria-label="Search" />
                         <Button variant="outline-success">Search</Button>
-                    </Form>
+                    </Form> */}
                     
                     <Button variant='danger' onClick={logout} style={{'marginLeft':'8px'}}>Sair</Button>
 
