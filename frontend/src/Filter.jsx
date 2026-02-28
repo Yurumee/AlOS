@@ -6,9 +6,12 @@ function Filter (props) {
         <Form.Group className='grid-child'>
                 <Form.Label>Teste de filtragem</Form.Label>
                 <Form.Select onChange={props.handleFilter}>
-                  <option value={'all'} >Todos</option>
-                  <option value={'storage'}>Itens de Estoque</option>
-                  <option value={'service'}>Serviços</option>
+                  <option value={'all'}>Todos</option>
+                  {props.options.map(categoria => (
+                    <>
+                        <option value={categoria}>{categoria}</option>
+                    </>
+                  ))}
                 </Form.Select>
             </Form.Group>
     )

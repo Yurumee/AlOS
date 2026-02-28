@@ -30,15 +30,38 @@ function Storages(props)
     // operação realizada
     const [operation, setOperation] = useState('')
 
+    const [category, setCategory] = useState([])
+    // const [filterOptions, setFilterOptions] = useState([])
     const [groupSelected, setGroupSelected] = useState('all')
     const [search, setSearch] = useState('')
+    const [itemsSearched, setItemsSearched] = useState([])
 
-    function handleFilter(event) {
+    // filtro
+    function handleFilter(event) 
+    {
         setGroupSelected(event.target.value)
     }
 
-    function handleSearch(newSearch) {
+    // busca
+    function handleSearch(newSearch) 
+    {
         setSearch(newSearch)
+    }
+
+    // resultados da busca
+    function results ()
+    {
+        const itemsResult = items.filter((items) => {
+            if (groupSelected == 'all') 
+            {
+                return true
+            }
+
+            return items.categoria === groupSelected
+        })
+        .filter(items => items.nome_item.toLowerCase().includes(search.toLowerCase()))
+
+        setItemsSearched(itemsResult)
     }
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
@@ -59,11 +82,17 @@ function Storages(props)
             const data = await response.json();
             const list = Object.values(data)
             setItems(list)
+            
+            // separando as categorias dos itens
+            let all_categorias = []
+            list.forEach(items => all_categorias.push(items.categoria))
+            setCategory([...new Set(all_categorias)])
 
             setIsLoading(false)
             }
 
         getItems()
+
     }, [props.token])
 
     async function reposition_item(event, flag, quantidade, id)
@@ -108,8 +137,6 @@ function Storages(props)
             }
 
         getItems()
-        
-
     }
 
     function new_item()
@@ -147,8 +174,16 @@ function Storages(props)
 
             
             <NavBar />
-            <Search search={search} handleSearch={handleSearch} />
-            <Filter handleFilter={handleFilter} />
+            {/* {!isLoading && itemsSearched.map(item => (
+                    <>
+                        <ul>
+                            <li>{item.codigo_barras}</li>
+                            <li>{item.nome_item}</li>
+                            <li>{item.preco_un}</li>
+                        </ul>
+                    </>
+                ))
+            } */}
 
             <div className='buttons'>
 
@@ -169,6 +204,9 @@ function Storages(props)
 
             </div>
 
+            <Search search={search} handleSearch={handleSearch} results={results} />        
+            <Filter handleFilter={handleFilter} options={category}/>
+
             
             {isLoading && 
                 <div style={{position: 'absolute', top: '50%', left: '50%'}}>
@@ -177,7 +215,7 @@ function Storages(props)
             }
             
             {/* tabela de produtos existentes*/}
-            { !isLoading && 
+            { !isLoading &&
                 
                 <div className="clientsCreated container">
                     <p className='h2'>ITEMS EM ESTOQUE</p>
@@ -198,7 +236,23 @@ function Storages(props)
                         </thead>
 
                         <tbody>
-                            {!isLoading && items.map(item => (
+                            {(!isLoading && itemsSearched == '') && items.map(item => (
+                                    <>
+                                        <tr key={item.id}>
+                                            <td> {item.id} </td>
+                                            <td> {item.nome_item} </td>
+                                            <td> {item.quantidade} </td>
+                                            <td> {item.preco_un} </td>
+                                            <td> {item.codigo_barras} </td>
+
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => manage_item(item)}>inventory_2</Button> </td> 
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_item(item)}>unfold_more</Button> </td>
+                                        </tr>
+                                    </>
+                                )
+                            )}
+
+                            {(!isLoading && itemsSearched != '') && itemsSearched.map(item => (
                                     <>
                                         <tr key={item.id}>
                                             <td> {item.id} </td>
