@@ -4,6 +4,8 @@ import NavBar from './NavBar'
 import StoragesVisualize from './StoragesVisualize'
 import ModalItem from './ModalItem'
 import ManageItem from './ManageItem'
+import Filter from './Filter'
+import Search from './Search'
 
 import { useEffect, useState } from 'react'
 
@@ -27,6 +29,17 @@ function Storages(props)
     const [modalItem, setModalItem] = useState({})
     // operação realizada
     const [operation, setOperation] = useState('')
+
+    const [groupSelected, setGroupSelected] = useState('all')
+    const [search, setSearch] = useState('')
+
+    function handleFilter(event) {
+        setGroupSelected(event.target.value)
+    }
+
+    function handleSearch(newSearch) {
+        setSearch(newSearch)
+    }
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -134,6 +147,8 @@ function Storages(props)
 
             
             <NavBar />
+            <Search search={search} handleSearch={handleSearch} />
+            <Filter handleFilter={handleFilter} />
 
             <div className='buttons'>
 

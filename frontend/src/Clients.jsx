@@ -89,7 +89,7 @@ function Clients(props)
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
             
-            <NavBar search='http://127.0.0.1:5000/cliente/pesquisar/' search_str/>
+            <NavBar />
 
             {/* ALERTA */}
 

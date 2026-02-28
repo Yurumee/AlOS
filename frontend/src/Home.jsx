@@ -1,7 +1,7 @@
 //  
 import './styles/index.css'
 // import './styles/Clients.css'
-import ImageUpload from './ImageUpload'
+// import ImageUpload from './ImageUpload'
 
 import { useState } from 'react'
 
@@ -40,7 +40,7 @@ function Home(props) {
                     Adicionar logo
                 </Button>
 
-                {modalOpen && <ImageUpload submit={props.new_logo} show={modalOpen} close={() => setModalOpen(false)} />}
+                {/* {modalOpen && <ImageUpload submit={props.new_logo} show={modalOpen} close={() => setModalOpen(false)} />} */}
             </div>
         </>
     )

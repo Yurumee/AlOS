@@ -2,7 +2,6 @@ import './styles/OS.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import AlertPopUp from './AlertPopUp'
-import seletor from './FiltroOrcamento'
 
 import { useEffect, useState } from 'react'
 
@@ -27,7 +26,7 @@ function OSNew(props)
     const [tipo_ordem, setTipoOrdem] = useState()
     const [prognostico_ordem, setPrognosticoOrdem] = useState()
     const [diagnostico_ordem, setDiagnosticoOrdem] = useState()
-    const [orcamento_ordem, setOrcamentoOrdem] = useState()
+    // const [orcamento_ordem, setOrcamentoOrdem] = useState()
     const [estado_ordem, setEstadoOrdem] = useState()
     const [emitir_ordem, setEmitirOrdem] = useState()
     const [criacao_ordem, setCriacaoOrdem] = useState()
@@ -109,7 +108,7 @@ function OSNew(props)
                     tipo_os: tipo_ordem,
                     prognostico: prognostico_ordem,
                     diagnostico: diagnostico_ordem,
-                    orcamento: orcamento_ordem,
+                    // orcamento: orcamento_ordem,
                     estado: estado_ordem,
                     emitir: emitir_ordem,
                     hora_emissao: criacao_ordem,
@@ -218,7 +217,7 @@ function OSNew(props)
 
                 <Form.Group className='grid-child' id='grid-budget'>
                     <Form.Label>Orçamento</Form.Label>
-                    <Form.Select defaultValue={''} onChange={seletor}>
+                    <Form.Select defaultValue={''}>
                       <option value={''} disabled>---Selecione um serviço/insumo---</option>
                       <option value={'todos'}>Todos</option>
                       <option value={'servico'}>Serviços</option>
