@@ -37,7 +37,7 @@ def all_typed_category(path=None):
     type_for = path
     
     if type_for == 'service':
-        categories = db.session.query(Categoria).filter(or_(Categoria.tipo == 'Geral', Categoria.tipo == 'Serviço')).all()
+        categories = db.session.query(Categoria).filter(or_(Categoria.tipo == 'Geral', Categoria.tipo == 'Servico')).all()
 
     if type_for == 'storage':
         categories = db.session.query(Categoria).filter(or_(Categoria.tipo == 'Geral', Categoria.tipo == 'Estoque')).all()
@@ -213,7 +213,7 @@ def delete_categoria(id_desejado):
 # rota usada para pesquisar categorias com base no id para ser utilizado para edição ou exclusão
 @view_category.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
-def getcategoria(id_desejado):
+def get_categoria(id_desejado):
     from models.categoria import Categoria
 
     try:
@@ -243,40 +243,47 @@ def getcategoria(id_desejado):
 # rota usada para buscar todos os titulos de categoria pelo tipo
 @view_category.route('/busca/<str_busca>', methods=['GET'])
 @jwt_required()
-def getcategoria(str_busca):
+def get_categoria_by_type(str_busca):
     from models.estoque import Estoque
     from models.servico import Servico
     from models.categoria import Categoria
 
-    if str_busca == 'Estoque':
-        itens = db.session.query(Categoria).filter_by()
-        pass
-    
-    if str_busca == 'Servico':
-        pass
+    if str_busca == 'estoque':
+        titulos_categorias = db.session.query(Categoria).filter(Categoria.tipo.ilike(str_busca)).all()
 
-    if str_busca == 'Geral':
-        pass
-
-    try:
-        categoria_desejada = db.session.query(Categoria).filter_by(categoria_id=id_desejado).first()
-    
-    except Exception:
-        return '', 500
-    
-    try:
-        # caso o produto exista
-        if not categoria_desejada:
-            return '', 404
+        titulos_encontrados = {}
         
-    except Exception:
-        return '', 500
+        for titulo in titulos_categorias:
+            titulos_encontrados[titulo.categoria_id] = {
+                                                        'id': titulo.categoria_id,
+                                                        'titulo': titulo.titulo
+                                                    }
+        
+        return titulos_encontrados, 200
+
     
-    result = {
-                "id":categoria_desejada.categoria_id,
-                "titulo": categoria_desejada.titulo,
-                "tipo": categoria_desejada.tipo,
-                "descricao": categoria_desejada.descricao
-            }
-                
-    return result, 302
+    if str_busca == 'servico':
+        titulos_categorias = db.session.query(Categoria).filter(Categoria.tipo.ilike(str_busca)).all()
+
+        titulos_encontrados = {}
+        
+        for titulo in titulos_categorias:
+            titulos_encontrados[titulo.categoria_id] = {
+                                                        'id': titulo.categoria_id,
+                                                        'titulo': titulo.titulo
+                                                    }
+        
+        return titulos_encontrados, 200
+
+    if str_busca == 'geral':
+        titulos_categorias = db.session.query(Categoria).filter(Categoria.tipo.ilike(str_busca)).all()
+
+        titulos_encontrados = {}
+        
+        for titulo in titulos_categorias:
+            titulos_encontrados[titulo.categoria_id] = {
+                                                        'id': titulo.categoria_id,
+                                                        'titulo': titulo.titulo
+                                                    }
+        
+        return titulos_encontrados, 200

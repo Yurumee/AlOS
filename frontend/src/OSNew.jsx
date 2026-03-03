@@ -6,6 +6,7 @@ import AlertPopUp from './AlertPopUp'
 import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
+import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,8 +16,6 @@ function OSNew(props) {
     const [clients, setClients] = useState([])
     // guarda os produtos do cliente especificado
     const [products, setProducts] = useState([])
-    // // guarda as categorias
-    const [categories, setCategories] = useState([])
 
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
@@ -35,11 +34,10 @@ function OSNew(props) {
     const [cliente_ordem, setClienteOrdem] = useState()
     const [produto_ordem, setProdutoOrdem] = useState()
 
-    // const [orcamentoInsert, setOrcamentoInsert] = useState()
-    const [categoryBudget, setCategoryBudget] = useState('')
-    const [categoryItems, setCategoryItems] = useState('')
-    // const [storageItems, setStorageItems] = useState('')
-    // const [serviceItems, setServiceItems] = useState('')
+    const [orcamentoNomeCategoria, setOrcamentoNomeCategoria] = useState()
+    // const [categoryBudget, setCategoryBudget] = useState('')
+    const [categories, setCategories] = useState([])
+    const [itemsSearched, setItemsSearched] = useState([])
 
     const [response, setResponse] = useState({ status: '', msg: '' })
     const navigation = useNavigate()
@@ -90,7 +88,7 @@ function OSNew(props) {
     {
         if (search_str != '')
         {
-            if (search_str === 'Estoque')
+            if (search_str === 'estoque')
             {
                 // url da api
                 const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
@@ -102,57 +100,120 @@ function OSNew(props) {
                     }
                 })
                 const data = await response.json();
+                // console.log(data)
                 const list = Object.values(data)
-                setCategoryItems(list)
-                
-                console.log(categoryItems)
+                // console.log(list)
+                setCategories(list)
+
                 setIsLoading(false)
             }
-        }
-    }
 
-
-        async function submit(event) {
-            // previne de ir vazio
-            event.preventDefault()
-
-            // url para backend
-            const URL = 'http://localhost:5000/os/novo'
-
-            await fetch(URL,
-                {
-                    method: 'POST',
+            else if (search_str === 'servico')
+            {
+                // url da api
+                const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
+                const response = await fetch(URL, {
                     headers:
                     {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + props.token
-                    },
-                    // transformando variaveis do forms em json
-                    body: JSON.stringify({
-                        cliente_id: cliente_ordem,
-                        produto_id: produto_ordem,
-                        tipo_os: tipo_ordem,
-                        prognostico: prognostico_ordem,
-                        diagnostico: diagnostico_ordem,
-                        // orcamento: orcamento_ordem,
-                        estado: estado_ordem,
-                        emitir: emitir_ordem,
-                        hora_emissao: criacao_ordem,
-                        hora_fechamento: fechamento_ordem,
-                        data_validade: validade_ordem
-                    })
-
+                    }
                 })
-                .then(res => res.json())
-                .then(res => setResponse(res))
-                .catch(error => console.log(error))
+                const data = await response.json();
+                // console.log(data)
+                const list = Object.values(data)
+                // console.log(list)
+                setCategories(list)
 
-            // window.location.href = '/clientes'
+                setIsLoading(false)
+            }
+
+            else if (search_str === 'geral')
+            {
+                // url da api
+                const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
+                const response = await fetch(URL, {
+                    headers:
+                    {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + props.token
+                    }
+                })
+                const data = await response.json();
+                // console.log(data)
+                const list = Object.values(data)
+                // console.log(list)
+                setCategories(list)
+
+                setIsLoading(false)
+            }
+
+            else
+            {
+                setCategories([])
+            }
+            
         }
+    }
+
+    async function tableOrcamento(category) 
+    {
+        // console.log(category)
+        // url da api
+        const URL = `http://127.0.0.1:5000/estoque/busca/${category}`
+        const response = await fetch(URL, {
+            headers:
+            {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + props.token
+            }
+        })
+        const data = await response.json();
+        console.log(data)
+        const list = Object.values(data)
+        console.log(list)
+        setItemsSearched(list)
+        setIsLoading(false)
+    }
+
+
+    async function submit(event) {
+        // previne de ir vazio
+        event.preventDefault()
+        // url para backend
+        const URL = 'http://localhost:5000/os/novo'
+        await fetch(URL,
+            {
+                method: 'POST',
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                },
+                // transformando variaveis do forms em json
+                body: JSON.stringify({
+                    cliente_id: cliente_ordem,
+                    produto_id: produto_ordem,
+                    tipo_os: tipo_ordem,
+                    prognostico: prognostico_ordem,
+                    diagnostico: diagnostico_ordem,
+                    // orcamento: orcamento_ordem,
+                    estado: estado_ordem,
+                    emitir: emitir_ordem,
+                    hora_emissao: criacao_ordem,
+                    hora_fechamento: fechamento_ordem,
+                    data_validade: validade_ordem
+                })
+            })
+            .then(res => res.json())
+            .then(res => setResponse(res))
+            .catch(error => console.log(error))
+        // window.location.href = '/clientes'
+    }
 
         return (
             <>
-                {console.log(categories)}
+
                 <NavBar />
 
                 <div className='container'>
@@ -243,48 +304,63 @@ function OSNew(props) {
 
                             <Form.Group className='grid-child'>
                                 <Form.Label>Tipo da Categoria</Form.Label>
-                                <Form.Select defaultValue={''} onChange={(event) => { setCategoryBudget(event.target.value); searchCategory(event.target.value)}}>
+                                <Form.Select defaultValue={''} onChange={(event) => { searchCategory(event.target.value)}}>
                                     <option value={''} disabled>---Selecione um categoria---</option>
-                                    <option value={'Geral'}>Geral</option>
-                                    <option value={'Estoque'}>Estoque</option>
-                                    <option value={'Servico'}>Serviço</option>
+                                    <option value={'geral'}>Geral</option>
+                                    <option value={'estoque'}>Estoque</option>
+                                    <option value={'servico'}>Serviço</option>
                                 </Form.Select>
 
 
                                 <Form.Label>Título da Categoria</Form.Label>
-                                <Form.Select defaultValue={''} onChange={(event) => { setCategoryBudget(event.target.value) }}>
+                                <Form.Select defaultValue={''} onChange={(event) => { setOrcamentoNomeCategoria(event.target.value); tableOrcamento(event.target.value) }}>
                                     <option value={''} disabled>---Selecione uma especificação---</option>
-                                    {/* {!isLoading && categoryItems.map(product => (
+                                    {!isLoading && categories.map(category => (
                                         <>
-                                            <option value={product.id}>{product.num_serie}</option>
+                                            <option value={category.id}>{category.titulo}</option>
                                         </>
                                     )
-                                    )} */}
+                                    )}
                                 </Form.Select>
                             </Form.Group>
-
-
-                            {/* <Form.Group className='grid-child'>
-                        <Search search={search} handleSearch={handleSearch}/>        
-                        <Filter handleFilter={handleFilter} options={category}/>
-                        <Button className='grid-child button-search' onClick={results}>
-                            Pesquisar
-                        </Button>
-                    </Form.Group>
-
-                    <Form.Group className='grid-child'>
-                        <Form.Label>Inserir procedimento não-categorizado <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                        <Form.Control type='text' placeholder='João Maria' onChange={(event) => setOrcamentoInsert(event.target.value)} />
-                        <Button className='grid-child button-search' onClick={results}>
-                            Inserir
-                        </Button>
-                    </Form.Group> */}
 
                             <ul>
 
                             </ul>
 
                         </Form.Group>
+
+                        <Table striped bordered hover responsive variant='warning' className='table-storage'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Cod. Barras</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {(!isLoading && itemsSearched != '') && itemsSearched.map(item => (
+                                        <>
+                                            <tr key={item.id}>
+                                                <td className='table-info-cell'> {item.id} </td>
+                                                <td className='table-name-cell'> {item.nome_item} </td>
+                                                <td className='table-info-cell'> {item.quantidade} </td>
+                                                <td className='table-info-cell'> {item.preco_un} </td>
+                                                <td className='table-info-cell'> {item.codigo_barras} </td>
+
+                                                <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning'><Button onClick={(event) => { props.reposition(event, true, quantidade, item.id) }} variant="success">Repor esta quantidade</Button>
+                    <Button onClick={(event) => { props.reposition(event, false, quantidade, item.id) }} variant="danger">Retirar esta quantidade</Button></Button> </td>
+                                            </tr>
+                                        </>
+                                    )
+                                )}
+                            </tbody>
+                        </Table>
 
                         <br />
 

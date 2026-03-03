@@ -305,3 +305,28 @@ def manageItem(id_desejado):
             item_desejado.quantidade = item_desejado.quantidade - quant
             db.session.commit()
             return '', 201
+        
+# rota usada para pesquisar todos os itens de uma categoria especifica
+@view_storage.route('/busca/<int:category_id>', methods=['GET'])
+@jwt_required()
+def storage_by_type(category_id):
+    from models.estoque import Estoque
+    from models.categoria import Categoria
+
+    storage = db.session.query(Estoque).filter_by(categoria_id=category_id).all()
+    result = {}
+    
+    # retorna clientes em formato json
+    for item in storage:
+        # item_categoria = db.session.query(Categoria).filter_by(categoria_id=item.categoria_id).one_or_none().titulo
+        result[item.item_id] = {
+                                    "id":item.item_id,
+                                    "categoria": item.categoria_id,
+                                    "nome_item": item.nome_item,
+                                    "descricao": item.descricao_item,
+                                    "quantidade": item.quantidade,
+                                    "preco_un": item.preco_unitario,
+                                    "codigo_barras": item.cod_barras
+                                }
+        
+    return result, 200

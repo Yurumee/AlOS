@@ -74,7 +74,7 @@ function CategoriesNew(props)
                     <Form.Label>Tipo da categoria</Form.Label>
                     <Form.Select defaultValue={''} onChange={(event) => setTipo(event.target.value)}>
                         <option disabled value={''}>---Selecione um tipo---</option>
-                        <option value={"Serviço"}>Serviço</option>
+                        <option value={"Servico"}>Serviço</option>
                         <option value={"Estoque"}>Estoque</option>
                         <option value={"Geral"}>Geral</option>
                     </Form.Select>
