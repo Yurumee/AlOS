@@ -94,6 +94,8 @@ function Storages(props)
 
     }, [props.token])
 
+    
+
     async function reposition_item(event, flag, quantidade, id)
     {
         event.preventDefault()
@@ -191,9 +193,9 @@ function Storages(props)
                 </Button>
 
             <div className="search-bar">
-                    <Search search={search} handleSearch={handleSearch}/>        
-                    <Filter handleFilter={handleFilter} options={category}/>
-                    <Button className='button-search' onClick={results}>
+                    <Search className='grid-child' search={search} handleSearch={handleSearch}/>        
+                    <Filter className='grid-child' handleFilter={handleFilter} options={category}/>
+                    <Button className='grid-child button-search' onClick={results}>
                         Pesquisar
                     </Button>
             </div>

@@ -3,9 +3,10 @@ import './styles/index.css'
 import NavBar from './NavBar'
 import OSVisualize from './OSVisualize'
 import ModalOS from './ModalOS'
+import Filter from './Filter'
+import Search from './Search'
 
 import { useEffect, useState } from 'react'
-// import { useLocation } from 'react-router-dom'
 
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -28,6 +29,39 @@ function OS(props)
     const [operation, setOperation] = useState('')
 
     // const location = useLocation()
+
+    const [category, setCategory] = useState([])
+    const [groupSelected, setGroupSelected] = useState('all')
+    const [search, setSearch] = useState('')
+    const [osSearched, setOsSearched] = useState([])
+
+    // filtro
+    function handleFilter(event) 
+    {
+        setGroupSelected(event.target.value)
+    }
+
+    // busca
+    function handleSearch(newSearch) 
+    {
+        setSearch(newSearch)
+    }
+
+    // resultados da busca
+    function results ()
+    {
+        const OSResult = orders.filter((order) => {
+            if (groupSelected == 'all') 
+            {
+                return true
+            }
+
+            return order.categoria === groupSelected
+        })
+        .filter(order => order.nome_item.toLowerCase().includes(search.toLowerCase()))
+
+        setOsSearched(osSearched)
+    }
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -96,18 +130,26 @@ function OS(props)
 
                 <Button bsPrefix='button-client' variant='warning' onClick={new_order}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
-                    Nova OS
+                    Nova Ordem de Serviço
                 </Button>
 
                 <Button bsPrefix='button-client' onClick={edit_order}>
                     <span className="material-icons md-24 md-primary">edit</span>
-                    Editar OS
+                    Editar Ordem de Serviço
                 </Button>
                 
                 <Button bsPrefix='button-client' onClick={delete_order}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
-                    Excluir OS
+                    Excluir Ordem de Serviço
                 </Button>
+
+                <div className="search-bar">
+                    <Search className='grid-child' search={search} handleSearch={handleSearch}/>        
+                    <Filter className='grid-child' handleFilter={handleFilter} options={category}/>
+                    <Button className='grid-child button-search' onClick={results}>
+                        Pesquisar
+                    </Button>
+                </div>
 
             </div>
 

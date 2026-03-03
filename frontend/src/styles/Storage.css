@@ -64,7 +64,7 @@
     align-self: center;
 }
 
-.grid-card {
+/* .grid-card {
     display: grid;
     justify-items: center;
     align-items: center;
@@ -82,7 +82,7 @@
 
 .grid-child-card .grid-button-card {
     width: 40%;
-}
+} */
 
 .divider {
     width: 5px;
@@ -90,9 +90,9 @@
     display: inline-block;
 }
 
-.modal-storage .modal-body {
+/* .modal-storage .modal-body {
     word-break: break-word;
-}
+} */
 
 .table-storage {
     width: 100%;
@@ -118,15 +118,14 @@
     width: 5%;
 }
 
-.buttons .search-bar {
+.buttons {
     display: grid;
-    grid-template-columns: [first] 40% [second] 40% [third] 20%;
-    justify-content: center;
-    align-content: center;
-    justify-self: end;
+    /* justify-self: end; */
+    align-self: center;
 }
 
-.buttons .search-bar .button-search{
-    align-self: center;
-    /* height: 10px; */
+.search-bar {
+    display: flex;
+    align-items: end;
+    /* justify-items: end; */
 }
