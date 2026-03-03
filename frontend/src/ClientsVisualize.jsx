@@ -16,7 +16,7 @@ function ClientsVisualize(props) {
     }
 
     return (
-        <div className="modal show" style={{ display: 'block' }}>
+        <div className="modal show" style={{ display: 'block', 'text-overflow':'ellipsis' }}>
                 <Modal.Dialog>
                 <Modal.Header closeButton onClick={props.close}>
                     <Modal.Title>Dados do Cliente - {client.cpf_cnpj}</Modal.Title>

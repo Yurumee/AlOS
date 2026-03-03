@@ -1,5 +1,5 @@
 import './styles/index.css'
-import './styles/ClientsVisualize.css'
+// import './styles/ClientsVisualize.css'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'

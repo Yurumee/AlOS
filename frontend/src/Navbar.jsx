@@ -9,10 +9,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function NavBar() {
-    // const navigation = useNavigate()
+    const navigation = useNavigate()
     
     const { removeToken } = useToken()
 
@@ -29,6 +29,7 @@ function NavBar() {
         // {
         //     window.location.reload()
         // }
+        navigation("/")
         window.location.reload()
 
         // navigation("/login", { replace: true } );

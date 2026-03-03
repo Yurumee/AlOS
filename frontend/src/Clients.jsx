@@ -124,7 +124,7 @@ function Clients(props)
                 <div className="clientsCreated container">
                     <p className='h2'>CLIENTES CADASTRADOS</p>
 
-                    <Table striped bordered hover responsive variant='warning'>
+                    <Table striped bordered hover responsive variant='warning' style={{'text-overflow':'ellipsis'}}>
                         <thead>
                             <tr>
                                 <th>ID</th>

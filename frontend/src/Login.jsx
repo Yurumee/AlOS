@@ -35,7 +35,13 @@ function Login(props){
             }
         )
         .then(res => res.json())
-        .then((res) => {props.setToken(res.access_token); setResponse(res.status, res.msg);}) // se bem sucedida, guarda o token
+        .then((res) => {
+                            if(res.access_token != null)
+                            {
+                                props.setToken(res.access_token)
+                            }; 
+                            setResponse(res.status, res.msg);
+                        }) // se bem sucedida, guarda o token
         .catch((error) => console.log(error))
         
         if(response.status == 'success')
