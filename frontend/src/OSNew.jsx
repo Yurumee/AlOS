@@ -16,6 +16,8 @@ function OSNew(props) {
     const [clients, setClients] = useState([])
     // guarda os produtos do cliente especificado
     const [products, setProducts] = useState([])
+    // guarda valor da soma
+    const [sum, setSum] = useState(0)
 
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
@@ -35,7 +37,7 @@ function OSNew(props) {
     const [produto_ordem, setProdutoOrdem] = useState()
 
     const [orcamentoNomeCategoria, setOrcamentoNomeCategoria] = useState()
-    // const [categoryBudget, setCategoryBudget] = useState('')
+    const [itemsBudgetList, setItemsBudgetList] = useState([])
     const [categories, setCategories] = useState([])
     const [itemsSearched, setItemsSearched] = useState([])
 
@@ -156,26 +158,128 @@ function OSNew(props) {
         }
     }
 
+
     async function tableOrcamento(category) 
     {
-        // console.log(category)
-        // url da api
-        const URL = `http://127.0.0.1:5000/estoque/busca/${category}`
-        const response = await fetch(URL, {
-            headers:
-            {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + props.token
-            }
-        })
-        const data = await response.json();
-        console.log(data)
-        const list = Object.values(data)
-        console.log(list)
-        setItemsSearched(list)
-        setIsLoading(false)
+        if (category != '')
+        {
+            // url da api
+            const URL = `http://127.0.0.1:5000/estoque/busca/${category}`
+            const response = await fetch(URL, {
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                }
+            })
+            const data = await response.json();
+            const list = Object.values(data)
+            setItemsSearched(list)
+            setIsLoading(false)
+        }
     }
 
+    async function addDelItemsBudget(flag, qtd, id, nome, preco) {
+        let flag_item_exists = false
+
+        // adicionar no orçamento
+        if (flag)
+        {   
+            itemsBudgetList.forEach(item => {
+                // se for o mesmo item, atualize a quantidade
+                if (item.id_item === id)
+                {
+                    
+                    let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
+                    let newqtd = Object.assign({}, itemsBudgetList[itemindex])
+                    newqtd.quantidade = newqtd.quantidade + qtd
+                    
+                    let newlist = itemsBudgetList.slice()
+                    newlist[itemindex] = newqtd
+                    
+                    flag_item_exists = true
+                    setItemsBudgetList(newlist)
+                }
+            })
+            
+            if (!flag_item_exists)
+            {
+                const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
+                let list_item = itemsBudgetList.slice() 
+                list_item.push(newitem)
+                setItemsBudgetList(list_item)
+
+                // const soma = sum + Number(preco)
+                // setSum(soma)
+            }
+
+            let soma = sum + Number(preco)
+            setSum(soma)
+
+        }
+
+        // diminuir no orçamento
+        else
+        {
+            itemsBudgetList.forEach(item => {
+                // se for o mesmo item, atualize a quantidade
+                if (item.id_item === id)
+                {
+                    let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
+
+                    if (item.quantidade > 1)
+                    {
+                        let newqtd = Object.assign({}, itemsBudgetList[itemindex])
+                        newqtd.quantidade = newqtd.quantidade - qtd
+                        console.log('quantidade:', newqtd.quantidade)
+
+                        if (newqtd.quantidade - 1 ==  -1)
+                        {
+                            let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
+                            console.log(newlist)
+                            setItemsBudgetList(newlist)
+                            return
+                        }
+
+                        let newlist = itemsBudgetList.slice()
+                        newlist[itemindex] = newqtd
+
+                        let soma = sum - Number(preco)
+                        if (soma < 0 )
+                        {
+                            soma = 0
+                        }
+                        setSum(soma)
+                        setItemsBudgetList(newlist)
+                    }
+
+                    else
+                    {
+                        console.log('entrei no else')
+                        if (itemsBudgetList.length == 1)
+                        {
+                            setItemsBudgetList([])
+                            setSum(0)
+                        }
+                        else
+                        {
+                            console.log('entrei no else do else')
+                            console.log(itemsBudgetList.length)
+                            console.log(itemindex)
+                            let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
+                            console.log(newlist)
+                            setItemsBudgetList(newlist)
+                        }
+                    }
+                }
+            })
+            
+            // const soma = sum - Number(preco)
+            // setSum(soma)
+        }
+
+        console.log(`Flag: ${flag} | qtd: ${qtd} | id: ${id}`)
+    }
 
     async function submit(event) {
         // previne de ir vazio
@@ -215,6 +319,8 @@ function OSNew(props) {
             <>
 
                 <NavBar />
+
+                {console.log(`DEPOIS: ${JSON.stringify(itemsBudgetList)}`)}
 
                 <div className='container'>
 
@@ -313,7 +419,7 @@ function OSNew(props) {
 
 
                                 <Form.Label>Título da Categoria</Form.Label>
-                                <Form.Select defaultValue={''} onChange={(event) => { setOrcamentoNomeCategoria(event.target.value); tableOrcamento(event.target.value) }}>
+                                <Form.Select defaultValue={''} onChange={(event) => { setOrcamentoNomeCategoria(event.target.value) }} onClick={(event) => { tableOrcamento(event.target.value)} }>
                                     <option value={''} disabled>---Selecione uma especificação---</option>
                                     {!isLoading && categories.map(category => (
                                         <>
@@ -325,12 +431,19 @@ function OSNew(props) {
                             </Form.Group>
 
                             <ul>
-
+                                {!isLoading && itemsBudgetList.map(item => (
+                                        <>
+                                            <li>{item.quantidade}x {item.nome} | Valor Unitário: {item.quantidade * item.preco}</li>
+                                        </>
+                                    )
+                                )
+                            }
+                                <li>Valor total: {sum}</li>
                             </ul>
 
                         </Form.Group>
 
-                        <Table striped bordered hover responsive variant='warning' className='table-storage'>
+                        <Table striped bordered hover variant='warning' id='table-budget'>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -353,8 +466,14 @@ function OSNew(props) {
                                                 <td className='table-info-cell'> {item.preco_un} </td>
                                                 <td className='table-info-cell'> {item.codigo_barras} </td>
 
-                                                <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning'><Button onClick={(event) => { props.reposition(event, true, quantidade, item.id) }} variant="success">Repor esta quantidade</Button>
-                    <Button onClick={(event) => { props.reposition(event, false, quantidade, item.id) }} variant="danger">Retirar esta quantidade</Button></Button> </td>
+                                                <td className='table-info-cell'> 
+                                                    <Button onClick={() => { addDelItemsBudget(true, 1, item.id, item.nome_item, item.preco_un) }} variant="success">Adicionar</Button>
+                                                </td>
+
+                                                <td className='table-info-cell'>
+                                                    <Button onClick={() => { addDelItemsBudget(false, 1, item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
+                                                </td>
+
                                             </tr>
                                         </>
                                     )

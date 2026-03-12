@@ -84,3 +84,10 @@
     grid-column: span 2;
     background-color: cadetblue;
 }
+
+#table-budget {
+    width: 100%;
+    justify-items: center;
+    grid-column: 3 / span 2;
+    /* background-color: cadetblue; */
+}

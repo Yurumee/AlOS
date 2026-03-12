@@ -329,4 +329,4 @@ def storage_by_type(category_id):
                                     "codigo_barras": item.cod_barras
                                 }
         
-    return result, 200
+    return result, 302
