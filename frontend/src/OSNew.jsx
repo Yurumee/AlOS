@@ -12,12 +12,28 @@ import { useNavigate } from 'react-router-dom'
 
 function OSNew(props) {
 
+    const valorInicialOrcamento = {
+        quantidade: 0,
+        id: 0,
+        nome: '',
+        preco: 0.0
+    }
+
     // guarda os clientes
     const [clients, setClients] = useState([])
     // guarda os produtos do cliente especificado
     const [products, setProducts] = useState([])
     // guarda valor da soma
     const [sum, setSum] = useState(0)
+
+    // lista dos itens do orçamento
+    const [itemsBudgetList, setItemsBudgetList] = useState([])
+    // categorias para exibição na página de busca
+    const [categories, setCategories] = useState([])
+    // itens da categoria correspondente pesquisados
+    const [itemsSearched, setItemsSearched] = useState([])
+    // guarda a quantidade do item desejado
+    const [quantityItem, setQuantityItem] = useState(0)
 
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
@@ -26,7 +42,6 @@ function OSNew(props) {
     const [tipo_ordem, setTipoOrdem] = useState()
     const [prognostico_ordem, setPrognosticoOrdem] = useState()
     const [diagnostico_ordem, setDiagnosticoOrdem] = useState()
-    // const [orcamento_ordem, setOrcamentoOrdem] = useState()
     const [estado_ordem, setEstadoOrdem] = useState()
     const [emitir_ordem, setEmitirOrdem] = useState()
     const [criacao_ordem, setCriacaoOrdem] = useState()
@@ -35,11 +50,6 @@ function OSNew(props) {
 
     const [cliente_ordem, setClienteOrdem] = useState()
     const [produto_ordem, setProdutoOrdem] = useState()
-
-    const [orcamentoNomeCategoria, setOrcamentoNomeCategoria] = useState()
-    const [itemsBudgetList, setItemsBudgetList] = useState([])
-    const [categories, setCategories] = useState([])
-    const [itemsSearched, setItemsSearched] = useState([])
 
     const [response, setResponse] = useState({ status: '', msg: '' })
     const navigation = useNavigate()
@@ -154,7 +164,6 @@ function OSNew(props) {
             {
                 setCategories([])
             }
-            
         }
     }
 
@@ -181,6 +190,7 @@ function OSNew(props) {
 
     async function addDelItemsBudget(flag, qtd, id, nome, preco) {
         let flag_item_exists = false
+        // console.log(event)
 
         // adicionar no orçamento
         if (flag)
@@ -208,12 +218,9 @@ function OSNew(props) {
                 let list_item = itemsBudgetList.slice() 
                 list_item.push(newitem)
                 setItemsBudgetList(list_item)
-
-                // const soma = sum + Number(preco)
-                // setSum(soma)
             }
 
-            let soma = sum + Number(preco)
+            let soma = sum + (Number(preco) * Number(qtd))
             setSum(soma)
 
         }
@@ -231,12 +238,10 @@ function OSNew(props) {
                     {
                         let newqtd = Object.assign({}, itemsBudgetList[itemindex])
                         newqtd.quantidade = newqtd.quantidade - qtd
-                        console.log('quantidade:', newqtd.quantidade)
 
                         if (newqtd.quantidade - 1 ==  -1)
                         {
                             let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
-                            console.log(newlist)
                             setItemsBudgetList(newlist)
                             return
                         }
@@ -244,7 +249,7 @@ function OSNew(props) {
                         let newlist = itemsBudgetList.slice()
                         newlist[itemindex] = newqtd
 
-                        let soma = sum - Number(preco)
+                        let soma = sum - (Number(preco) * Number(qtd))
                         if (soma < 0 )
                         {
                             soma = 0
@@ -255,7 +260,6 @@ function OSNew(props) {
 
                     else
                     {
-                        console.log('entrei no else')
                         if (itemsBudgetList.length == 1)
                         {
                             setItemsBudgetList([])
@@ -263,19 +267,12 @@ function OSNew(props) {
                         }
                         else
                         {
-                            console.log('entrei no else do else')
-                            console.log(itemsBudgetList.length)
-                            console.log(itemindex)
                             let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
-                            console.log(newlist)
                             setItemsBudgetList(newlist)
                         }
                     }
                 }
             })
-            
-            // const soma = sum - Number(preco)
-            // setSum(soma)
         }
 
         console.log(`Flag: ${flag} | qtd: ${qtd} | id: ${id}`)
@@ -301,7 +298,7 @@ function OSNew(props) {
                     tipo_os: tipo_ordem,
                     prognostico: prognostico_ordem,
                     diagnostico: diagnostico_ordem,
-                    // orcamento: orcamento_ordem,
+                    orcamento: itemsBudgetList,
                     estado: estado_ordem,
                     emitir: emitir_ordem,
                     hora_emissao: criacao_ordem,
@@ -405,10 +402,11 @@ function OSNew(props) {
                             <Form.Control as='textarea' rows='10' style={{ 'width': '100%' }} placeholder='O problema encontrado trata-se de...' onChange={(event) => setDiagnosticoOrdem(event.target.value)} />
                         </Form.Group>
 
-                        <Form.Group className='grid-child grid-procedure' id='grid-budget'>
+                        <Form.Group className='grid-child grid-budget'>
                             <Form.Label>Orçamento</Form.Label>
 
-                            <Form.Group className='grid-child'>
+                            <div id='flex-budget'>
+                            <Form.Group>
                                 <Form.Label>Tipo da Categoria</Form.Label>
                                 <Form.Select defaultValue={''} onChange={(event) => { searchCategory(event.target.value)}}>
                                     <option value={''} disabled>---Selecione um categoria---</option>
@@ -419,7 +417,7 @@ function OSNew(props) {
 
 
                                 <Form.Label>Título da Categoria</Form.Label>
-                                <Form.Select defaultValue={''} onChange={(event) => { setOrcamentoNomeCategoria(event.target.value) }} onClick={(event) => { tableOrcamento(event.target.value)} }>
+                                <Form.Select defaultValue={''} onClick={(event) => { tableOrcamento(event.target.value)} }>
                                     <option value={''} disabled>---Selecione uma especificação---</option>
                                     {!isLoading && categories.map(category => (
                                         <>
@@ -432,14 +430,17 @@ function OSNew(props) {
 
                             <ul>
                                 {!isLoading && itemsBudgetList.map(item => (
-                                        <>
-                                            <li>{item.quantidade}x {item.nome} | Valor Unitário: {item.quantidade * item.preco}</li>
+                                    <>
+                                            <li>{item.quantidade}x {item.nome} | Preço: R${parseFloat(item.quantidade * item.preco).toFixed(2)}</li>
                                         </>
                                     )
                                 )
                             }
-                                <li>Valor total: {sum}</li>
+                                <br/>
+                                <p >Valor total: R${parseFloat(sum).toFixed(2)}</p>
                             </ul>
+
+                        </div>
 
                         </Form.Group>
 
@@ -448,11 +449,10 @@ function OSNew(props) {
                                 <tr>
                                     <th>ID</th>
                                     <th>Nome</th>
-                                    <th>Quantidade</th>
+                                    <th>Em Estoque</th>
                                     <th>Valor Unitário</th>
                                     <th>Cod. Barras</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>Quantidade desejada</th>
                                 </tr>
                             </thead>
 
@@ -466,12 +466,16 @@ function OSNew(props) {
                                                 <td className='table-info-cell'> {item.preco_un} </td>
                                                 <td className='table-info-cell'> {item.codigo_barras} </td>
 
-                                                <td className='table-info-cell'> 
-                                                    <Button onClick={() => { addDelItemsBudget(true, 1, item.id, item.nome_item, item.preco_un) }} variant="success">Adicionar</Button>
-                                                </td>
+                                                <td className='table-info-cell table-add-rem-button'> 
+                                                    <Form.Control type='number' min={0} max={item.quantidade} onChange={(event) => {setQuantityItem(event.target.value)}} /> 
+                                                {/* </td>
 
-                                                <td className='table-info-cell'>
-                                                    <Button onClick={() => { addDelItemsBudget(false, 1, item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
+                                                <td className='table-info-cell'>  */}
+                                                    <Button onClick={() => { addDelItemsBudget(true, Number(quantityItem), item.id, item.nome_item, item.preco_un) }} variant="success">Adicionar</Button>
+                                                {/* </td> */}
+
+                                                {/* <td className='table-info-cell'> */}
+                                                    <Button onClick={() => { addDelItemsBudget(false, Number(quantityItem), item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
                                                 </td>
 
                                             </tr>

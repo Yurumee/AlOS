@@ -107,7 +107,7 @@ function ClientsNew(props) {
                 <Form className='grid-container' onSubmit={submit}>
                     <Form.Group className='grid-child'>
                         <Form.Label>CPF/CNPJ <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                        <Form.Control className='grid-input' type='number' placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
+                        <Form.Control className='grid-input' type='number' min={0} placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
                     </Form.Group>
 
                     <Form.Group className='grid-child'>

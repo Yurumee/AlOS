@@ -2,7 +2,7 @@ from config import db
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, jsonify, request
-from datetime import datetime
+from datetime import datetime, timedelta
 
 view_os = Blueprint('view_os', __name__, url_prefix='/os')
 
@@ -143,9 +143,22 @@ def new_os():
             orcamento = data.get('orcamento')
             estado = data.get('estado')
             emitir = data.get('emitir')
-            emissao = data.get('hora_emissao')
+            criacao = data.get('hora_emissao')
             fechamento = data.get('hora_fechamento')
             validade = data.get('data_validade')
+
+            print(f'cliente id: {cliente_id}')
+            print(f'produto id: {produto_id}')
+            print(f'tecnico id: {tecnico_id}')
+            print(f'tipo os: {tipo_os}')
+            print(f'diagnostico: {diagnostico}')
+            print(f'prognostico: {prognostico}')
+            print(f'orcamento: {orcamento}')
+            print(f'estado: {estado}')
+            print(f'emitir: {emitir}')
+            print(f'emissao: {criacao}')
+            print(f'validade: {validade}')
+            print(f'fechamento: {fechamento}')
         
         except Exception as e:    
             response = {'status':'error', 'msg':'AINDA HÁ DADOS QUE NÃO FORAM CADASTRADOS'}
@@ -181,38 +194,45 @@ def new_os():
         except:
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
+        
+        if not criacao:
+            criacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        if not validade:
+            validade = criacao + timedelta(weeks=2)
+            validade = 
             
-        try:
-            # realizando transação
-            # criando a os a ser inserido
-            os = OrdemServico(
-                                tecnico_cpf = tecnico_cpf,
-                                produto_id = produto_id,
-                                cliente_id = cliente_id,
-                                tipo_ordem = tipo_os,
-                                emissao = emissao,
-                                fechamento = fechamento,
-                                validade = validade,
-                                prognostico = prognostico,
-                                diagnostico = diagnostico,
-                                orcamento = orcamento,
-                                estado_os = estado,
-                                emitida = emitir,
-                                ultima_atualizacao = datetime.now()
-                            )
+        # try:
+        #     # realizando transação
+        #     # criando a os a ser inserido
+        #     os = OrdemServico(
+        #                         tecnico_cpf = tecnico_cpf,
+        #                         produto_id = produto_id,
+        #                         cliente_id = cliente_id,
+        #                         tipo_ordem = tipo_os,
+        #                         emissao = emissao,
+        #                         fechamento = fechamento,
+        #                         validade = validade,
+        #                         prognostico = prognostico,
+        #                         diagnostico = diagnostico,
+        #                         orcamento = orcamento,
+        #                         estado_os = estado,
+        #                         emitida = emitir,
+        #                         ultima_atualizacao = datetime.now()
+        #                     )
 
-            # inserindo e realizando commit
-            db.session.add(os)
+        #     # inserindo e realizando commit
+        #     db.session.add(os)
 
-            db.session.commit()
-            # fim da transação
+        #     db.session.commit()
+        #     # fim da transação
 
-            response = {'status':'success', 'msg':'ORDEM DE SERVIÇO CADASTRADA COM SUCESSO!'}
-            return response, 201
+        #     response = {'status':'success', 'msg':'ORDEM DE SERVIÇO CADASTRADA COM SUCESSO!'}
+        #     return response, 201
 
-        except Exception as e:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        # except Exception as e:
+        #     response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        #     return response, 500
 
 # rota para alterar uma os existente
 # esta rota deve alterar os dados da os desejada baseado no id 
