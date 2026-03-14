@@ -190,49 +190,57 @@ def new_os():
         
         # puxa o cpf do tecnico
         try:
-            tecnico_cpf = db.session.query(Tecnico).filter_by(tecnico_id=tecnico_id).first()
+            tecnico_cpf = db.session.query(Tecnico).filter_by(tecnico_id=tecnico_id).first().cpf_tecnico
         except:
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
         
-        if not criacao:
-            criacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if criacao == None:
+            criacao = datetime.now()
         
-        if not validade:
+        if validade == None:
             validade = criacao + timedelta(weeks=2)
-            validade = 
+
+        valor_orcamento = 0.0
+
+        for item in orcamento:
+            valor_orcamento += (float(item['preco']) * int(item['quantidade']))
+        
+        print(valor_orcamento)
             
-        # try:
-        #     # realizando transação
-        #     # criando a os a ser inserido
-        #     os = OrdemServico(
-        #                         tecnico_cpf = tecnico_cpf,
-        #                         produto_id = produto_id,
-        #                         cliente_id = cliente_id,
-        #                         tipo_ordem = tipo_os,
-        #                         emissao = emissao,
-        #                         fechamento = fechamento,
-        #                         validade = validade,
-        #                         prognostico = prognostico,
-        #                         diagnostico = diagnostico,
-        #                         orcamento = orcamento,
-        #                         estado_os = estado,
-        #                         emitida = emitir,
-        #                         ultima_atualizacao = datetime.now()
-        #                     )
+        try:
+            # realizando transação
+            # criando a os a ser inserido
 
-        #     # inserindo e realizando commit
-        #     db.session.add(os)
+            os = OrdemServico(
+                                tecnico_cpf = tecnico_cpf,
+                                produto_id = produto_id,
+                                cliente_id = cliente_id,
+                                tipo_ordem = tipo_os,
+                                emissao = criacao,
+                                fechamento = fechamento,
+                                validade = validade,
+                                prognostico = prognostico,
+                                diagnostico = diagnostico,
+                                orcamento = valor_orcamento,
+                                estado_os = estado,
+                                emitida = emitir,
+                                ultima_atualizacao = datetime.now()
+                            )
 
-        #     db.session.commit()
-        #     # fim da transação
+            # inserindo e realizando commit
+            db.session.add(os)
 
-        #     response = {'status':'success', 'msg':'ORDEM DE SERVIÇO CADASTRADA COM SUCESSO!'}
-        #     return response, 201
+            db.session.commit()
+            # fim da transação
 
-        # except Exception as e:
-        #     response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-        #     return response, 500
+            response = {'status':'success', 'msg':'ORDEM DE SERVIÇO CADASTRADA COM SUCESSO!'}
+            return response, 201
+
+        except Exception as e:
+            print(str(e))
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
 
 # rota para alterar uma os existente
 # esta rota deve alterar os dados da os desejada baseado no id 

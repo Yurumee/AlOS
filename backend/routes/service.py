@@ -263,37 +263,23 @@ def get_service(id_desejado):
     
     return result, 302
 
-# # rota usada para gerenciar itens com base no id para repor ou retiar sua quantidade
-# @view_service.route('/gerenciamento/<int:id_desejado>', methods=['POST'])
-# @jwt_required()
-# def manageItem(id_desejado):
-#     from models.estoque import Estoque
-
-#     data = request.json
-#     quant = int(data.get('quantidade'))
-#     reposicao = data.get('isRepo')
-
-#     print(data)
-
-#     try:
-#         item_desejado = db.session.query(Estoque).filter_by(item_id=id_desejado).first()
+# rota usada para pesquisar todos os itens de uma categoria especifica
+@view_service.route('/busca/<int:category_id>', methods=['GET'])
+@jwt_required()
+def service_by_type(category_id):
+    from models.servico import Servico
+    services = db.session.query(Servico).filter_by(categoria_id=category_id).all()
+    result = {}
     
-#     except Exception:
-#         return '', 500
-    
-#     if not item_desejado:
-#         return '', 404
-    
-#     if reposicao == True:
-#         item_desejado.quantidade = item_desejado.quantidade + quant
-#         db.session.commit()
-#         return '', 201
-    
-#     else:
-#         if quant > item_desejado.quantidade:
-#             return '',  406
+    # retorna serviços em estoque em formato json
+    for service in services:    
+        result[service.servico_id] = {
+                                        "id_servico":service.servico_id,
+                                        "categoria": service.categoria_id,
+                                        "nome_servico": service.nome_servico,
+                                        "descricao": service.descricao_servico,
+                                        "custo": service.custo,
+                                        'tipo': 'servico'
+                                    }
         
-#         else:
-#             item_desejado.quantidade = item_desejado.quantidade - quant
-#             db.session.commit()
-#             return '', 201
+    return result, 302

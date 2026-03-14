@@ -311,22 +311,24 @@ def manageItem(id_desejado):
 @jwt_required()
 def storage_by_type(category_id):
     from models.estoque import Estoque
-    from models.categoria import Categoria
+    # from models.servico import Servico
 
     storage = db.session.query(Estoque).filter_by(categoria_id=category_id).all()
+    # services = db.session.query(Servico).filter_by(categoria_id=category_id).all()
     result = {}
     
-    # retorna clientes em formato json
+    # retorna itens em estoque em formato json
     for item in storage:
-        # item_categoria = db.session.query(Categoria).filter_by(categoria_id=item.categoria_id).one_or_none().titulo
-        result[item.item_id] = {
-                                    "id":item.item_id,
-                                    "categoria": item.categoria_id,
-                                    "nome_item": item.nome_item,
-                                    "descricao": item.descricao_item,
-                                    "quantidade": item.quantidade,
-                                    "preco_un": item.preco_unitario,
-                                    "codigo_barras": item.cod_barras
-                                }
+        if item.quantidade > 0:
+            result[item.item_id] = {
+                                        "id":item.item_id,
+                                        "categoria": item.categoria_id,
+                                        "nome_item": item.nome_item,
+                                        "descricao": item.descricao_item,
+                                        "quantidade": item.quantidade,
+                                        "preco_un": item.preco_unitario,
+                                        "codigo_barras": item.cod_barras,
+                                        'tipo': 'estoque'
+                                    }
         
     return result, 302

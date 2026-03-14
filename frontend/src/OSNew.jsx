@@ -12,13 +12,6 @@ import { useNavigate } from 'react-router-dom'
 
 function OSNew(props) {
 
-    const valorInicialOrcamento = {
-        quantidade: 0,
-        id: 0,
-        nome: '',
-        preco: 0.0
-    }
-
     // guarda os clientes
     const [clients, setClients] = useState([])
     // guarda os produtos do cliente especificado
@@ -32,8 +25,6 @@ function OSNew(props) {
     const [categories, setCategories] = useState([])
     // itens da categoria correspondente pesquisados
     const [itemsSearched, setItemsSearched] = useState([])
-    // guarda a quantidade do item desejado
-    const [quantityItem, setQuantityItem] = useState(0)
 
     // carregamento
     const [isLoading, setIsLoading] = useState(true)
@@ -43,7 +34,7 @@ function OSNew(props) {
     const [prognostico_ordem, setPrognosticoOrdem] = useState()
     const [diagnostico_ordem, setDiagnosticoOrdem] = useState()
     const [estado_ordem, setEstadoOrdem] = useState()
-    const [emitir_ordem, setEmitirOrdem] = useState()
+    const [emitir_ordem, setEmitirOrdem] = useState(false)
     const [criacao_ordem, setCriacaoOrdem] = useState()
     const [fechamento_ordem, setFechamentoOrdem] = useState()
     const [validade_ordem, setValidadeOrdem] = useState()
@@ -100,80 +91,8 @@ function OSNew(props) {
     {
         if (search_str != '')
         {
-            if (search_str === 'estoque')
-            {
-                // url da api
-                const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
-                const response = await fetch(URL, {
-                    headers:
-                    {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + props.token
-                    }
-                })
-                const data = await response.json();
-                // console.log(data)
-                const list = Object.values(data)
-                // console.log(list)
-                setCategories(list)
-
-                setIsLoading(false)
-            }
-
-            else if (search_str === 'servico')
-            {
-                // url da api
-                const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
-                const response = await fetch(URL, {
-                    headers:
-                    {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + props.token
-                    }
-                })
-                const data = await response.json();
-                // console.log(data)
-                const list = Object.values(data)
-                // console.log(list)
-                setCategories(list)
-
-                setIsLoading(false)
-            }
-
-            else if (search_str === 'geral')
-            {
-                // url da api
-                const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
-                const response = await fetch(URL, {
-                    headers:
-                    {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + props.token
-                    }
-                })
-                const data = await response.json();
-                // console.log(data)
-                const list = Object.values(data)
-                // console.log(list)
-                setCategories(list)
-
-                setIsLoading(false)
-            }
-
-            else
-            {
-                setCategories([])
-            }
-        }
-    }
-
-
-    async function tableOrcamento(category) 
-    {
-        if (category != '')
-        {
             // url da api
-            const URL = `http://127.0.0.1:5000/estoque/busca/${category}`
+            const URL = `http://127.0.0.1:5000/categoria/busca/${search_str}`
             const response = await fetch(URL, {
                 headers:
                 {
@@ -183,14 +102,53 @@ function OSNew(props) {
             })
             const data = await response.json();
             const list = Object.values(data)
-            setItemsSearched(list)
+            setCategories(list)
             setIsLoading(false)
         }
     }
 
-    async function addDelItemsBudget(flag, qtd, id, nome, preco) {
+
+    async function tableOrcamento(category) 
+    {
+        if (category != '')
+        {
+            // url da api
+            const URL_estoque = `http://127.0.0.1:5000/estoque/busca/${category}`
+            const response_estoque = await fetch(URL_estoque, {
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                }
+            })
+            const data_estoque = await response_estoque.json();
+            const list_estoque = Object.values(data_estoque)
+
+            setItemsSearched(list_estoque)
+            
+            const URL_servico = `http://127.0.0.1:5000/servico/busca/${category}`
+            const response_servico = await fetch(URL_servico, {
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                }
+            })
+            const data_servico = await response_servico.json();
+            const list_servico = Object.values(data_servico)
+            
+            const all_items = list_estoque.concat(list_servico)
+
+            // console.log(list_estoque)
+
+            setItemsSearched(all_items)
+            // setItemsSearched(list_estoque)
+            setIsLoading(false)
+        }
+    }
+
+    function addDelItemsBudget(flag, qtd, id, nome, preco, qtd_estoque) {
         let flag_item_exists = false
-        // console.log(event)
 
         // adicionar no orçamento
         if (flag)
@@ -202,27 +160,34 @@ function OSNew(props) {
                     
                     let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
                     let newqtd = Object.assign({}, itemsBudgetList[itemindex])
-                    newqtd.quantidade = newqtd.quantidade + qtd
-                    
-                    let newlist = itemsBudgetList.slice()
-                    newlist[itemindex] = newqtd
-                    
+
+                    if (!(newqtd.quantidade >= qtd_estoque))
+                    {
+                        newqtd.quantidade = newqtd.quantidade + qtd
+                        
+                        let newlist = itemsBudgetList.slice()
+                        newlist[itemindex] = newqtd
+                        
+                        setItemsBudgetList(newlist)
+                        
+                        let soma = sum + (Number(preco) * Number(qtd))
+                        setSum(soma)
+                    }
+
                     flag_item_exists = true
-                    setItemsBudgetList(newlist)
                 }
             })
-            
+
             if (!flag_item_exists)
             {
                 const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
                 let list_item = itemsBudgetList.slice() 
                 list_item.push(newitem)
                 setItemsBudgetList(list_item)
+                
+                let soma = sum + (Number(preco) * Number(qtd))
+                setSum(soma)
             }
-
-            let soma = sum + (Number(preco) * Number(qtd))
-            setSum(soma)
-
         }
 
         // diminuir no orçamento
@@ -265,6 +230,7 @@ function OSNew(props) {
                             setItemsBudgetList([])
                             setSum(0)
                         }
+
                         else
                         {
                             let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
@@ -274,8 +240,6 @@ function OSNew(props) {
                 }
             })
         }
-
-        console.log(`Flag: ${flag} | qtd: ${qtd} | id: ${id}`)
     }
 
     async function submit(event) {
@@ -309,15 +273,13 @@ function OSNew(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
             .catch(error => console.log(error))
-        // window.location.href = '/clientes'
+        // window.location.href = '/os'
     }
 
         return (
             <>
 
                 <NavBar />
-
-                {console.log(`DEPOIS: ${JSON.stringify(itemsBudgetList)}`)}
 
                 <div className='container'>
 
@@ -457,30 +419,45 @@ function OSNew(props) {
                             </thead>
 
                             <tbody>
-                                {(!isLoading && itemsSearched != '') && itemsSearched.map(item => (
-                                        <>
-                                            <tr key={item.id}>
-                                                <td className='table-info-cell'> {item.id} </td>
-                                                <td className='table-name-cell'> {item.nome_item} </td>
-                                                <td className='table-info-cell'> {item.quantidade} </td>
-                                                <td className='table-info-cell'> {item.preco_un} </td>
-                                                <td className='table-info-cell'> {item.codigo_barras} </td>
+                                {(!isLoading && itemsSearched != '') && itemsSearched.map(item => {
+                                        
+                                        if (item.tipo == 'estoque')
+                                        {
+                                            return <>
+                                                <tr key={item.id}>
+                                                    <td className='table-info-cell'> {item.id} </td>
+                                                    <td className='table-name-cell'> {item.nome_item} </td>
+                                                    <td className='table-info-cell'> {item.quantidade} </td>
+                                                    <td className='table-info-cell'> {item.preco_un} </td>
+                                                    <td className='table-info-cell'> {item.codigo_barras} </td>
 
-                                                <td className='table-info-cell table-add-rem-button'> 
-                                                    <Form.Control type='number' min={0} max={item.quantidade} onChange={(event) => {setQuantityItem(event.target.value)}} /> 
-                                                {/* </td>
+                                                    <td className='table-info-cell table-add-rem-button'> 
+                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.id, item.nome_item, item.preco_un, item.quantidade) }} variant="success">Adicionar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
+                                                    </td>
 
-                                                <td className='table-info-cell'>  */}
-                                                    <Button onClick={() => { addDelItemsBudget(true, Number(quantityItem), item.id, item.nome_item, item.preco_un) }} variant="success">Adicionar</Button>
-                                                {/* </td> */}
+                                                </tr>
+                                            </>
+                                        }
+                                        if (item.tipo == 'servico')
+                                        {
+                                            return <>
+                                                <tr key={item.id_servico}>
+                                                    <td className='table-info-cell'> {item.id_servico} </td>
+                                                    <td className='table-name-cell'> {item.nome_servico} </td>
+                                                    <td className='table-info-cell'> --- </td>
+                                                    <td className='table-info-cell'> {item.custo} </td>
+                                                    <td className='table-info-cell'> --- </td>
 
-                                                {/* <td className='table-info-cell'> */}
-                                                    <Button onClick={() => { addDelItemsBudget(false, Number(quantityItem), item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
-                                                </td>
+                                                    <td className='table-info-cell table-add-rem-button'> 
+                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.id_servico, item.nome_servico, item.custo, 1) }} variant="success">Adicionar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.id_servico, item.nome_servico, item.custo) }} variant="danger">Retirar</Button>
+                                                    </td>
 
-                                            </tr>
-                                        </>
-                                    )
+                                                </tr>
+                                            </>
+                                        }
+                                    }
                                 )}
                             </tbody>
                         </Table>

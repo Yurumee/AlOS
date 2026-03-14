@@ -25,7 +25,7 @@ class OrdemServico(db.Model):
     fechamento: Mapped[DateTime] = mapped_column(DATETIME)
     # data de validade para o orçamento da os
     # por padrão, adiciona 2 semanas
-    validade: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now() + datetime.timedelta(days=14))
+    validade: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now() + datetime.timedelta(weeks=2))
 
     prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
