@@ -153,109 +153,167 @@ function OSNew(props) {
         // adicionar no orçamento
         if (flag)
         {   
+            // teste cada entrada da lista de orçamento e veja se existe
             itemsBudgetList.forEach(item => {
                 // se for o mesmo item, atualize a quantidade
+                // teste se o item a ser adicionado é de estoque, se sim, a chave é o codigo de barras
                 if (tipo == 'estoque')
-                {}
-                if (item.id_item === id)
-                {
-                    
-                    let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
-                    let newqtd = Object.assign({}, itemsBudgetList[itemindex])
-
-                    if (!(newqtd.quantidade >= qtd_estoque))
+                {    
+                    if (item.cod_barra_item == id)
                     {
-                        newqtd.quantidade = newqtd.quantidade + qtd
                         
-                        let newlist = itemsBudgetList.slice()
-                        newlist[itemindex] = newqtd
+                        let itemindex = itemsBudgetList.findIndex((item) => item.cod_barra_item === id)
+                        let newqtd = Object.assign({}, itemsBudgetList[itemindex])
                         
-                        setItemsBudgetList(newlist)
+                        if (!(newqtd.quantidade >= qtd_estoque))
+                        {
+                            newqtd.quantidade = newqtd.quantidade + qtd
+                            
+                            let newlist = itemsBudgetList.slice()
+                            newlist[itemindex] = newqtd
+                            
+                            setItemsBudgetList(newlist)
+                            
+                            let soma = sum + (Number(preco) * Number(qtd))
+                            setSum(soma)
+                        }
                         
-                        let soma = sum + (Number(preco) * Number(qtd))
-                        setSum(soma)
+                        flag_item_exists = true
                     }
-
-                    flag_item_exists = true
                 }
-            })
 
+                // teste se o item a ser adicionado é de é servico, se sim, a chave é o id do servico
+                else if (tipo == 'servico')
+                {
+                    if (item.id_item === id)
+                    {
+                        
+                        let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
+                        let newqtd = Object.assign({}, itemsBudgetList[itemindex])
+                        
+                        if (!(newqtd.quantidade >= qtd_estoque))
+                        {
+                            newqtd.quantidade = newqtd.quantidade + qtd
+                            
+                            let newlist = itemsBudgetList.slice()
+                            newlist[itemindex] = newqtd
+                            
+                            setItemsBudgetList(newlist)
+                            
+                            let soma = sum + (Number(preco) * Number(qtd))
+                            setSum(soma)
+                        }
+                        
+                        flag_item_exists = true
+                    }
+                }
+                
+            })
+            
+            // se não existir o item desejado na lista, insira
             if (!flag_item_exists)
             {
+                let newitem
+                // teste se é estoque, se sim, a chave é o codigo de barras
                 if (tipo == 'estoque')
                 {
-                    // const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
-                    const newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
-                    let list_item = itemsBudgetList.slice() 
-                    list_item.push(newitem)
-                    setItemsBudgetList(list_item)
-                    
-                    let soma = sum + (Number(preco) * Number(qtd))
-                    setSum(soma)
-                    return
+                    newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
                 }
 
-                if(tipo == 'servico')
+                // teste se é um servico, se sim, a chave é o id
+                else if(tipo == 'servico')
                 {
-                    const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
-                    // const newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
-                    let list_item = itemsBudgetList.slice() 
-                    list_item.push(newitem)
-                    setItemsBudgetList(list_item)
-                    
-                    let soma = sum + (Number(preco) * Number(qtd))
-                    setSum(soma)
-                    return
+                    newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
                 }
+                
+                // insira o novo item na lista
+                let list_item = itemsBudgetList.slice() 
+                list_item.push(newitem)
+                setItemsBudgetList(list_item)
+                
+                let soma = sum + (Number(preco) * Number(qtd))
+                setSum(soma)
+                return
             }
         }
 
         // diminuir no orçamento
         else
         {
+            let itemindex
+            // teste cada entrada da lista do orçamento
             itemsBudgetList.forEach(item => {
+                // teste para ver se é um servico ou item de estoque
                 // se for o mesmo item, atualize a quantidade
-                if (item.id_item === id)
+                // se for item de estoque e o cod_barras for igual, pegue o index
+                if (tipo == 'estoque')
                 {
-                    let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
-
-                    if (item.quantidade > 1)
+                    if (item.cod_barra_item === id)
                     {
-                        let newqtd = Object.assign({}, itemsBudgetList[itemindex])
-                        newqtd.quantidade = newqtd.quantidade - qtd
-
-                        if (newqtd.quantidade - 1 ==  -1)
-                        {
-                            let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
-                            setItemsBudgetList(newlist)
-                            return
-                        }
-
-                        let newlist = itemsBudgetList.slice()
-                        newlist[itemindex] = newqtd
-
-                        let soma = sum - (Number(preco) * Number(qtd))
-                        if (soma < 0 )
-                        {
-                            soma = 0
-                        }
-                        setSum(soma)
-                        setItemsBudgetList(newlist)
+                        itemindex = itemsBudgetList.findIndex((item) => item.cod_barra_item === id)
                     }
+                }
+            
+                // se for item de servico e o id for igual, pegue o index
+                else if (tipo == 'servico')
+                {
+                    if (item.id_item === id)
+                    {
+                        itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
+                    }
+                }
+                // senão, apenas retorne
+                else
+                {
+                    return
+                }
+                    
+                // se a quantidade for maior que 1
+                if (item.quantidade > 1)
+                {
+                    // clona o elemento e atualiza a quantidade
+                    let newqtd = Object.assign({}, itemsBudgetList[itemindex])
+                    newqtd.quantidade = newqtd.quantidade - qtd
 
+                    // se a quantidade após atualizar for 0
+                    if (newqtd.quantidade == 0)
+                    {
+                        // exclua da lista
+                        let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
+                        setItemsBudgetList(newlist)
+                        return
+                    }
+                    
+                    // clona a lista, insere o elemento na posição desejada
+                    let newlist = itemsBudgetList.slice()
+                    newlist[itemindex] = newqtd
+                    // atualiza o valor total
+                    // se for negativo, deixe igual a 0
+                    let soma = sum - (Number(preco) * Number(qtd))
+                    if (soma < 0 )
+                    {
+                        soma = 0
+                    }
+                    
+                    setSum(soma)
+                    setItemsBudgetList(newlist)
+                }
+
+                // se não for maior que 1
+                else
+                {
+                    // se tiver exatamente apenas um item
+                    // limpe a lista
+                    if (itemsBudgetList.length == 1)
+                    {
+                        setItemsBudgetList([])
+                        setSum(0)
+                    }
+                    // senão, exclua o elemento desejado
                     else
                     {
-                        if (itemsBudgetList.length == 1)
-                        {
-                            setItemsBudgetList([])
-                            setSum(0)
-                        }
-
-                        else
-                        {
-                            let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
-                            setItemsBudgetList(newlist)
-                        }
+                        let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
+                        setItemsBudgetList(newlist)
                     }
                 }
             })
@@ -454,7 +512,7 @@ function OSNew(props) {
 
                                                     <td className='table-info-cell table-add-rem-button'> 
                                                         <Button onClick={() => { addDelItemsBudget(true, 1, item.codigo_barras, item.nome_item, item.preco_un, item.quantidade, 'estoque') }} variant="success">Adicionar</Button>
-                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.codigo_barras, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.codigo_barras, item.nome_item, item.preco_un, 0, 'estoque') }} variant="danger">Retirar</Button>
                                                     </td>
 
                                                 </tr>
@@ -472,7 +530,7 @@ function OSNew(props) {
 
                                                     <td className='table-info-cell table-add-rem-button'> 
                                                         <Button onClick={() => { addDelItemsBudget(true, 1, item.id_servico, item.nome_servico, item.custo, 1, 'servico') }} variant="success">Adicionar</Button>
-                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.id_servico, item.nome_servico, item.custo) }} variant="danger">Retirar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.id_servico, item.nome_servico, item.custo, 0, 'servico') }} variant="danger">Retirar</Button>
                                                     </td>
 
                                                 </tr>
