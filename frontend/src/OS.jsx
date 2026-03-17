@@ -50,17 +50,43 @@ function OS(props)
     // resultados da busca
     function results ()
     {
-        const OSResult = orders.filter((order) => {
+        var OSResult = orders.filter((order) => {
             if (groupSelected == 'all') 
             {
                 return true
             }
 
-            return order.categoria === groupSelected
+            return order.estado === groupSelected
         })
-        .filter(order => order.nome_item.toLowerCase().includes(search.toLowerCase()))
+        .filter(order => order.tecnico_resp.toLowerCase().includes(search.toLowerCase()))
 
-        setOsSearched(osSearched)
+        if (OSResult.length == 0)
+        {
+            OSResult = orders.filter((order) => {
+                if (groupSelected == 'all') 
+                {
+                    return true
+                }
+
+                return order.estado === groupSelected
+            })
+            .filter(order => order.cliente_nome.toLowerCase().includes(search.toLowerCase()))
+        }
+
+        if (OSResult.length == 0)
+        {
+            OSResult = orders.filter((order) => {
+                if (groupSelected == 'all') 
+                {
+                    return true
+                }
+
+                return order.estado === groupSelected
+            })
+            .filter(order => order.produto_num_serie.toLowerCase().includes(search.toLowerCase()))
+        }
+
+        setOsSearched(OSResult)
     }
 
     // realiza a chama da função apenas uma vez, quando a pagina é carregada
@@ -79,13 +105,14 @@ function OS(props)
                 }
             )
             const data = await response.json();
-            
-            // definindo o token de autenticação
-            // data.access_token && props.setToken(data.access_token)
-            
             const list = Object.values(data)
-            setOrders(list)
 
+            // separando as categorias dos itens
+            let all_categorias = []
+            list.forEach(os => all_categorias.push(os.estado))
+            
+            setCategory([...new Set(all_categorias)])
+            setOrders(list)
             setIsLoading(false)
             }
 
@@ -183,7 +210,26 @@ function OS(props)
                             {/* {!isLoading && <ClientRows clients={clients} />} */}
 
                         <tbody>
-                            {!isLoading && orders.map(order => (
+                            {(!isLoading && osSearched == '') && orders.map(order => (
+                                    <>
+                                        <tr key={order.id}>
+                                            <td> {order.id} </td>
+                                            <td> {order.tipo_ordem} </td>
+                                            <td> {order.tecnico_resp} </td>
+                                            <td> {order.cliente_nome} </td>
+                                            <td> {order.produto_num_serie} </td>
+                                            <td> {order.estado} </td>
+                                            <td> {order.data_emissao} </td>
+                                            <td> {order.emitida} </td>
+
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_order(order)}>unfold_more</Button> </td> 
+                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
+                                        </tr>
+                                    </>
+                                )
+                            )}
+
+                            {(!isLoading && osSearched != '') && osSearched.map(order => (
                                     <>
                                         <tr key={order.id}>
                                             <td> {order.id} </td>

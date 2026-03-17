@@ -4,7 +4,7 @@ function Filter (props) {
     return (
         
         <Form.Group className='grid-child'>
-                <Form.Label>Teste de filtragem</Form.Label>
+                {/* <Form.Label>Teste de filtragem</Form.Label> */}
                 <Form.Select onChange={props.handleFilter}>
                   <option value={'all'}>Todos</option>
                   {props.options.map(categoria => (

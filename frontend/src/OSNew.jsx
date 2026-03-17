@@ -217,13 +217,13 @@ function OSNew(props) {
                 // teste se é estoque, se sim, a chave é o codigo de barras
                 if (tipo == 'estoque')
                 {
-                    newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco, tipo: tipo})
                 }
 
                 // teste se é um servico, se sim, a chave é o id
                 else if(tipo == 'servico')
                 {
-                    newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco, tipo: tipo})
                 }
                 
                 // insira o novo item na lista

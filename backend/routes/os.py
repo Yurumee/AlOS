@@ -127,14 +127,17 @@ def new_os():
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
         
+        # se a data de criação for nulo, puxe a data atual
+        # senão, pegue o datetime informado e transforme de string para datetime
         if criacao == None:
             criacao = datetime.now()
-            print(criacao)
-            print(type(criacao))
         
         else:
             criacao = datetime.strptime(criacao, '%Y-%m-%dT%H:%M')
 
+        # se a data de validade for nulo, puxe a data atual
+        # senão, pegue o datetime informado e transforme de string para datetime
+        # a diferença minima deve ser de 1 semana entre a data de criação e a data de validade
         if validade == None:
             validade = criacao + timedelta(weeks=1)
 
@@ -145,10 +148,28 @@ def new_os():
         if diferenca_data.days//7 < 1:
             validade = criacao + timedelta(weeks=1)
 
+        # atualize o valor do orçamento total
         for item in orcamento:
             valor_orcamento += (float(item['preco']) * int(item['quantidade']))
         
-        print(valor_orcamento)
+        # se a os tiver sido emitida e autorizada, retire os itens de estoque
+        if emitir and estado == 'Autorizada':
+            from models.estoque import Estoque
+
+            for item in orcamento:
+                if item['tipo'] == 'estoque':
+                    item_atualizar = db.session.query(Estoque).filter_by(cod_barras=item['cod_barra_item']).one_or_none()
+                    item_atualizar.quantidade -= item['quantidade'] 
+                    
+                    # se for ficar com estoque negativo, transforme em 0
+                    if item_atualizar.quantidade < 0:
+                        item_atualizar.quantidade = 0
+
+        # se ela tiver sido emitida mas estiver em um estado diferente de 
+        # autorizada, não autorizada ou cancelada
+        # transforme em finalizada
+        if emitir and (estado == 'Criada' or estado == 'Em análise'):
+            estado = 'Finalizada'
             
         try:
             # realizando transação

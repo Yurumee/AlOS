@@ -6,7 +6,7 @@ function Search (props) {
         
         <>
             <Form.Group className='grid-child'>
-                <Form.Label>Teste de busca</Form.Label>
+                {/* <Form.Label>Busca</Form.Label> */}
                 <Form.Control type='text' value={props.search} placeholder='Sua busca aqui...' onChange={(event) => props.handleSearch(event.target.value)}></Form.Control>
             </Form.Group>
         </>
