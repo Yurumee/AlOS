@@ -3,6 +3,8 @@ from config import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, jsonify, request
 from datetime import datetime, timedelta
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 view_os = Blueprint('view_os', __name__, url_prefix='/os')
 
@@ -38,83 +40,13 @@ def all_os():
                                     "orcamento": os.orcamento,
                                     "estado": os.estado_os,
                                     "emitida": os.emitida,
-                                    "data_emissao": os.emissao,
+                                    "data_emissao": datetime.strftime(os.emissao, '%A, %d/%m/%Y às %H:%M:%S'),
                                     "data_fechamento": os.fechamento,
                                     "validade": os.validade,
                                     "ult_atualizacao": os.ultima_atualizacao
                                 }
         
     return result, 200
-    # return resp
-
-# rota pesquisa de produto por modelo/id
-# rota utilizada pela barra de pesquisa
-# essa rota deve exibir os produtos com base no numero de serie ou id
-# @view_os.route('/pesquisar/<str_pesquisa>', methods=['GET'])
-# def search_product(str_pesquisa):
-#     from models.produto import Produto
-#     from models.cliente import Cliente
-
-#     # pesquisa pelo modelo
-#     try:
-#         # checa se é um id (apenas numeros)
-#         if str_pesquisa.isdigit():
-#             print(str_pesquisa)
-
-#             produto_desejado =  db.session.query(Produto).filter_by(produto_id=int(str_pesquisa)).one_or_none()
-#             print(produto_desejado)
-
-#             if produto_desejado:
-#                 cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
-#                 result = {
-#                             "id":produto_desejado.produto_id,
-#                             "cliente_nome": cliente_nome,
-#                             "modelo": produto_desejado.modelo,
-#                             "num_serie": produto_desejado.num_serie,
-#                             "cor": produto_desejado.cor,
-#                             "sis_operacional": produto_desejado.sis_operacional,
-#                             "avaria": produto_desejado.avaria,
-#                             "liga": produto_desejado.liga,
-#                             "carrega": produto_desejado.carrega,
-#                             "backup": produto_desejado.backup,
-#                             "acessorios": produto_desejado.acessorios,
-#                             "obs": produto_desejado.observacoes,
-#                         }
-#                 print(result)
-#                 return result, 302
-            
-#             else:
-#                 return '', 404
-            
-#         # else:
-#         #     produto_desejado =  db.session.query(Produto).filter(Produto.modelo.ilike(f'%{str_pesquisa}%')).all()
-            
-#         #     if produto_desejado:
-#         #         cliente_nome = db.session.query(Cliente).filter_by(cliente_id=produto_desejado.cliente_id).one_or_none().nome_completo
-
-#         #         result = {}
-#         #         for product in produto_desejado:
-#         #             result[product.produto_id] = {
-#         #                             "id":product.produto_id,
-#         #                             "cliente_nome": cliente_nome,
-#         #                             "modelo": product.modelo,
-#         #                             "num_serie": product.num_serie,
-#         #                             "cor": product.cor,
-#         #                             "sis_operacional": product.sis_operacional,
-#         #                             "avaria": 'Sim' if product.avaria == True else 'Não',
-#         #                             "liga": 'Sim' if product.liga == True else 'Não',
-#         #                             "carrega": 'Sim' if product.carrega == True else 'Não',
-#         #                             "backup": 'Sim' if product.backup == True else 'Não',
-#         #                             "acessorios": product.acessorios,
-#         #                             "obs": product.observacoes,
-#         #                         }
-#         #         return result, 302
-#         #     else:
-#         #         return '', 404
-    
-#     except Exception as e:
-#         return jsonify({'err':str(e)}), 500
-
         
 # rota cadastro de nova ordem
 # esta rota deve exibir o formulário de ordens de serviço
@@ -135,7 +67,6 @@ def new_os():
             # separando em variaveis
             cliente_id = data.get('cliente_id')
             produto_id = data.get('produto_id')
-            # tecnico_id = data.get('tecnico_id')
             tecnico_id = int(get_jwt_identity())
             tipo_os = data.get('tipo_os')
             prognostico = data.get('prognostico')
@@ -146,6 +77,7 @@ def new_os():
             criacao = data.get('hora_emissao')
             fechamento = data.get('hora_fechamento')
             validade = data.get('data_validade')
+            valor_orcamento = 0.0
 
             print(f'cliente id: {cliente_id}')
             print(f'produto id: {produto_id}')
@@ -197,11 +129,21 @@ def new_os():
         
         if criacao == None:
             criacao = datetime.now()
+            print(criacao)
+            print(type(criacao))
         
-        if validade == None:
-            validade = criacao + timedelta(weeks=2)
+        else:
+            criacao = datetime.strptime(criacao, '%Y-%m-%dT%H:%M')
 
-        valor_orcamento = 0.0
+        if validade == None:
+            validade = criacao + timedelta(weeks=1)
+
+        else:
+            validade = datetime.strptime(validade, '%Y-%m-%dT%H:%M')
+        
+        diferenca_data = validade.date() - criacao.date()
+        if diferenca_data.days//7 < 1:
+            validade = criacao + timedelta(weeks=1)
 
         for item in orcamento:
             valor_orcamento += (float(item['preco']) * int(item['quantidade']))

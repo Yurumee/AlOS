@@ -147,7 +147,7 @@ function OSNew(props) {
         }
     }
 
-    function addDelItemsBudget(flag, qtd, id, nome, preco, qtd_estoque) {
+    function addDelItemsBudget(flag, qtd, id, nome, preco, qtd_estoque, tipo) {
         let flag_item_exists = false
 
         // adicionar no orçamento
@@ -155,6 +155,8 @@ function OSNew(props) {
         {   
             itemsBudgetList.forEach(item => {
                 // se for o mesmo item, atualize a quantidade
+                if (tipo == 'estoque')
+                {}
                 if (item.id_item === id)
                 {
                     
@@ -180,13 +182,31 @@ function OSNew(props) {
 
             if (!flag_item_exists)
             {
-                const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
-                let list_item = itemsBudgetList.slice() 
-                list_item.push(newitem)
-                setItemsBudgetList(list_item)
-                
-                let soma = sum + (Number(preco) * Number(qtd))
-                setSum(soma)
+                if (tipo == 'estoque')
+                {
+                    // const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    const newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    let list_item = itemsBudgetList.slice() 
+                    list_item.push(newitem)
+                    setItemsBudgetList(list_item)
+                    
+                    let soma = sum + (Number(preco) * Number(qtd))
+                    setSum(soma)
+                    return
+                }
+
+                if(tipo == 'servico')
+                {
+                    const newitem = Object.assign({}, {id_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    // const newitem = Object.assign({}, {cod_barra_item: id, quantidade: qtd, nome: nome, preco: preco})
+                    let list_item = itemsBudgetList.slice() 
+                    list_item.push(newitem)
+                    setItemsBudgetList(list_item)
+                    
+                    let soma = sum + (Number(preco) * Number(qtd))
+                    setSum(soma)
+                    return
+                }
             }
         }
 
@@ -273,7 +293,8 @@ function OSNew(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
             .catch(error => console.log(error))
-        // window.location.href = '/os'
+        
+         window.location.href = '/os'
     }
 
         return (
@@ -340,7 +361,7 @@ function OSNew(props) {
                         </Form.Group>
 
                         <Form.Group className='grid-child' id='grid-date-create'>
-                            <Form.Label>Data de Criação da OS</Form.Label>
+                            <Form.Label>Data de Criação da OS <span style={{ 'color': 'red' }}>*</span></Form.Label>
                             <Form.Control type='datetime-local' onChange={(event) => setCriacaoOrdem(event.target.value)} ></Form.Control>
                         </Form.Group>
 
@@ -432,8 +453,8 @@ function OSNew(props) {
                                                     <td className='table-info-cell'> {item.codigo_barras} </td>
 
                                                     <td className='table-info-cell table-add-rem-button'> 
-                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.id, item.nome_item, item.preco_un, item.quantidade) }} variant="success">Adicionar</Button>
-                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.id, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.codigo_barras, item.nome_item, item.preco_un, item.quantidade, 'estoque') }} variant="success">Adicionar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(false, 1, item.codigo_barras, item.nome_item, item.preco_un) }} variant="danger">Retirar</Button>
                                                     </td>
 
                                                 </tr>
@@ -450,7 +471,7 @@ function OSNew(props) {
                                                     <td className='table-info-cell'> --- </td>
 
                                                     <td className='table-info-cell table-add-rem-button'> 
-                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.id_servico, item.nome_servico, item.custo, 1) }} variant="success">Adicionar</Button>
+                                                        <Button onClick={() => { addDelItemsBudget(true, 1, item.id_servico, item.nome_servico, item.custo, 1, 'servico') }} variant="success">Adicionar</Button>
                                                         <Button onClick={() => { addDelItemsBudget(false, 1, item.id_servico, item.nome_servico, item.custo) }} variant="danger">Retirar</Button>
                                                     </td>
 

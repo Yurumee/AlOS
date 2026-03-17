@@ -22,14 +22,14 @@ class OrdemServico(db.Model):
     # data de criação da os
     emissao: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now())
     # data de aprovação/cancelamento da os
-    fechamento: Mapped[DateTime] = mapped_column(DATETIME)
+    fechamento: Mapped[DateTime] = mapped_column(DATETIME, nullable=True)
     # data de validade para o orçamento da os
     # por padrão, adiciona 2 semanas
     validade: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now() + datetime.timedelta(weeks=2))
 
     prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
-    diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
-    orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2))
+    diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=True)
+    orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), nullable=True)
     estado_os: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     emitida: Mapped[bool] = mapped_column(BOOLEAN, default=False, nullable=False)
     ultima_atualizacao: Mapped[DateTime] = mapped_column(DATETIME, default=datetime.datetime.now())
