@@ -141,6 +141,7 @@ function OS(props)
     function visualize_order(order)
     {
         setModalOrder(order)
+        console.log(order)
         setModalOpen(!modalOpen)
     }
 
@@ -254,7 +255,7 @@ function OS(props)
                 </div>
             }
 
-            {modalOpen && <OSVisualize service={modalOrder} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOpen && <OSVisualize order={modalOrder} show={modalOpen} close={() => setModalOpen(false)}/>}
             {modalOperationOpen && <ModalOS operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )

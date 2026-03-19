@@ -39,11 +39,11 @@ def all_os():
                                     "diagnostico": os.diagnostico,
                                     "orcamento": os.orcamento,
                                     "estado": os.estado_os,
-                                    "emitida": os.emitida,
-                                    "data_emissao": datetime.strftime(os.emissao, '%A, %d/%m/%Y às %H:%M:%S'),
-                                    "data_fechamento": os.fechamento,
-                                    "validade": os.validade,
-                                    "ult_atualizacao": os.ultima_atualizacao
+                                    "emitida": 'Sim' if os.emitida == True else 'Não',
+                                    "data_emissao": datetime.strftime(os.emissao, '%A, %d/%m/%Y às %H:%M:%S') if os.emissao != None else '',
+                                    "data_fechamento": datetime.strftime(os.fechamento, '%A, %d/%m/%Y às %H:%M:%S') if os.fechamento != None else '',
+                                    "validade": datetime.strftime(os.validade, '%A, %d/%m/%Y às %H:%M:%S') if os.validade != None else '',
+                                    "ult_atualizacao": datetime.strftime(os.ultima_atualizacao, '%A, %d/%m/%Y às %H:%M:%S')
                                 }
         
     return result, 200

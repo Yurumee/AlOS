@@ -103,3 +103,10 @@
     justify-items: center;
     grid-column: 3 / span 2;
 }
+
+.teste {
+    /* width: 100%; */
+    display: grid;
+    grid-template-columns: [a] fit-content(50%) [b] fit-content(50%);
+    /* justify-self: center; */
+}
