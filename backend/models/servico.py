@@ -11,7 +11,7 @@ class Servico(db.Model):
     servico_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'))
+    categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'), nullable=True)
 
     nome_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=False, unique=True)
     descricao_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)

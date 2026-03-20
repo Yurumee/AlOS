@@ -104,9 +104,11 @@
     grid-column: 3 / span 2;
 }
 
-.teste {
-    /* width: 100%; */
+.modal-os {
     display: grid;
-    grid-template-columns: [a] fit-content(50%) [b] fit-content(50%);
-    /* justify-self: center; */
+    grid-template-columns: [a] 3fr [b] 3fr;
+    align-items: center;
+    justify-items: center;
+    text-wrap: pretty;
+    text-align: center;
 }
