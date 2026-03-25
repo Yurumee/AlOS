@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { createRoot } from 'react-dom/client'
-// import { useState } from 'react';
 
 import Technicians from './Technicians.jsx';
 import TechniciansNew from './TechniciansNew.jsx';
@@ -39,8 +38,11 @@ import ModalCat from './ModalCat.jsx';
 import ModalItem from './ModalItem.jsx';
 import ModalServ from './ModalServ.jsx';
 
+import BudgetOS from './BudgetOS.jsx';
+
 import OS from './OS.jsx';
 import OSNew from './OSNew.jsx';
+import OSEdit from './OSEdit.jsx';
 
 import Home from './Home.jsx';
 import Login from './Login.jsx';
@@ -115,6 +117,12 @@ function Main(){
 
         <Route path='/os' element={<OS  token={token}/>}/>
         <Route path='/nova-os' element={<OSNew  token={token}/>}/>
+        <Route path='/editar-os/:id' element={<OSEdit token={token}/>}/>
+        <Route path='/orcamento-os/:id' element={<BudgetOS token={token}/>}/>
+        {/* <Route path='/orcamento-os/:id' element={<OSEdit token={token}/>}/> */}
+        {/* <Route path='/deletar-os/:id' element={<OSDelete token={token}/>}/> */}
+        {/* <Route path='/editar-os' element={<ModalOS operation={'edit'}/>}/> */}
+        {/* <Route path='/deletar-os' element={<ModalOS operation={'delete'}/>}/> */}
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
       </>

@@ -1,14 +1,12 @@
 import './styles/index.css'
 
+import BudgetOS from './BudgetOS'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import html2canvas from 'html2canvas'
-import { useRef } from 'react'
-import { jsPDF } from 'jspdf'
+import { useState } from 'react'
 
 function OSVisualize(props) {
     const order = props.order
-    const printRef = useRef(null)
 
     function edit_current() {
         window.location.href = `/editar-os/${order.id}`
@@ -22,33 +20,14 @@ function OSVisualize(props) {
         window.location.href = `/cadastrar-apendice-os/${order.id}`
     }
 
-    async function download_pdf() {
-        const element = printRef.current
-        // console.log(element)
-        if (!element)
-        {
-            return
-        }
-
-        const canvas = await html2canvas(element)
-        const data = canvas.toDataURL('image/png')
-        const pdf = new jsPDF({
-                                orientation: 'portrait',
-                                unit: 'px',
-                                format: 'a4'
-                            })
-
-        const imgProperties = pdf.getImageProperties(data)
-        const pdfWidth = pdf.internal.pageSize.getWidth()
-        const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width
-        
-        pdf.addImage(data, 'PNG', 0, 0, pdfWidth, pdfHeight)
-        pdf.save(`OS_N${order.id}.pdf`)
+    function print_budget(id) {
+        window.location.href = `/orcamento-os/${id}`
     }
 
     return (
         <div className="teste modal show" style={{ display: 'block' }}>
-            <Modal.Dialog ref={printRef}>
+
+            <Modal.Dialog>
                 <Modal.Header closeButton onClick={props.close}>
                     <Modal.Title>OS Nº{order.id}</Modal.Title>
                 </Modal.Header>
@@ -132,12 +111,14 @@ function OSVisualize(props) {
                     }
                     {(order.emitida == 'Sim') &&
                         <>
-                            <Button onClick={download_pdf} variant='outline-warning'>Baixar PDF</Button>
                             <Button onClick={create_appendix} variant="outline-info">Adicionar Anexo</Button>
                         </>
                     }
+                    
+                    <Button onClick={() => print_budget(order.id)} variant="outline-info">Exibir Orçamento</Button>
                 </Modal.Footer>
             </Modal.Dialog>
+            
         </div>
     )
 }

@@ -141,7 +141,6 @@ function OS(props)
     function visualize_order(order)
     {
         setModalOrder(order)
-        console.log(order)
         setModalOpen(!modalOpen)
     }
 
@@ -223,8 +222,7 @@ function OS(props)
                                             <td> {order.data_emissao} </td>
                                             <td> {order.emitida} </td>
 
-                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_order(order)}>unfold_more</Button> </td> 
-                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
+                                            <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_order(order)}>unfold_more</Button> </td>
                                         </tr>
                                     </>
                                 )
@@ -243,7 +241,6 @@ function OS(props)
                                             <td> {order.emitida} </td>
 
                                             <td> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_order(order)}>unfold_more</Button> </td> 
-                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                         </tr>
                                     </>
                                 )
@@ -255,7 +252,7 @@ function OS(props)
                 </div>
             }
 
-            {modalOpen && <OSVisualize order={modalOrder} show={modalOpen} close={() => setModalOpen(false)}/>}
+            {modalOpen && <OSVisualize order={modalOrder} token={props.token} show={modalOpen} close={() => setModalOpen(false)}/>}
             {modalOperationOpen && <ModalOS operation={operation} show={modalOperationOpen} close={() => setModalOperationOpen(false)}/>}
         </div>
     )

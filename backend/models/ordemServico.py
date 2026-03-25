@@ -1,7 +1,7 @@
 from config import db
 # from typing import Optional
 import datetime
-from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey
+from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # from models.anexo import Anexo
@@ -37,6 +37,11 @@ class OrdemServico(db.Model):
     # RELACIONAMENTOS
     # relacionamento 1:1 entre ordem e anexo
     # model declarado dessa forma para evitar erro de circular import 
+    # anexo: Mapped['models.anexo.Anexo'] = relationship(back_populates='ordem', uselist=False)
     anexo: Mapped['models.anexo.Anexo'] = relationship(back_populates='ordem', uselist=False)
     
-    
+    # relacionamentos n:n entre ordemServico e estoque
+    itens_os: Mapped[list['models.os_estoque.Os_estoque']] = relationship(back_populates='ordem')
+
+    # relacionamento n:n com ordemServico e servico
+    servicos_os: Mapped[list['models.os_servico.Os_servico']] = relationship(back_populates='ordem')

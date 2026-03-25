@@ -59,6 +59,10 @@ def new_os():
         from models.tecnico import Tecnico
         from models.produto import Produto
         from models.cliente import Cliente
+        from models.servico import Servico
+        from models.estoque import Estoque
+        from models.os_estoque import Os_estoque
+        from models.os_servico import Os_servico
 
         try:
             # guarda dados do frontend
@@ -78,6 +82,8 @@ def new_os():
             fechamento = data.get('hora_fechamento')
             validade = data.get('data_validade')
             valor_orcamento = 0.0
+            associacoes_estoque = []
+            associacoes_servico = []
 
             print(f'cliente id: {cliente_id}')
             print(f'produto id: {produto_id}')
@@ -148,10 +154,38 @@ def new_os():
         if diferenca_data.days//7 < 1:
             validade = criacao + timedelta(weeks=1)
 
+        if fechamento:
+            diferenca_fechamento = fechamento.date() - criacao.date()
+            if diferenca_fechamento < 0:
+                response = {'status':'error', 'msg':'A DATA DE FECHAMENTO NÃO PODE SER INFERIOR A DE CRIAÇÃO!'}
+                return response, 400
+
         # atualize o valor do orçamento total
+        # adicione os itens e serviços de orçamento nas tabelas pivô
         for item in orcamento:
             valor_orcamento += (float(item['preco']) * int(item['quantidade']))
-        
+
+            if item['tipo'] == 'estoque':
+                item_desejado = db.session.query(Estoque).filter_by(cod_barras=item['cod_barra_item']).one_or_none()
+                # orcamento_estoque.append({'item': item_desejado, 'qtd': item['quantidade']})
+                associacoes_estoque.append(
+                                            Os_estoque(
+                                                        quantidade = item['quantidade'],
+                                                        itens = item_desejado
+                                                      )
+                                          )
+
+            if item['tipo'] == 'servico':
+                servico_desejado = db.session.query(Servico).filter_by(servico_id=item['id_item']).one_or_none()
+                associacoes_servico.append(
+                                            Os_servico(
+                                                        servicos = servico_desejado
+                                                      )
+                                          )
+
+        print(associacoes_estoque)
+        print(associacoes_servico)
+
         # se a os tiver sido emitida e autorizada, retire os itens de estoque
         if emitir and estado == 'Autorizada':
             from models.estoque import Estoque
@@ -190,6 +224,10 @@ def new_os():
                                 emitida = emitir,
                                 ultima_atualizacao = datetime.now()
                             )
+            
+
+            os.itens_os.extend(associacoes_estoque)
+            os.servicos_os.extend(associacoes_servico)
 
             # inserindo e realizando commit
             db.session.add(os)
@@ -217,7 +255,7 @@ def patch_os(id_desejado):
         data = request.get_json()
 
         # separando em variaveis
-        tipo = data.get('tipo_os')
+        # tipo = data.get('tipo_os')
         fechamento = data.get('fechamento')
         validade = data.get('validade')
         prognostico = data.get('prognostico')
@@ -245,9 +283,9 @@ def patch_os(id_desejado):
 
         # realizando modificações
         try:
-            if tipo != None and tipo != os_exists.tipo:
-                os_exists.tipo_ordem = tipo
-                os_exists.ultima_atualizacao = datetime.now()
+            # if tipo != None and tipo != os_exists.tipo:
+            #     os_exists.tipo_ordem = tipo
+            #     os_exists.ultima_atualizacao = datetime.now()
             
             if fechamento != None and fechamento != os_exists.fechamento:
                 os_exists.fechamento = fechamento
@@ -327,7 +365,7 @@ def delete_os(id_desejado):
 # rota usada para pesquisar ordem com base no id para ser utilizado para edição ou exclusão
 @view_os.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
-def getOS(id_desejado):
+def get_os(id_desejado):
     from models.ordemServico import OrdemServico
     from models.produto import Produto
     from models.cliente import Cliente
@@ -369,6 +407,119 @@ def getOS(id_desejado):
                 "orcamento": os_desejada.orcamento,
                 "is_emitida": os_desejada.emitida,
                 "ult_atualizacao": os_desejada.ultima_atualizacao,
+            }
+                
+    return result, 302
+
+
+# rota usada para pesquisar o orçamento de uma ordem com base no id para ser utilizado para edição ou download
+@view_os.route('/orcamento/<int:id_desejado>', methods=['GET'])
+@jwt_required()
+def get_os_budget(id_desejado):
+    from models.ordemServico import OrdemServico
+    from models.produto import Produto
+    from models.cliente import Cliente
+    from models.tecnico import Tecnico
+    from models.estoque import Estoque
+    from models.servico import Servico
+    from models.os_estoque import Os_estoque
+    from models.os_servico import Os_servico
+
+    i = 0
+    orcamento_itens = {}
+    orcamento_servico = {}
+
+    try:
+        os_desejada = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).first()
+    
+    except Exception as e:
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
+    
+    try:
+        # caso a ordem de serviço exista
+        if os_desejada:
+            # pega o nome do cliente da os especifica
+            cliente = db.session.query(Cliente).filter_by(cliente_id=os_desejada.cliente_id).one_or_none()
+
+            produto = db.session.query(Produto).filter_by(produto_id=os_desejada.produto_id).one_or_none()
+
+            tecnico = db.session.query(Tecnico).filter_by(cpf_tecnico=os_desejada.tecnico_cpf).one_or_none()
+            
+            try:
+                itens = db.session.query(Os_estoque).filter_by(ordem_id=id_desejado).all()
+                servicos = db.session.query(Os_servico).filter_by(ordem_id=id_desejado).all()
+
+            except:
+                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
+        
+        else:
+            response = {'status':'error', 'msg':'O CLIENTE OU PRODUTO SOLICITADO NÃO ESTÃO CADASTRADOS'}
+            return response, 404
+        
+    except Exception as e:
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
+
+
+    for itemOrcamento in itens:
+        print(itemOrcamento)
+        item = db.session.query(Estoque).filter_by(item_id=itemOrcamento.item_id).one_or_none()  
+        orcamento_itens[i] = {
+                                                "cod_barras": item.cod_barras,
+                                                "nome_item": item.nome_item,
+                                                "preco": item.preco_unitario,
+                                                "quantidade_orcamento": itemOrcamento.quantidade
+                                            }
+        i += 1
+
+    # i = 0
+    for servicoOrcamento in servicos:
+        print(servicoOrcamento)
+        servico = db.session.query(Servico).filter_by(servico_id=servicoOrcamento.servico_id).one_or_none()
+        orcamento_servico[i] = {
+                                                    "nome_servico": servico.nome_servico,
+                                                    "custo": servico.custo
+                                                }
+        i += 1
+    
+    result = {
+                "id":os_desejada.ordem_id,
+                "cliente_nome": cliente.nome_completo,
+                "cliente_fantasia": cliente.nome_fantasia,
+                "cliente_cpf_cnpj": cliente.cpf_cnpj,
+                "cliente_endereco": cliente.endereco,
+                "cliente_bairro": cliente.bairro,
+                "cliente_cep": cliente.cep,
+                "cliente_cidade": cliente.cidade,
+                "cliente_telefone": cliente.telefone,
+                "cliente_pessoa_juridica": cliente.pessoa_juridica,
+                
+                "num_serie": produto.num_serie,
+                "modelo": produto.modelo,
+                "cor": produto.cor,
+                "so": produto.sis_operacional,
+                "acessorios": produto.acessorios,
+                "avaria": produto.avaria,
+                "backup": produto.backup,
+                "carrega": produto.carrega,
+                "liga": produto.liga,
+                "obs": produto.observacoes,
+
+                "tecnico_resp": tecnico.nome_tecnico,
+                "tecnico_contato": tecnico.contato_tecnico,
+
+                "tipo": os_desejada.tipo_ordem,
+                "data_emissao": datetime.strftime(os_desejada.emissao, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.emissao != None else '',
+                "data_fechamento": datetime.strftime(os_desejada.fechamento, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.fechamento != None else '',
+                "validade": datetime.strftime(os_desejada.validade, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.validade != None else '',
+                "prognostico": os_desejada.prognostico,
+                "diagnostico": os_desejada.diagnostico,
+                "orcamento_item": orcamento_itens, 
+                "orcamento_servico": orcamento_servico,
+                "is_emitida": os_desejada.emitida,
+                "ult_atualizacao": datetime.strftime(os_desejada.ultima_atualizacao, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.ultima_atualizacao != None else '',
             }
                 
     return result, 302

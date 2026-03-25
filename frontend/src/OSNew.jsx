@@ -425,12 +425,12 @@ function OSNew(props) {
 
                         <Form.Group className='grid-child' id='grid-date-expiration'>
                             <Form.Label>Validade do Orçamento <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                            <Form.Control type='datetime-local' onChange={(event) => setValidadeOrdem(event.target.value)} ></Form.Control>
+                            <Form.Control type='datetime-local' min={criacao_ordem} onChange={(event) => setValidadeOrdem(event.target.value)} ></Form.Control>
                         </Form.Group>
 
                         <Form.Group className='grid-child' id='grid-date-close'>
                             <Form.Label>Data do Fechamento da OS</Form.Label>
-                            <Form.Control type='datetime-local' onChange={(event) => setFechamentoOrdem(event.target.value)} ></Form.Control>
+                            <Form.Control type='datetime-local' min={criacao_ordem} onChange={(event) => setFechamentoOrdem(event.target.value)} ></Form.Control>
                         </Form.Group>
 
                         <Form.Group className='grid-child' id='grid-prognostic'>

@@ -112,3 +112,94 @@
     text-wrap: pretty;
     text-align: center;
 }
+
+.budget {
+    grid-column: span 2;
+    margin: 2px;
+}
+
+.budget-prog-diag {
+    margin: 2px;
+}
+
+.budget-background {
+    margin: 15px;
+}
+
+.budget-container {
+    display: grid;
+    grid-template-columns: [first] 2fr [second] 2fr;
+    font-family: serif;
+}
+
+.budget-header {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid black;
+    background-color: #fff307;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+.budget-grid {
+    display: grid;
+    grid-template-columns: [first] 2fr [second] 2fr [third] 2fr;
+    border: 1px solid black;
+    border-top: 0px;
+    /* text-align: center; */
+}
+
+.budget-grid fieldset {
+    display: grid;
+    grid-template-columns: [first] 2fr [second] 2fr;
+    margin: 5px;
+}
+
+.budget-checkboxes {
+    display: grid;
+    grid-column: span 2;
+    grid-template-columns: [first] 2fr [second] 2fr;
+}
+
+.budget-checkboxes div {
+    justify-self: start;
+}
+
+.budget-checkboxes label {
+    margin: 0px;
+}
+
+.budget-grid fieldset legend {
+    grid-column: span 2;
+    text-align: start;
+    font-weight: bold;
+    margin: 0px;
+}
+
+.budget-section {
+    margin: 5px;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #ffc107;
+}
+
+.isChecked input {
+    background-color: black;
+}
+
+.budget-p {
+    margin: 0;
+}
+
+.info-p {
+    font-size: 1em;
+}
+
+.budget-obs {
+    justify-self: center;
+    grid-column: span 3;
+}
+
+.item-serv {
+    grid-template-columns: [first] 2fr [second] 2fr;
+}

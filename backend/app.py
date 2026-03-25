@@ -1,14 +1,15 @@
 # importando configuracoes
 from config import app, db
 # importando os modelos
+from models.os_estoque import Os_estoque
+from models.os_servico import Os_servico
+
 from models.cliente import Cliente
 from models.estoque import Estoque
 from models.ordemServico import OrdemServico
 from models.produto import Produto
 from models.servico import Servico
 from models.tecnico import Tecnico
-from models.os_servicos import OSServicos
-from models.os_itens import OSItens
 from models.categoria import Categoria
 from models.anexo import Anexo
 

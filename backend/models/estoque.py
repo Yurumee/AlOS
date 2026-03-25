@@ -18,3 +18,8 @@ class Estoque(db.Model):
     quantidade: Mapped[int] = mapped_column(INTEGER, default=0, nullable=False)
     preco_unitario: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), default=0.01, nullable=False)
     cod_barras: Mapped[str] = mapped_column(VARCHAR, unique=True)
+
+    # RELACIONAMENTOS
+    # relacionamentos n:n entre ordemServico e estoque
+    ordens_item: Mapped[list['models.os_estoque.Os_estoque']] = relationship(back_populates='itens')
+    
