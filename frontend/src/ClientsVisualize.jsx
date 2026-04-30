@@ -1,5 +1,4 @@
 import './styles/index.css'
-//  
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -19,7 +18,6 @@ function ClientsVisualize(props) {
         <div style={{ display: 'block' }}>
             <Modal className='modal-client' show={props.show} onHide={props.close}>
 
-                {/* <Modal.Dialog> */}
                 <Modal.Header closeButton>
                     <Modal.Title>Dados do Cliente - {client.cpf_cnpj}</Modal.Title>
                 </Modal.Header>
@@ -40,7 +38,6 @@ function ClientsVisualize(props) {
                     <Button onClick={delete_current} variant="danger">Excluir Cliente</Button>
                     <Button onClick={edit_current} variant="warning">Editar Cliente</Button>
                 </Modal.Footer>
-                {/* </Modal.Dialog> */}
 
             </Modal>
         </div>

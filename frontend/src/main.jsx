@@ -37,6 +37,7 @@ import ModalTech from './ModalTech.jsx';
 import ModalCat from './ModalCat.jsx';
 import ModalItem from './ModalItem.jsx';
 import ModalServ from './ModalServ.jsx';
+import ModalOS from './ModalOS.jsx';
 
 import BudgetOS from './BudgetOS.jsx';
 
@@ -121,8 +122,8 @@ function Main(){
         <Route path='/orcamento-os/:id' element={<BudgetOS token={token}/>}/>
         {/* <Route path='/orcamento-os/:id' element={<OSEdit token={token}/>}/> */}
         {/* <Route path='/deletar-os/:id' element={<OSDelete token={token}/>}/> */}
-        {/* <Route path='/editar-os' element={<ModalOS operation={'edit'}/>}/> */}
-        {/* <Route path='/deletar-os' element={<ModalOS operation={'delete'}/>}/> */}
+        <Route path='/editar-os' element={<ModalOS operation={'edit'}/>}/>
+        <Route path='/deletar-os' element={<ModalOS operation={'delete'}/>}/>
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
       </>

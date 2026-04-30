@@ -19,7 +19,9 @@ function OSEdit(props)
     // guarda valor da soma
     const [sum, setSum] = useState(0)
     
-    const [date, setDate] = useState()
+    const [dateEmissao, setDateEmissao] = useState()
+    const [dateValidade, setDateValidade] = useState()
+    const [dateFechamento, setDateFechamento] = useState()
 
     // lista dos itens do orçamento
     const [itemsBudgetList, setItemsBudgetList] = useState([])
@@ -46,7 +48,10 @@ function OSEdit(props)
                 }
             }).then(resp => resp.json())
             setOrder(resp)
-            setDate(new Date(resp.data_emissao).toISOString().substring(0, 16))
+            setDateEmissao(new Date(resp.data_emissao).toISOString().substring(0, 16))
+            setDateValidade(new Date(resp.data_fechamento).toISOString().substring(0, 16))
+            setDateFechamento(new Date(resp.validade).toISOString().substring(0, 16))
+            setItemsBudgetList(resp.orcamento)
             setIsLoading(false)
         }
 
@@ -341,7 +346,7 @@ function OSEdit(props)
                 
                 <Form.Group className='grid-child'>
                     <Form.Label>Estado da OS <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                    <Form.Select defaultValue={''} onChange={(event) => setNewEstadoOrdem(event.target.value)}>
+                    <Form.Select defaultValue={order.estado} onChange={(event) => setNewEstadoOrdem(event.target.value)}>
                         <option value={''} disabled>---Selecione um estado---</option>
                         <option value={'Criada'}>Criada</option>
                         <option value={'Em análise'}>Em análise</option>
@@ -354,22 +359,22 @@ function OSEdit(props)
 
                 <Form.Group className='grid-child' id='grid-date-expiration'>
                     <Form.Label>Validade do Orçamento <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                    <Form.Control type='datetime-local' min={date} onChange={(event) => setNewValidadeOrdem(event.target.value)} ></Form.Control>
+                    <Form.Control type='datetime-local' defaultValue={dateValidade} min={dateEmissao} onChange={(event) => setNewValidadeOrdem(event.target.value)} ></Form.Control>
                 </Form.Group>
                 
                 <Form.Group className='grid-child' id='grid-date-close'>
                     <Form.Label>Data do Fechamento da OS</Form.Label>
-                    <Form.Control type='datetime-local' min={date} onChange={(event) => setNewFechamentoOrdem(event.target.value)} ></Form.Control>
+                    <Form.Control type='datetime-local' defaultValue={dateFechamento} min={dateEmissao} onChange={(event) => setNewFechamentoOrdem(event.target.value)} ></Form.Control>
                 </Form.Group>
             
                 <Form.Group className='grid-child' id='grid-prognostic'>
                     <Form.Label>Prognóstico <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                    <Form.Control as='textarea' rows='10' placeholder='Apresenta comportamento indesejado...' onChange={(event) => setNewPrognosticoOrdem(event.target.value)} />
+                    <Form.Control as='textarea' rows='10' defaultValue={order.prognostico} placeholder='Apresenta comportamento indesejado...' onChange={(event) => setNewPrognosticoOrdem(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className='grid-child' id='grid-diagnostic'>
                     <Form.Label>Diagnóstico</Form.Label>
-                    <Form.Control as='textarea' rows='10' style={{ 'width': '100%' }} placeholder='O problema encontrado trata-se de...' onChange={(event) => setNewDiagnosticoOrdem(event.target.value)} />
+                    <Form.Control as='textarea' rows='10' style={{ 'width': '100%' }} defaultValue={order.diagnostico} placeholder='O problema encontrado trata-se de...' onChange={(event) => setNewDiagnosticoOrdem(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className='grid-child grid-budget'>
@@ -473,7 +478,7 @@ function OSEdit(props)
 
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Produto</Button>
+                <Button variant='outline-warning' type='submit'>Editar OS</Button>
             </Form>
 
             </div>

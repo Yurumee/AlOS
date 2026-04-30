@@ -65,18 +65,8 @@ def new_client():
                 lim_credito = float(data.get('limite_credito'))
 
         except Exception as e:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(e))
-            
-            finally:
-                response = {'status':'error', 'msg':'FALTAM DADOS A SEREM CADASTRADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'FALTAM DADOS A SEREM CADASTRADOS'}
+            return response, 500
         
         # cpf/cnpj nao deve ser nulo
         if cpf_cnpj == '' or cpf_cnpj == None:
@@ -96,31 +86,12 @@ def new_client():
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cpf_cnpj=cpf_cnpj).first()
         except Exception as e:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-
-            finally:
-
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
         
         if cliente_exists:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: TENTATIVA DE CADASTRAR UM CPF/CNPJ JA EXISTENTE')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-
-            finally:
-                response = {'status':'error', 'msg':'O CLIENTE JÁ CADASTRADO'}
-                return response, 409    
+            response = {'status':'error', 'msg':'O CLIENTE JÁ CADASTRADO'}
+            return response, 409    
         
         
         # verifica se o telefone é nulo
@@ -174,28 +145,12 @@ def new_client():
             db.session.commit()
             # fim da transação
             
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT CREATED: NOVO CLIENTE CADASTRADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
-                return response, 201
+            response = {'status':'success', 'msg':'CLIENTE CADASTRADO COM SUCESSO!'}
+            return response, 201
         
         except Exception as e:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
 
 # rota para alterar um cliente existente
 # esta rota deve alterar os dados do cliente desejado baseado no id
@@ -218,25 +173,14 @@ def patch_client(id_desejado):
         cep = data.get('cep_cliente')
         telefone = data.get('telefone_cliente')
         lim_credito = data.get('limite_credito')
-        
-        # if lim_credito:
-        #     lim_credito = float(data.get('limite_credito'))
 
         # checa se o cliente existe
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
 
         except:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
         
         if not cliente_exists:
             response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
@@ -309,29 +253,12 @@ def patch_client(id_desejado):
 
             db.session.commit()
 
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT PATCH: CLIENTE ID {id_desejado} EDITADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            
-            finally:
-                response = {'status':'success', 'msg':'CLIENTE EDITADO COM SUCESSO!'}
-                return response, 200
+            response = {'status':'success', 'msg':'CLIENTE EDITADO COM SUCESSO!'}
+            return response, 200
 
         except Exception as e:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
 
 # rota para deletar um cliente com base no id informado
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
@@ -344,16 +271,8 @@ def delete_client(id_desejado):
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
         except:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
         
         if not cliente_exists:
             response = {'status':'error', 'msg':'O CLIENTE PESQUISADO NÃO EXISTE'}
@@ -363,30 +282,12 @@ def delete_client(id_desejado):
         try:
             db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
             db.session.commit()
-                
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT DELETE: CLIENTE ID {id_desejado} DELETADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')} PELO TECNICO ID {int(get_jwt_identity())}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-
-            finally:
-                response = {'status':'success', 'msg':'CLIENTE APAGADO COM SUCESSO!'}
-                return response, 200
+            response = {'status':'success', 'msg':'CLIENTE APAGADO COM SUCESSO!'}
+            return response, 200
     
         except Exception as e:
-            try:
-                with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                    file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-
-            except:
-                print('LOG NAO PODE SER CRIADO')
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500
         
 
 # esta rota pesquisa o id do cliente
@@ -398,15 +299,8 @@ def getClient(id_desejado):
     try:
         cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()
     except Exception as e:
-        try:
-            with open(f'{log_path}/log_cli_{datetime.now().strftime('%Y_%m_%d_at_%H_%M_%S')}.txt', 'w') as file:
-                file.write(f'BACKEND CLIENT ERROR: {str(e)}')
-            print('LOG ESCRITO COM SUCESSO')
-        except:
-            print('LOG NAO PODE SER CRIADO')
-        finally:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
     
     if cliente_exists:
         result = {}
@@ -423,68 +317,9 @@ def getClient(id_desejado):
                                         "limite_credito": cliente_exists.limite_credito,
                                         "pessoa_juridica": cliente_exists.pessoa_juridica
                                     }
-        # jsonify({cliente_exists.cliente_id:result})
+
         return result, 302
     
     
     response = {'status':'error', 'msg':'NENHUM CLIENTE ENCONTRADO COM ESTE ID'}
     return response, 404
-
-# rota pesquisa de cliente por nome/cpf/cnpj
-# esta rota é utilizada pela barra de pesquisa
-# essa rota deve exibir os clientes com base no cpf/cnpj informado ou nome do cliente
-# @view_client.route('/pesquisar/<str_pesquisa>', methods=['GET'])
-# def search_client(str_pesquisa):
-#     from models.cliente import Cliente
-#     # pesquisa pelo cpf/cnpj
-#     if str_pesquisa.isdigit():    
-#         # pesquisa pelo cpf
-#         if int(str_pesquisa) <= 14:
-            
-#             try:
-#                 cliente_desejado =  db.session.query(Cliente).filter_by(Cliente.cpf_cnpj.ilike(f'%{str_pesquisa}')).all()
-#                 if cliente_desejado:
-#                     result = {}
-#                     for cliente in clientes_desejados:
-#                         result[cliente.cliente_id] = {
-#                                                     'cpf_cnpj': cliente.cpf_cnpj,
-#                                                     'nome_cliente':cliente.nome_completo,
-#                                                     'nome_fantasia':cliente.nome_fantasia,
-#                                                     'endereco':cliente.endereco,
-#                                                     'bairro':cliente.bairro,
-#                                                     'cep':cliente.cep,
-#                                                     'cidade':cliente.cidade,
-#                                                     'limite_credito':cliente.limite_credito,
-#                                                     'pessoa_juridica':cliente.pessoa_juridica
-#                                                     }
-                    
-#                     return result, 200
-#                 else:
-#                     return '', 404
-            
-#             except Exception as e:
-#                 return '', 500
-#     else: 
-#         # pesquisa pelo nome
-#         try:
-#             clientes_desejados =  db.session.query(Cliente).filter(Cliente.nome_completo.ilike(f'%{str_pesquisa}%')).all()
-#             if clientes_desejados:
-#                 result = {}
-#                 for cliente in clientes_desejados:
-#                     result[cliente.cliente_id] = {
-#                                                 'cpf_cnpj': cliente.cpf_cnpj,
-#                                                 'nome_cliente':cliente.nome_completo,
-#                                                 'nome_fantasia':cliente.nome_fantasia,
-#                                                 'endereco':cliente.endereco,
-#                                                 'bairro':cliente.bairro,
-#                                                 'cep':cliente.cep,
-#                                                 'cidade':cliente.cidade,
-#                                                 'limite_credito':cliente.limite_credito,
-#                                                 'pessoa_juridica':cliente.pessoa_juridica
-#                                                 }
-#                 return result, 200
-#             else:
-#                 return '', 404
-            
-#         except Exception as e:
-#             return '', 500

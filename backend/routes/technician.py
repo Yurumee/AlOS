@@ -79,120 +79,41 @@ def tech_login():
             usuario = data.get('usuario')
             senha = data.get('senha')
         else:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                print('LOG ESCRITO COM SUCESSO')
-            
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                response = {'status':'error', 'msg':'CAMPOS USUÁRIO OU SENHA VAZIOS!'}
-                return response, 400
+            response = {'status':'error', 'msg':'CAMPOS USUÁRIO OU SENHA VAZIOS!'}
+            return response, 400
 
         # se nao existir cpf ou senha, retorne erro
         if not usuario or not senha:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: TENTATIVA DE LOGIN AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                print('LOG ESCRITO COM SUCESSO')
-            
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                response = {'status':'error', 'msg':'CAMPOS USUÁRIO OU SENHA VAZIOS!'}
-                return response, 400
+            response = {'status':'error', 'msg':'CAMPOS USUÁRIO OU SENHA VAZIOS!'}
+            return response, 400
 
         # checando se o cpf existe
         try:
             tech_exists = db.session.query(Tecnico).filter_by(usuario=usuario).first()
 
         except Exception as e:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-                
-            finally:
-                response = {'status':'error', 'msg':'HOUVE UM ERRO COM O BANCO DE DADOS!'}    
-                return response, 500
+            response = {'status':'error', 'msg':'HOUVE UM ERRO COM O BANCO DE DADOS!'}    
+            return response, 500
             
         if not bcrypt.check_password_hash(tech_exists.senha, senha):
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN LOGIN ERROR: ERRO AO LOGAR. TENTATIVA REALIZADA POR {usuario} COM A SENHA {senha} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-            
-            finally:
-                response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}    
-                return response, 401
+            response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}    
+            return response, 401
         
         # se for autorizado
         # cria o token
         token_access = create_access_token(identity=str(tech_exists.tecnico_id))
         # response = {"access_token":token_access}
-        try:
-            with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                file.write(f'BACKEND TECHNICIAN LOGIN SUCCESS: USUARIO {usuario} LOGADO AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-            print('LOG ESCRITO COM SUCESSO')
-            
-        except Exception as f:
-            print('LOG NAO PODE SER CRIADO')
-            print(str(f))
-        
-        finally:
-            response = {'status':'success', 'msg':'TÉCNICO LOGADO COM SUCESSO!', "access_token":token_access}
-            return response, 200
+        response = {'status':'success', 'msg':'TÉCNICO LOGADO COM SUCESSO!', "access_token":token_access}
+        return response, 200
     
 
 # rota para logout do tecnico
 @view_technician.route('/logout', methods=['POST'])
 @jwt_required()
 def tech_logout():
-    try:
-        from models.tecnico import Tecnico
-        tech_nome = db.session.query(Tecnico).filter_by(tecnico_id=int(get_jwt_identity())).one_or_none().nome_tecnico
-
-    except Exception as e:
-        try:
-            with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-            print('LOG ESCRITO COM SUCESSO')
-            
-        except Exception as f:
-            print('LOG NAO PODE SER CRIADO')
-            print(str(f))
-            
-        finally:
-            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            print(str(e))   
-            # return response, 500
-
-    try:
-        with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-            file.write(f'BACKEND TECHNICIAN LOGOUT: LOGOUT REALIZADO POR {tech_nome} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-        print('LOG ESCRITO COM SUCESSO')
-        
-    except Exception as f:
-        print('LOG NAO PODE SER CRIADO')
-        print(str(f))
-    
-    finally:
-        response = {'status':'success', 'msg':'LOGOUT REALIZADO COM SUCESSO'}
-        unset_jwt_cookies(response)
-        return response, 200
+    response = {'status':'success', 'msg':'LOGOUT REALIZADO COM SUCESSO'}
+    unset_jwt_cookies(response)
+    return response, 200
 
 # rota get all clients
 # essa rota deve exibir todos os clientes em lista na tela inicial do modulo de clientes
@@ -237,19 +158,9 @@ def new_technician():
             tech_exists = db.session.query(Tecnico).filter_by(tecnico_id=tech_id).one_or_none()
 
         except Exception as e:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-                
-            finally:
-                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                print(str(e))   
-                return response, 500
+            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            # print(str(e))   
+            return response, 500
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
@@ -285,17 +196,8 @@ def new_technician():
                 user_registered = db.session.query(Tecnico).filter_by(usuario=user_tech).one_or_none()
             
             except Exception as e:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-                    
-                except:
-                    print('LOG NAO PODE SER CRIADO')
-                    
-                finally:
-                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    return response, 500
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
             
             # se ja estiver registrado, retorne erro
             if is_registered:
@@ -343,32 +245,12 @@ def new_technician():
                 db.session.add(tech)
                 db.session.commit()
                 
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN CREATED: NOVO TECNICO CADASTRADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'success', 'msg':'TÉCNICO CADASTRADO COM SUCESSO!'}
-                    return response, 201
+                response = {'status':'success', 'msg':'TÉCNICO CADASTRADO COM SUCESSO!'}
+                return response, 201
             
             except Exception as e:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    return response, 500
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
 
         # caso nao, retorne nao autorizado
         else:

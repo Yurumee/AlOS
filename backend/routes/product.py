@@ -20,10 +20,10 @@ def all_products():
     
     # retorna clientes em formato json
     for product in products:
-        cliente_nome = db.session.query(Cliente).filter_by(cliente_id=product.cliente_id).one_or_none().nome_completo
+        cliente_nome = db.session.query(Cliente).filter_by(cliente_id=product.cliente_id).one_or_none()
         result[product.produto_id] = {
                                     "id":product.produto_id,
-                                    "cliente_nome": cliente_nome,
+                                    "cliente_nome": cliente_nome.nome_completo if cliente_nome else '',
                                     "modelo": product.modelo,
                                     "num_serie": product.num_serie,
                                     "cor": product.cor,

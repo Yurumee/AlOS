@@ -84,19 +84,6 @@ def new_os():
             valor_orcamento = 0.0
             associacoes_estoque = []
             associacoes_servico = []
-
-            print(f'cliente id: {cliente_id}')
-            print(f'produto id: {produto_id}')
-            print(f'tecnico id: {tecnico_id}')
-            print(f'tipo os: {tipo_os}')
-            print(f'diagnostico: {diagnostico}')
-            print(f'prognostico: {prognostico}')
-            print(f'orcamento: {orcamento}')
-            print(f'estado: {estado}')
-            print(f'emitir: {emitir}')
-            print(f'emissao: {criacao}')
-            print(f'validade: {validade}')
-            print(f'fechamento: {fechamento}')
         
         except Exception as e:    
             response = {'status':'error', 'msg':'AINDA HÁ DADOS QUE NÃO FORAM CADASTRADOS'}
@@ -249,13 +236,16 @@ def new_os():
 @jwt_required()
 def patch_os(id_desejado):
     from models.ordemServico import OrdemServico
+    from models.estoque import Estoque
+    from models.servico import Servico
+    from models.os_estoque import Os_estoque
+    from models.os_servico import Os_servico
 
     if request.method == 'POST':
         # recebe dados do frontend
         data = request.get_json()
 
         # separando em variaveis
-        # tipo = data.get('tipo_os')
         fechamento = data.get('fechamento')
         validade = data.get('validade')
         prognostico = data.get('prognostico')
@@ -263,6 +253,9 @@ def patch_os(id_desejado):
         orcamento = data.get('orcamento')
         estado = data.get('estado')
         emitir = data.get('emitir_os')
+        valor_orcamento = 0
+        associacoes_estoque = []
+        associacoes_servico = []
 
         # checa se a os existe
         try:
@@ -282,10 +275,64 @@ def patch_os(id_desejado):
             return response, 401
 
         # realizando modificações
+        print(fechamento)
+        print(validade)
+        print(prognostico)
+        print(diagnostico)
+        print(orcamento)
+        print(estado)
+        print(emitir)
+
+        print(f'os_exists.itens_os: {os_exists.itens_os}')
+        print(f'os_exists.servicos_os: {os_exists.servicos_os}')
+
         try:
-            # if tipo != None and tipo != os_exists.tipo:
-            #     os_exists.tipo_ordem = tipo
-            #     os_exists.ultima_atualizacao = datetime.now()
+            if orcamento != None:
+                for item in orcamento:
+                    valor_orcamento += (float(item['preco']) * int(item['quantidade']))
+
+                    if item['tipo'] == 'estoque':
+                        
+                        item_desejado = db.session.query(Estoque).filter_by(cod_barras=item['cod_barra_item']).one_or_none()
+                        # orcamento_estoque.append({'item': item_desejado, 'qtd': item['quantidade']})
+                        associacoes_estoque.append(
+                                                    Os_estoque(
+                                                                quantidade = item['quantidade'],
+                                                                itens = item_desejado
+                                                              )
+                                                  )
+
+                    if item['tipo'] == 'servico':
+                        
+                        servico_desejado = db.session.query(Servico).filter_by(servico_id=item['id_item']).one_or_none()
+                        associacoes_servico.append(
+                                                    Os_servico(
+                                                                servicos = servico_desejado
+                                                              )
+                                                  )
+                
+                if associacoes_estoque != []:
+                    # relacoes_item = db.session.query(Os_estoque).filter(ordem_id=os_exists.ordem_id)
+                    db.session.query(Os_estoque).where(Os_estoque.ordem_id==os_exists.ordem_id).delete()
+                    # relacoes_item.delete()
+                    db.session.commit()
+                
+                if associacoes_servico != []:
+                    # relacoes_servico = db.session.query(Os_servico).filter(ordem_id=os_exists.ordem_id)
+                    # relacoes_servico.delete()
+                    db.session.query(Os_servico).where(Os_servico.ordem_id==os_exists.ordem_id).delete()
+                    db.session.commit()
+                
+                print(associacoes_estoque)
+                print(associacoes_servico)
+
+                os_exists.itens_os.extend(associacoes_estoque)
+                os_exists.servicos_os.extend(associacoes_servico)
+
+                print(f'os_exists.itens_os: {os_exists.itens_os}')
+                print(f'os_exists.servicos_os: {os_exists.servicos_os}')
+                
+                os_exists.ultima_atualizacao = datetime.now()
             
             if fechamento != None and fechamento != os_exists.fechamento:
                 os_exists.fechamento = fechamento
@@ -303,9 +350,9 @@ def patch_os(id_desejado):
                 os_exists.diagnostico = diagnostico
                 os_exists.ultima_atualizacao = datetime.now()
 
-            if orcamento != None and orcamento != os_exists.orcamento:
-                os_exists.orcamento = orcamento
-                os_exists.ultima_atualizacao = datetime.now()
+            # if orcamento != None and orcamento != os_exists.orcamento:
+            #     os_exists.orcamento = orcamento
+            #     os_exists.ultima_atualizacao = datetime.now()
             
             if estado != None and estado != os_exists.estado_os:
                 os_exists.estado_os = estado
@@ -314,6 +361,8 @@ def patch_os(id_desejado):
             if emitir != None and emitir != os_exists.emitida:
                 os_exists.emitida = emitir
                 os_exists.ultima_atualizacao = datetime.now()
+
+            
             
             # if observacoes != None and observacoes != os_exists.observacoes:
             #                 os_exists.observacoes = observacoes
@@ -367,8 +416,13 @@ def delete_os(id_desejado):
 @jwt_required()
 def get_os(id_desejado):
     from models.ordemServico import OrdemServico
-    from models.produto import Produto
-    from models.cliente import Cliente
+    from models.servico import Servico
+    from models.estoque import Estoque
+    # from models.produto import Produto
+    # from models.cliente import Cliente
+    
+    orcamento = []
+    # i = 0
 
     try:
         os_desejada = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).first()
@@ -378,25 +432,43 @@ def get_os(id_desejado):
         return response, 500
     
     try:
-        # caso a ordem de serviço exista
-        if os_desejada:
-            # pega o nome do cliente da os especifica
-            cliente_nome = db.session.query(Cliente).filter_by(cliente_id=os_desejada.cliente_id).one_or_none().nome_completo
-
-            produto_num_serie = db.session.query(Produto).filter_by(produto_id=os_desejada.produto_id).one_or_none().num_serie
+        # caso a ordem de serviço exista e não esteja emitida
+        if os_desejada and os_desejada.emitida == False:
+            # busca os serviços e itens atrelados àquela OS
+            for servico in os_desejada.servicos_os:
+                servico_desejado = db.session.query(Servico).filter_by(servico_id=servico.servico_id).one_or_none()
+                orcamento.append({
+                                    'id_item': servico_desejado.servico_id,
+                                    'quantidade': 1,
+                                    'nome': servico_desejado.nome_servico,
+                                    'preco': float(servico_desejado.custo),
+                                    'tipo': 'servico'
+                                })
             
+            for item in os_desejada.itens_os:
+                item_desejado = db.session.query(Estoque).filter_by(item_id=item.item_id).one_or_none()
+                orcamento.append({
+                                    'cod_barra_item': item_desejado.cod_barras,
+                                    'quantidade': item.quantidade,
+                                    'nome': item_desejado.nome_item,
+                                    'preco': float(item_desejado.preco_unitario),
+                                    'tipo': 'estoque'
+                                })
+
         else:
-            response = {'status':'error', 'msg':'O CLIENTE OU PRODUTO SOLICITADO NÃO ESTÃO CADASTRADOS'}
+            response = {'status':'error', 'msg':'A OS JÁ FOI EMITIDA  OU NÃO EXISTE'}
             return response, 404
         
     except Exception as e:
         response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
         return response, 500
     
+    print(os_desejada.validade)
+    print(os_desejada.emissao)
+
     result = {
                 "id":os_desejada.ordem_id,
-                "cliente_nome": cliente_nome,
-                "num serie": produto_num_serie,
+                "estado":os_desejada.estado_os,
                 "tecnico resp": os_desejada.tecnico_cpf,
                 "tipo": os_desejada.tipo_ordem,
                 "data_emissao": os_desejada.emissao,
@@ -404,8 +476,8 @@ def get_os(id_desejado):
                 "validade": os_desejada.validade,
                 "prognostico": os_desejada.prognostico,
                 "diagnostico": os_desejada.diagnostico,
-                "orcamento": os_desejada.orcamento,
-                "is_emitida": os_desejada.emitida,
+                "orcamento": orcamento,
+                # "is_emitida": os_desejada.emitida,
                 "ult_atualizacao": os_desejada.ultima_atualizacao,
             }
                 
@@ -467,21 +539,20 @@ def get_os_budget(id_desejado):
         print(itemOrcamento)
         item = db.session.query(Estoque).filter_by(item_id=itemOrcamento.item_id).one_or_none()  
         orcamento_itens[i] = {
-                                                "cod_barras": item.cod_barras,
-                                                "nome_item": item.nome_item,
-                                                "preco": item.preco_unitario,
-                                                "quantidade_orcamento": itemOrcamento.quantidade
-                                            }
+                                "cod_barras": item.cod_barras,
+                                "nome_item": item.nome_item,
+                                "preco": item.preco_unitario,
+                                "quantidade_orcamento": itemOrcamento.quantidade
+                            }
         i += 1
 
-    # i = 0
     for servicoOrcamento in servicos:
         print(servicoOrcamento)
         servico = db.session.query(Servico).filter_by(servico_id=servicoOrcamento.servico_id).one_or_none()
         orcamento_servico[i] = {
-                                                    "nome_servico": servico.nome_servico,
-                                                    "custo": servico.custo
-                                                }
+                                    "nome_servico": servico.nome_servico,
+                                    "custo": servico.custo
+                                }
         i += 1
     
     result = {

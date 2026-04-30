@@ -25,7 +25,7 @@ class Cliente(db.Model):
 
     # RELACIONAMENTOS
     # relacionamento 1:n com Produto
-    produto_id: Mapped[list['Produto']] = relationship()
+    produto_id: Mapped[list['Produto']] = relationship(back_populates='cliente', cascade='all, delete, delete-orphan')
 
     # relacionamento 1:n com ordemServico
     ordem_servicos: Mapped[list['OrdemServico']] = relationship()

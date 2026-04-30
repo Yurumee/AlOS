@@ -119,7 +119,9 @@ function ClientsEdit(props) {
 
                 <div className='container' >
 
-                    <h1>Editando Cliente - {client.cpf_cnpj}</h1>
+                    <div style={{ 'marginBottom': '15px' }}>
+                        <p className='h2'>Editando Cliente - {client.cpf_cnpj}</p>
+                    </div>
 
                     <Form className='grid-container' onSubmit={submit}>
 
@@ -171,12 +173,12 @@ function ClientsEdit(props) {
                     </Form>
 
                     {/* CHECA O ALERTA A SER MOSTRADO */}
-                    {(response.status != '' && response.status == 'success') &&
+                    {/* {(response.status != '' && response.status == 'success') &&
                         navigation("/clientes", { state: { 'status': response.status, 'msg': response.msg } })
                         ||
                         (response.status != '' && response.status == 'error') &&
                         <AlertPopUp status={response.status} msg={response.msg} close={() => { setResponse({ status: '', msg: '' }) }} />
-                    }
+                    } */}
 
                 </div>
 

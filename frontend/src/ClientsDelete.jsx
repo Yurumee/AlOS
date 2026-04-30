@@ -20,8 +20,13 @@ function ClientsDelete(props) {
     useEffect(() => {
         async function getClient() {
             const URL = `http://localhost:5000/cliente/pesquisar/${id}`
-            const resp = await fetch(URL).then(resp => resp.json())
+            const resp = await fetch(URL, {
+                                            headers: {
+                                                'Authorization': 'Bearer ' + props.token
+                                            }
+            }).then(resp => resp.json())
             const list = Object.values(resp)
+            console.log(list)
             setClient(list[0])
             setIsLoading(false)
         }

@@ -5,7 +5,6 @@ import ClientsVisualize from './ClientsVisualize'
 import ModalId from './ModalId'
 
 import { useEffect, useState } from 'react'
-// import { useLocation } from 'react-router-dom'
 
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -91,8 +90,6 @@ function Clients(props)
             
             <NavBar />
 
-            {/* ALERTA */}
-
             <div className='buttons'>
 
                 <Button bsPrefix='button-client' variant='warning' onClick={new_client}>
@@ -136,8 +133,6 @@ function Clients(props)
                             </tr>
                         </thead>
 
-                            {/* {!isLoading && <ClientRows clients={clients} />} */}
-
                         <tbody>
                             {!isLoading && clients.map(client => (
                                     <>
@@ -148,15 +143,13 @@ function Clients(props)
                                             <td className='table-info-cell'> {client.telefone} </td>
                                             <td className='table-info-cell'> {client.limite_credito} </td>
 
-                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td> 
-                                                {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
+                                            <td className='table-info-cell'> <Button className="material-icons md-16" style={{color: '#fff3b7'}} variant='warning' onClick={() => visualize_client(client)}>unfold_more</Button> </td>
                                         </tr>
                                     </>
                                 )
                             )}
                         </tbody>
                     </Table>
-
                         
                 </div>
             }

@@ -45,7 +45,6 @@ function ModalId(props) {
     return (
         <div style={{ display: 'block'}}>
             <Modal show={props.show} onHide={props.close}>
-                {/* <Modal.Dialog> */}
                     <Modal.Header closeButton>
                         <Modal.Title>Insira o ID do cliente desejado</Modal.Title>
                     </Modal.Header>
@@ -60,7 +59,6 @@ function ModalId(props) {
                         <Button onClick={redirect} variant="warning">Continuar</Button>
                         {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
                     </Modal.Footer>
-                {/* </Modal.Dialog> */}
             </Modal>
         </div>
     )

@@ -16,7 +16,7 @@ function ModalOS(props) {
         {
             if(idService != undefined) 
             {
-                window.location.href = `/editar-servico/${idService}`
+                window.location.href = `/editar-os/${idService}`
             }
             else
             {
@@ -28,7 +28,7 @@ function ModalOS(props) {
         {
             if(idService != undefined) 
             {
-                window.location.href = `/deletar-servico/${idService}`    
+                window.location.href = `/deletar-os/${idService}`    
             }
             else
             {
@@ -39,7 +39,7 @@ function ModalOS(props) {
 
     function go_back()
     {
-        window.location.href = '/servicos'
+        window.location.href = '/os'
     }
 
     return (

@@ -27,7 +27,7 @@ def all_category():
     return result, 200
     # return resp
 
-# rota get all category
+# rota get all specific category
 # essa rota deve exibir todos os produtos em lista na tela inicial do modulo de produtos
 @view_category.route('/<path:path>', methods=['GET'])
 @jwt_required()

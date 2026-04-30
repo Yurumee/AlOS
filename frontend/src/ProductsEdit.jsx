@@ -30,7 +30,12 @@ function ProductsEdit(props)
         async function getProduct()
         {
             const URL = `http://localhost:5000/produto/pesquisar/${id}`
-            const resp = await fetch(URL).then(resp => resp.json())
+            const resp = await fetch(URL, {
+                headers: {
+                    'Authorization': 'Bearer ' + props.token
+                }
+            }
+            ).then(resp => resp.json())
             console.log(resp)
             setProduct(resp)
             setIsLoading(false)

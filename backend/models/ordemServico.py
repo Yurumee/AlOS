@@ -1,7 +1,7 @@
 from config import db
 # from typing import Optional
 import datetime
-from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey, Column
+from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # from models.anexo import Anexo
