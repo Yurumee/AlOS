@@ -44,6 +44,13 @@ import BudgetOS from './BudgetOS.jsx';
 import OS from './OS.jsx';
 import OSNew from './OSNew.jsx';
 import OSEdit from './OSEdit.jsx';
+import OSDelete from './OSDelete.jsx';
+
+import AttachmentsNew from './Attachments.jsx';
+import AttachmentsVisualize from './AttachmentsVisualize.jsx';
+import AttachmentsEdit from './AttachmentsEdit.jsx';
+import AttachmentsDelete from './AttachmentsDelete.jsx';
+import AttachmentsOS from './AttachmentsOS.jsx';
 
 import Home from './Home.jsx';
 import Login from './Login.jsx';
@@ -121,9 +128,16 @@ function Main(){
         <Route path='/editar-os/:id' element={<OSEdit token={token}/>}/>
         <Route path='/orcamento-os/:id' element={<BudgetOS token={token}/>}/>
         {/* <Route path='/orcamento-os/:id' element={<OSEdit token={token}/>}/> */}
-        {/* <Route path='/deletar-os/:id' element={<OSDelete token={token}/>}/> */}
+        <Route path='/deletar-os/:id' element={<OSDelete token={token}/>}/>
         <Route path='/editar-os' element={<ModalOS operation={'edit'}/>}/>
         <Route path='/deletar-os' element={<ModalOS operation={'delete'}/>}/>
+
+        <Route path='/cadastrar-anexo-os/:id' element={<AttachmentsNew token={token}/>}/>
+        <Route path='/exibir-anexo-os/:id' element={<AttachmentsVisualize token={token}/>}/>
+        <Route path='/editar-anexo-os/:id' element={<AttachmentsEdit token={token}/>}/>
+        <Route path='/deletar-anexo-os/:id' element={<AttachmentsDelete token={token}/>}/>
+        <Route path='/anexo-os/:id' element={<AttachmentsOS token={token}/>}/>
+
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
       </>

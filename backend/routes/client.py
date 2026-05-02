@@ -265,6 +265,7 @@ def patch_client(id_desejado):
 @jwt_required()
 def delete_client(id_desejado):
     from models.cliente import Cliente
+    from models.produto import Produto
 
     if request.method == 'POST':
         # checa se o cliente existe
@@ -280,6 +281,9 @@ def delete_client(id_desejado):
         
         # exclui o cliente
         try:
+            for product in cliente_exists.produto_id:
+                db.session.query(Produto).filter_by(cliente_id=id_desejado).delete()    
+
             db.session.query(Cliente).filter_by(cliente_id=id_desejado).delete()
             db.session.commit()
             response = {'status':'success', 'msg':'CLIENTE APAGADO COM SUCESSO!'}

@@ -108,7 +108,7 @@ function ClientsEdit(props) {
             .catch(error => console.log(error))
         // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/clientes'
     }
 
     return (

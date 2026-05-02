@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 function OSVisualize(props) {
     const order = props.order
+    console.log(order)
 
     function edit_current() {
         window.location.href = `/editar-os/${order.id}`
@@ -17,11 +18,27 @@ function OSVisualize(props) {
     }
 
     function create_appendix() {
-        window.location.href = `/cadastrar-apendice-os/${order.id}`
+        window.location.href = `/cadastrar-anexo-os/${order.id}`
+    }
+
+    function show_appendix() {
+        window.location.href = `/exibir-anexo-os/${order.id}`
+    }
+
+    function edit_appendix() {
+        window.location.href = `/editar-anexo-os/${order.id}`
+    }
+
+    function delete_appendix() {
+        window.location.href = `/deletar-anexo-os/${order.id}`
     }
 
     function print_budget(id) {
         window.location.href = `/orcamento-os/${id}`
+    }
+
+    function print_attachment(id) {
+        window.location.href = `/anexo-os/${id}`
     }
 
     return (
@@ -109,9 +126,22 @@ function OSVisualize(props) {
                             <Button onClick={edit_current} variant="warning">Editar Ordem de Serviço</Button>
                         </>
                     }
-                    {(order.emitida == 'Sim') &&
+                    {(order.emitida == 'Sim' && order.anexo_exists == 'Não') &&
                         <>
                             <Button onClick={create_appendix} variant="outline-info">Adicionar Anexo</Button>
+                        </>
+                    }
+                    {(order.emitida == 'Sim' && order.anexo_exists == 'Sim' && order.anexo_emitido == 'Não') &&
+                        <>
+                            <Button onClick={show_appendix} variant="outline-success">Exibir Anexo</Button>
+                            <Button onClick={edit_appendix} variant="outline-warning">Editar Anexo</Button>
+                            <Button onClick={delete_appendix} variant="outline-danger">Excluir Anexo</Button>
+                        </>
+                    }
+
+                    {(order.emitida == 'Sim' && order.anexo_exists == 'Sim' && order.anexo_emitido == 'Sim') &&
+                        <>
+                            <Button onClick={() => print_attachment(order.id)} variant="outline-warning">Baixar Anexo</Button>
                         </>
                     }
                     

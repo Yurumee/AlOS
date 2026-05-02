@@ -551,13 +551,6 @@ function OSNew(props) {
                         <Button className='grid-child grid-button' variant='outline-primary' type='submit'>Cadastrar OS</Button>
                     </Form>
 
-                    {/* CHECA O ALERTA A SER MOSTRADO */}
-                    {(response.status != '' && response.status == 'success') &&
-                        navigation("/servicos", { state: { 'status': response.status, 'msg': response.msg } })
-                        ||
-                        (response.status != '' && response.status == 'error') &&
-                        <AlertPopUp status={response.status} msg={response.msg} />
-                    }
 
                 </div>
             </>

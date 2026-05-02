@@ -21,9 +21,10 @@ def all_products():
     # retorna clientes em formato json
     for product in products:
         cliente_nome = db.session.query(Cliente).filter_by(cliente_id=product.cliente_id).one_or_none()
+        # print(cliente_nome.cliente_id)
         result[product.produto_id] = {
                                     "id":product.produto_id,
-                                    "cliente_nome": cliente_nome.nome_completo if cliente_nome else '',
+                                    "cliente_nome": cliente_nome.nome_completo if cliente_nome else None,
                                     "modelo": product.modelo,
                                     "num_serie": product.num_serie,
                                     "cor": product.cor,
@@ -95,6 +96,8 @@ def new_product():
             return response, 500
             
         try:
+            
+
             # realizando transação
             # criando o produto a ser inserido
             product = Produto(
@@ -108,13 +111,13 @@ def new_product():
                                 backup = backup,
                                 acessorios = acessorios,
                                 observacoes = observacoes,
-                                cliente_id = cliente_id
                             )
+            
+
+            cliente_desejado.produto_id.append(product)
 
             # inserindo e realizando commit
             db.session.add(product)
-
-            # product.cliente.append(cliente_desejado)
 
             db.session.commit()
             # fim da transação
@@ -123,6 +126,7 @@ def new_product():
             return response, 201
 
         except Exception as e:
+            print(str(e))
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
 

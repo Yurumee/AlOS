@@ -141,7 +141,7 @@ function BudgetOS(props) {
                                 </div>
 
                                 {orcamento.is_emitida &&
-                                    <div>
+                                    <div className="budget-section">
                                         <p className="budget-p">
                                             Ordem emitida e fechada em <strong>{orcamento.data_fechamento}</strong>
                                         </p>
@@ -496,6 +496,45 @@ function BudgetOS(props) {
                                 }
                             </div>
                         </div>
+
+                        {orcamento.anexo_emitido == 'Sim' &&
+                            <div className='budget'>
+                                <div className='budget-header'>
+                                    ANEXO
+                                </div>
+
+                                <div className='budget-grid'>
+                                    <div className='budget-section'>
+                                        <p className='budget-p'>
+                                            <strong>Garantia até</strong>
+                                        </p>
+                                        <p className='budget-p'>
+                                            {orcamento.garantia}
+                                        </p>
+                                    </div>
+
+                                    <div className='budget-section'>
+                                        <p className='budget-p'>
+                                            <strong>Solução Realizada</strong>
+                                        </p>
+                                        <p className='budget-p'>
+                                            {orcamento.solucao}
+                                        </p>
+                                    </div>
+
+                                    <div className='budget-section'>
+                                        <p className='budget-p'>
+                                            <strong>Observações Adicionais</strong>
+                                        </p>
+                                        <p className='budget-p'>
+                                            {orcamento.observacoes}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
 
                     </div>
                 </div>

@@ -13,7 +13,7 @@ class Produto(db.Model):
     produto_id: Mapped[int] = mapped_column(INTEGER, primary_key=True, autoincrement=True)
 
     # chave estrangeira
-    cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id', ondelete='cascade'))
+    cliente_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('cliente.cliente_id'))
 
     modelo: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
     num_serie: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
@@ -31,4 +31,4 @@ class Produto(db.Model):
     ordem_servicos: Mapped[list['OrdemServico']] = relationship()
 
     # relacionamento com Cliente
-    cliente: Mapped["models.cliente.Cliente"] = relationship(back_populates='produto_id')
+    # cliente: Mapped["models.cliente.Cliente"] = relationship(back_populates='produto_id')

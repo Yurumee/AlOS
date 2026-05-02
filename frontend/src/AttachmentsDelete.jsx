@@ -9,33 +9,34 @@ import { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/esm/Button'
 
-function ClientsDelete(props) {
+function AttachmentsDelete(props) {
     let params = useParams()
-    const navigation = useNavigate()
     const id = params.id
-    const [client, setClient] = useState()
+    const [attachment, setAttachment] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const [response, setResponse] = useState({ status: '', msg: '' })
 
     useEffect(() => {
-        async function getClient() {
-            const URL = `http://localhost:5000/cliente/pesquisar/${id}`
-            const resp = await fetch(URL, {
-                                            headers: {
-                                                'Authorization': 'Bearer ' + props.token
-                                            }
-            }).then(resp => resp.json())
-            const list = Object.values(resp)
-            console.log(list)
-            setClient(list[0])
+        async function getAnexo() {
+            // url da api
+            const URL = `http://127.0.0.1:5000/anexo/${id}`
+            const response = await fetch(URL, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + props.token
+                }
+            }
+            )
+            const data = await response.json();
+            console.log(data)
+            // guardando o orcamento
+            setAttachment(data)
             setIsLoading(false)
         }
-
-        getClient()
+        getAnexo()
     }, [])
 
     async function confirm() {
-        const URL = `http://localhost:5000/cliente/excluir/${id}`
+        const URL = `http://localhost:5000/anexo/excluir/${id}`
         await fetch(URL,
             {
                 method: 'POST',
@@ -48,11 +49,11 @@ function ClientsDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-            window.location.href = '/clientes'
+            window.location.href = '/os'
     }
 
     function cancel() {
-        window.location.href = '/clientes'
+        window.location.href = '/os'
     }
 
     return (
@@ -66,25 +67,21 @@ function ClientsDelete(props) {
                 }
             </div>
 
-            {!isLoading && client &&
+            {!isLoading && attachment &&
                 <>
 
                     <div className="container grid-card mt-3">
 
                         <Card className='grid-child-card'>
-                            <Card.Header>Deseja realmente deletar este cliente?</Card.Header>
+                            <Card.Header>Deseja realmente deletar o anexo abaixo?</Card.Header>
                             <Card.Body>
-                                <Card.Title>{client.cpf_cnpj}</Card.Title>
+                                <Card.Title>ANEXO DA ORDEM N°{id}</Card.Title>
                                 <Card.Text>
-                                    <p className='grid-p-card'>Nome</p>
-                                    <p>{client.nome_completo}</p>
+                                    <p className='grid-p-card'>Solução realizada</p>
+                                    <p>{attachment.solucao}</p>
                                     <br />
-                                    {client.nome_fantasia &&
-                                    <>
-                                        <p className='grid-p-card'>Nome Fantasia</p>
-                                        <p>{client.nome_fantasia}</p>
-                                    </>
-                                    }
+                                    <p className='grid-p-card'>Observações</p>
+                                    <p>{attachment.observacoes}</p>
                                 </Card.Text>
                                 <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
                                 <div className="divider"></div>
@@ -101,4 +98,4 @@ function ClientsDelete(props) {
     )
 }
 
-export default ClientsDelete
+export default AttachmentsDelete

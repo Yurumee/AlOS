@@ -17,6 +17,7 @@ def all_os():
     from models.cliente import Cliente
     from models.produto import Produto
     from models.tecnico import Tecnico
+    from models.anexo import Anexo
 
     orders = db.session.query(OrdemServico).all()
     result = {}
@@ -29,6 +30,13 @@ def all_os():
 
         tecnico_os = db.session.query(Tecnico).filter_by(cpf_tecnico=os.tecnico_cpf).one_or_none().nome_tecnico
 
+        anexo_os = db.session.query(Anexo).filter_by(anexo_id=os.ordem_id).one_or_none()
+        
+        if anexo_os != None:
+            anexo_emitido = 'Sim' if anexo_os.emitida else 'Não'
+        else:
+            anexo_emitido = 'Não'
+
         result[os.ordem_id] = {
                                     "id":os.ordem_id,
                                     "tipo_ordem": os.tipo_ordem,
@@ -39,6 +47,13 @@ def all_os():
                                     "diagnostico": os.diagnostico,
                                     "orcamento": os.orcamento,
                                     "estado": os.estado_os,
+                                    
+                                    "anexo_exists": 'Sim' if anexo_os else 'Não',
+                                    "solucao": anexo_os.solucao if anexo_os else '',
+                                    "garantia": anexo_os.garantia if anexo_os else '',
+                                    "observacao": anexo_os.observacoes if anexo_os else '',
+                                    "anexo_emitido": anexo_emitido,
+                                    
                                     "emitida": 'Sim' if os.emitida == True else 'Não',
                                     "data_emissao": datetime.strftime(os.emissao, '%A, %d/%m/%Y às %H:%M:%S') if os.emissao != None else '',
                                     "data_fechamento": datetime.strftime(os.fechamento, '%A, %d/%m/%Y às %H:%M:%S') if os.fechamento != None else '',
@@ -136,6 +151,12 @@ def new_os():
 
         else:
             validade = datetime.strptime(validade, '%Y-%m-%dT%H:%M')
+
+        if fechamento == None:
+            fechamento = criacao + timedelta(weeks=1)
+
+        else:
+            fechamento = datetime.strptime(fechamento, '%Y-%m-%dT%H:%M')
         
         diferenca_data = validade.date() - criacao.date()
         if diferenca_data.days//7 < 1:
@@ -143,7 +164,7 @@ def new_os():
 
         if fechamento:
             diferenca_fechamento = fechamento.date() - criacao.date()
-            if diferenca_fechamento < 0:
+            if diferenca_fechamento.days < criacao.date().day:
                 response = {'status':'error', 'msg':'A DATA DE FECHAMENTO NÃO PODE SER INFERIOR A DE CRIAÇÃO!'}
                 return response, 400
 
@@ -169,9 +190,6 @@ def new_os():
                                                         servicos = servico_desejado
                                                       )
                                           )
-
-        print(associacoes_estoque)
-        print(associacoes_servico)
 
         # se a os tiver sido emitida e autorizada, retire os itens de estoque
         if emitir and estado == 'Autorizada':
@@ -380,6 +398,9 @@ def patch_os(id_desejado):
 @jwt_required()
 def delete_os(id_desejado):
     from models.ordemServico import OrdemServico
+    from models.os_estoque import Os_estoque
+    from models.os_servico import Os_servico
+    from models.anexo import Anexo
 
     if request.method == 'POST':
         # checa se a ordem existe
@@ -401,11 +422,23 @@ def delete_os(id_desejado):
 
         # exclui a ordem
         try:
-                db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).delete()
-                db.session.commit()
-    
-                response = {'status':'success', 'msg':'ORDEM DE SERVIÇO DELETADA COM SUCESSO!'}
-                return response, 200
+            for item in os_exists.itens_os:
+                db.session.query(Os_estoque).filter_by(ordem_id=id_desejado).delete()
+            
+            for servico in os_exists.servicos_os:
+                db.session.query(Os_servico).filter_by(ordem_id=id_desejado).delete()
+            
+            if os_exists.anexo:
+                anexo_desejado = db.session.query(Anexo).filter_by(anexo_id=id_desejado).first()
+                if anexo_desejado.emitida == False:
+                    db.session.query(Anexo).filter_by(anexo_id=id_desejado).delete()
+
+            db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).delete()
+
+            db.session.commit()
+
+            response = {'status':'success', 'msg':'ORDEM DE SERVIÇO DELETADA COM SUCESSO!'}
+            return response, 200
     
         except Exception as e:
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
@@ -418,8 +451,8 @@ def get_os(id_desejado):
     from models.ordemServico import OrdemServico
     from models.servico import Servico
     from models.estoque import Estoque
-    # from models.produto import Produto
-    # from models.cliente import Cliente
+    from models.produto import Produto
+    from models.cliente import Cliente
     
     orcamento = []
     # i = 0
@@ -466,6 +499,20 @@ def get_os(id_desejado):
     print(os_desejada.validade)
     print(os_desejada.emissao)
 
+    try:
+        cliente_os = db.session.query(Cliente).filter_by(cliente_id=os_desejada.cliente_id).first()
+    
+    except Exception as e:
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
+
+    try:
+        produto_os = db.session.query(Produto).filter_by(produto_id=os_desejada.produto_id).first()
+    
+    except Exception as e:
+        response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
+
     result = {
                 "id":os_desejada.ordem_id,
                 "estado":os_desejada.estado_os,
@@ -477,6 +524,8 @@ def get_os(id_desejado):
                 "prognostico": os_desejada.prognostico,
                 "diagnostico": os_desejada.diagnostico,
                 "orcamento": orcamento,
+                "cliente_os": cliente_os.nome_completo,
+                "produto_os": produto_os.modelo,
                 # "is_emitida": os_desejada.emitida,
                 "ult_atualizacao": os_desejada.ultima_atualizacao,
             }
@@ -494,6 +543,7 @@ def get_os_budget(id_desejado):
     from models.tecnico import Tecnico
     from models.estoque import Estoque
     from models.servico import Servico
+    from models.anexo import Anexo
     from models.os_estoque import Os_estoque
     from models.os_servico import Os_servico
 
@@ -517,6 +567,13 @@ def get_os_budget(id_desejado):
             produto = db.session.query(Produto).filter_by(produto_id=os_desejada.produto_id).one_or_none()
 
             tecnico = db.session.query(Tecnico).filter_by(cpf_tecnico=os_desejada.tecnico_cpf).one_or_none()
+
+            anexo_os = db.session.query(Anexo).filter_by(anexo_id=os_desejada.ordem_id).one_or_none()
+        
+            if anexo_os != None:
+                anexo_emitido = 'Sim' if anexo_os.emitida else 'Não'
+            else:
+                anexo_emitido = 'Não'
             
             try:
                 itens = db.session.query(Os_estoque).filter_by(ordem_id=id_desejado).all()
@@ -580,6 +637,12 @@ def get_os_budget(id_desejado):
 
                 "tecnico_resp": tecnico.nome_tecnico,
                 "tecnico_contato": tecnico.contato_tecnico,
+
+                "anexo_exists": 'Sim' if anexo_os else 'Não',
+                "solucao": anexo_os.solucao if anexo_os else '',
+                "garantia": datetime.strftime(anexo_os.garantia, '%d/%m/%Y às %H:%M:%S, %A') if anexo_os.garantia != None else '',
+                "observacao": anexo_os.observacoes if anexo_os else '',
+                "anexo_emitido": anexo_emitido,
 
                 "tipo": os_desejada.tipo_ordem,
                 "data_emissao": datetime.strftime(os_desejada.emissao, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.emissao != None else '',

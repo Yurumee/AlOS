@@ -89,7 +89,7 @@ function ClientsNew(props) {
             .then(res => setResponse(res))
             .catch(error => console.log(error))
 
-        // window.location.href = '/clientes'
+            window.location.href = '/clientes'
     }
 
     return (
