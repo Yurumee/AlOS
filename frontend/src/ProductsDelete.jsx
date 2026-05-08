@@ -1,4 +1,4 @@
-import './styles/Clients.css'
+import './styles/Products.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 
@@ -19,7 +19,11 @@ function ProductsDelete(props) {
         async function getProduct()
         {
             const URL = `http://localhost:5000/produto/pesquisar/${id}`
-            const resp = await fetch(URL).then(resp => resp.json())
+            const resp = await fetch(URL, {
+                                            headers: {
+                                                'Authorization': 'Bearer ' + props.token
+                                            }
+            }).then(resp => resp.json())
             setProduct(resp)
             setIsLoading(false)
         }
@@ -62,19 +66,23 @@ function ProductsDelete(props) {
             {!isLoading && product &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar este produto?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{product.num_serie}</Card.Title>
                                 <Card.Text>
-                                    <p>Modelo: {product.modelo}</p>
-                                    <p>Pertencente a: {product.cliente_nome}</p>
+                                    <p className='grid-p-card'>Modelo</p>
+                                    <p>{product.modelo}</p>
+                                    <br />
+                                    <p className='grid-p-card'>Pertencente a</p>
+                                    <p>{product.cliente_nome}</p>
+                                
                                 </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
-
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 

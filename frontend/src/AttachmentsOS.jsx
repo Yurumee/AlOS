@@ -1,4 +1,5 @@
 import './styles/index.css'
+import './styles/Attachment.css'
 
 import NavBar from './NavBar'
 import Button from 'react-bootstrap/Button'
@@ -73,14 +74,14 @@ function AttachmentsOS(props) {
             {!isLoading &&
             <>
                 <div className='container' ref={printRef}>
-                    <div className='budget-container'>
-                        <div className='budget' style={{'marginTop':'15px'}}>
-                            <div className="budget-header">
+                    <div className='attachment-container'>
+                        <div className='attachment' style={{'marginTop':'15px'}}>
+                            <div className="attachment-header">
                                 <h1>ANEXO DA ORDEM DE SERVIÇO N°{attachment.id}</h1>
                                 
                                 {attachment.is_emitida &&
                                     <div>
-                                        <h3 className="budget-p">
+                                        <h3 className="attachment-p">
                                             <strong>Anexo emitido</strong>
                                         </h3>
                                     </div>
@@ -88,44 +89,41 @@ function AttachmentsOS(props) {
 
                                 {!attachment.is_emitida &&
                                     <div>
-                                        <h3 className="budget-p">
+                                        <h3 className="attachment-p">
                                             <strong>Anexo não emitido</strong>
                                         </h3>
                                     </div>
                                 }
 
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <h5 className='budget-p'>
+                                <div>
+                                    <h5 className='attachment-p'>
                                         Garantia até <strong>{attachment.garantia}</strong>
                                     </h5>
                                 </div>
-
-                            </div>
                         </div>
                         
                         
-                        <div className='budget-prog-diag'>
-                            <div className="budget-header">
+                        <div className='attachment-prog-diag'>
+                            <div className="attachment-header">
                                 SOLUÇÃO REALIZADA 
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <p className='budget-p'>
+                            <div>
+                                <div className="attachment-section">
+                                    <p className='attachment-p'>
                                         {attachment.solucao}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className='budget-prog-diag'>
-                            <div className="budget-header">
+                        <div className='attachment-prog-diag'>
+                            <div className="attachment-header">
                                 OBSERVAÇÕES
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <p className="budget-p">
+                            <div className="">
+                                <div className="attachment-section">
+                                    <p className="attachment-p">
                                         {attachment.observacoes}
                                     </p>
                                 </div>

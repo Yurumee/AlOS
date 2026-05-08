@@ -271,7 +271,7 @@ def patch_os(id_desejado):
         orcamento = data.get('orcamento')
         estado = data.get('estado')
         emitir = data.get('emitir_os')
-        valor_orcamento = 0
+        valor_orcamento = 0.0
         associacoes_estoque = []
         associacoes_servico = []
 
@@ -293,17 +293,6 @@ def patch_os(id_desejado):
             return response, 401
 
         # realizando modificações
-        print(fechamento)
-        print(validade)
-        print(prognostico)
-        print(diagnostico)
-        print(orcamento)
-        print(estado)
-        print(emitir)
-
-        print(f'os_exists.itens_os: {os_exists.itens_os}')
-        print(f'os_exists.servicos_os: {os_exists.servicos_os}')
-
         try:
             if orcamento != None:
                 for item in orcamento:
@@ -640,7 +629,7 @@ def get_os_budget(id_desejado):
 
                 "anexo_exists": 'Sim' if anexo_os else 'Não',
                 "solucao": anexo_os.solucao if anexo_os else '',
-                "garantia": datetime.strftime(anexo_os.garantia, '%d/%m/%Y às %H:%M:%S, %A') if anexo_os.garantia != None else '',
+                "garantia": datetime.strftime(anexo_os.garantia, '%d/%m/%Y às %H:%M:%S, %A') if anexo_os != None else '',
                 "observacao": anexo_os.observacoes if anexo_os else '',
                 "anexo_emitido": anexo_emitido,
 
@@ -652,6 +641,7 @@ def get_os_budget(id_desejado):
                 "diagnostico": os_desejada.diagnostico,
                 "orcamento_item": orcamento_itens, 
                 "orcamento_servico": orcamento_servico,
+                "orcamento_total": os_desejada.orcamento,
                 "is_emitida": os_desejada.emitida,
                 "ult_atualizacao": datetime.strftime(os_desejada.ultima_atualizacao, '%d/%m/%Y às %H:%M:%S, %A') if os_desejada.ultima_atualizacao != None else '',
             }

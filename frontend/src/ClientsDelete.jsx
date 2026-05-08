@@ -1,7 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'

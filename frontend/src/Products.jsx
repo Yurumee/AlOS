@@ -1,4 +1,4 @@
-import './styles/Clients.css'
+import './styles/Products.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 import ProductsVisualize from './ProductsVisualize'
@@ -80,17 +80,17 @@ function Products(props)
 
             <div className='buttons'>
 
-                <Button bsPrefix='button-client' variant='warning' onClick={new_product}>
+                <Button bsPrefix='button-product' variant='warning' onClick={new_product}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
                     Novo Produto
                 </Button>
 
-                <Button bsPrefix='button-client' onClick={edit_product}>
+                <Button bsPrefix='button-product' onClick={edit_product}>
                     <span className="material-icons md-24 md-primary">edit</span>
                     Editar Produto
                 </Button>
                 
-                <Button bsPrefix='button-client' onClick={delete_product}>
+                <Button bsPrefix='button-product' onClick={delete_product}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
                     Excluir Produto
                 </Button>
@@ -107,7 +107,7 @@ function Products(props)
             {/* tabela de produtos existentes*/}
             { !isLoading && 
                 
-                <div className="clientsCreated container">
+                <div className="productsCreated container">
                     <p className='h2'>PRODUTOS CADASTRADOS</p>
 
                     <Table striped bordered hover responsive variant='warning'>

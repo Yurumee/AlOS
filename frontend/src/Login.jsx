@@ -1,7 +1,7 @@
 import './styles/index.css'
+import './styles/Login.css'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import AlertPopUp from './AlertPopUp';
 
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
@@ -49,36 +49,28 @@ function Login(props){
     }
 
     return (
-        <div className="container">
+        <div className="container grid-login-container">
 
-            <h1>ENTRE COMO UM TÉCNICO CADASTRADO</h1>
 
-            <Form onSubmit={loginTech}>
-                <Form.Group>
+            <Form className='grid-login-container' onSubmit={loginTech}>
+                <p className='h2'>Login - ALOS</p>
+                <Form.Group className='grid-login-child'>
                     <FloatingLabel label='Usuário' className='mb-3'>
-                        <Form.Control type='text' placeholder='Insira o nome de usuário' onChange={(event) => setLoginUser(event.target.value)}></Form.Control>
+                        <Form.Control className='grid-login-input' type='text' placeholder='Insira o nome de usuário' onChange={(event) => setLoginUser(event.target.value)}></Form.Control>
                     </FloatingLabel>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-login-child'>
                     <FloatingLabel label='Senha' className='mb-3'>
-                        <Form.Control type='password' placeholder='Insira sua senha' onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
+                        <Form.Control className='grid-login-input' type='password' placeholder='Insira sua senha' onChange={(event) => setLoginSenha(event.target.value)}></Form.Control>
                     </FloatingLabel>
                 </Form.Group>
                 
-                <Button variant='outline-primary' type='submit'>Login</Button>
+                <Button className='grid-login-child grid-login-button' variant='outline-primary' type='submit'>Login</Button>
 
             </Form>
 
-            {/* CHECA O ALERTA A SER MOSTRADO */}
-            { 
-                // (response.status != '' && response.status == 'success') && 
-                // navigation("/clientes", {state: {'status':response.status, 'msg':response.msg}})
-                // ||
-                (response.status != '' && response.status == 'error') &&
-                <AlertPopUp status={response.status} msg={response.msg} close={() => {setResponse({status:'', msg:''})}}/>
-            }
-
+            
         </div>
     )
 }

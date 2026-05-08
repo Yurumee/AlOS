@@ -1,7 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useState } from 'react'
 
@@ -120,13 +119,6 @@ function TechniciansNew(props)
                 <Button variant='outline-primary' type='submit'>Cadastrar técnico</Button>
             </Form>
 
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                { (response.status != '' && response.status == 'success') && 
-                    navigation("/tecnicos", {state: {'status':response.status, 'msg':response.msg}})
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
             </div>
         </>
     )

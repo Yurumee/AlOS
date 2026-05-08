@@ -1,7 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -62,13 +61,6 @@ function CategoriesDelete(props) {
     return (
 
         <>
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                { (response.status != '' && response.status == 'success') && 
-                    navigation("/categorias", {state: {'status':response.status, 'msg':response.msg}})
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
 
             <NavBar />
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />

@@ -1,4 +1,4 @@
-import './styles/Clients.css'
+import './styles/Products.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 
@@ -25,6 +25,25 @@ function ProductsEdit(props)
     const [new_backup, setNewBackup] = useState()
     const [new_acessorio, setNewAcessorio] = useState()
     const [new_obs, setNewObservacao] = useState()
+
+    const [lenA, setLenA] = useState(0)
+    const [lenObs, setLenObs] = useState(0)
+    const [lenMod, setLenMod] = useState(0)
+    
+    useEffect(() => {
+        if (new_acessorio != undefined) {
+            setLenA(new_acessorio.length)
+        }
+
+        if (new_obs != undefined) {
+            setLenObs(new_obs.length)
+        }
+
+        if (new_modelo != undefined) {
+            setLenMod(new_modelo.length)
+        }
+
+    }, [lenA, lenObs, lenMod, new_acessorio, new_obs, new_modelo])
 
     useEffect(() => {
         async function getProduct()
@@ -86,56 +105,60 @@ function ProductsEdit(props)
 
             <div className='container'>
 
-            <h1>Editando Produto - {product.num_serie}</h1>
+            <div style={{ 'marginBottom': '15px' }}>
+                    <p className='h2'>Editando Produto - {product.num_serie}</p>
+                    <span style={{ 'color': 'red' }}>* representam campos obrigatórios</span>
+            </div>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container-prod' onSubmit={submit}>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Modelo do Produto</Form.Label>
-                    <Form.Control type='text' defaultValue={product.modelo} onChange={(event) => setNewModelo(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' style={{ 'width': lenMod + 'ch' }} defaultValue={product.modelo} onChange={(event) => setNewModelo(event.target.value)} />
                 </Form.Group>
                 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Cor do Produto</Form.Label>
-                    <Form.Control type='text' defaultValue={product.cor} onChange={(event) => setNewCor(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' defaultValue={product.cor} onChange={(event) => setNewCor(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Sistema Operacional do Produto</Form.Label>
-                    <Form.Control type='text' defaultValue={product.sis_operacional} onChange={(event) => setNewSisOperacional(event.target.value)} />
+                <Form.Group className='grid-child'>
+                    <Form.Label>Sistema Operacional do Produto <span style={{ 'color': 'red' }}>*</span></Form.Label>
+                    <Form.Control type='text' className='grid-input' defaultValue={product.sis_operacional} onChange={(event) => setNewSisOperacional(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group className='grid-child' id='grid-text-ace'>
+                    <Form.Label>Acessórios</Form.Label>
+                    <Form.Control type='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.acessorios} onChange={(event) => setNewAcessorio(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group className='grid-child' id='grid-text-obs'>
+                    <Form.Label>Observações</Form.Label>
+                    <Form.Control type='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.obs} onChange={(event) => setNewObservacao(event.target.value)} />
                 </Form.Group>
                 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-switch-one'>
                     <Form.Label>Possui avarias?</Form.Label>
                     <Form.Check type='switch' defaultChecked={product.avaria} onChange={(event) => setNewAvaria(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-switch-two'>
                     <Form.Label>Está ligando?</Form.Label>
                     <Form.Check type='switch' defaultChecked={product.liga} onChange={(event) => setNewLiga(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-switch-three'>
                     <Form.Label>Está carregando?</Form.Label>
                     <Form.Check type='switch' defaultChecked={product.carrega} onChange={(event) => setNewCarrega(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='grid-switch-four'>
                     <Form.Label>Possui backup?</Form.Label>
                     <Form.Check type='switch' defaultChecked={product.backup} onChange={(event) => setNewBackup(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Acessórios</Form.Label>
-                    <Form.Control type='textarea' defaultValue={product.acessorios} onChange={(event) => setNewAcessorio(event.target.value)} />
-                </Form.Group>
-
-                <Form.Group>
-                    <Form.Label>Observações</Form.Label>
-                    <Form.Control type='textarea' defaultValue={product.obs} onChange={(event) => setNewObservacao(event.target.value)} />
-                </Form.Group>
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Produto</Button>
+                <Button variant='outline-warning' className='grid-child grid-button-prod' type='submit'>Editar Produto</Button>
             </Form>
 
             </div>

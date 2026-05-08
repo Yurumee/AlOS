@@ -3,7 +3,6 @@ from config import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import INTEGER, VARCHAR, BOOLEAN, DATETIME, DateTime, ForeignKey
 
-# from models.ordemServico import OrdemServico
 class Anexo(db.Model):
     __tablename__ = 'anexo'
 
@@ -22,3 +21,5 @@ class Anexo(db.Model):
     # relacionamento 1:1 entre anexo e ordem
     # model declarado dessa forma para evitar erro de circular import 
     ordem: Mapped['models.ordemServico.OrdemServico'] = relationship(back_populates='anexo')
+
+

@@ -1,7 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 
@@ -169,16 +168,8 @@ function ClientsEdit(props) {
 
                         <br />
 
-                        <Button className='grid-button grid-child' variant='outline-warning' type='submit'>Editar cliente</Button>
+                        <Button className='grid-button-cli grid-child' variant='outline-warning' type='submit'>Editar cliente</Button>
                     </Form>
-
-                    {/* CHECA O ALERTA A SER MOSTRADO */}
-                    {/* {(response.status != '' && response.status == 'success') &&
-                        navigation("/clientes", { state: { 'status': response.status, 'msg': response.msg } })
-                        ||
-                        (response.status != '' && response.status == 'error') &&
-                        <AlertPopUp status={response.status} msg={response.msg} close={() => { setResponse({ status: '', msg: '' }) }} />
-                    } */}
 
                 </div>
 

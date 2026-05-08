@@ -1,7 +1,6 @@
 import './styles/OS.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 

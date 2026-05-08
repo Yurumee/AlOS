@@ -1,7 +1,6 @@
-import './styles/Clients.css'
+import './styles/Storage.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 
@@ -27,6 +26,20 @@ function StoragesEdit(props)
     const [new_quantidade, setNewQuantidade] = useState()
     const [new_preco, setNewPreco] = useState()
     const [new_cod_barra, setNewCodBarra] = useState()
+
+    const [lenN, setLenN] = useState(0)
+    const [lenD, setLenD] = useState(0)
+
+    useEffect(() => {
+        if (new_item_nome != undefined) {
+            setLenN(new_item_nome.length)
+        }
+
+        if (new_descricao != undefined) {
+            setLenD(new_descricao.length)
+        }
+
+    }, [lenN, lenD, new_item_nome, new_descricao])
 
     useEffect(() => {
 
@@ -113,24 +126,25 @@ function StoragesEdit(props)
 
             <div className='container' >
 
-            <h1>Editando Item - {item.codigo_barras}</h1>
+            <div style={{ 'marginBottom': '15px' }}>
+                        <p className='h2'>Editando Item - {item.codigo_barras}</p>
+            </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
-                    <Form.Label>Código de Barras</Form.Label>
-                    <Form.Control type='number' defaultValue={item.codigo_barras} placeholder='84912345678' onChange={(event) => setNewCodBarra(event.target.value)} />
+            <Form className='grid-container' onSubmit={submit}>
+                <Form.Group className='grid-child'>
+                    <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='number' className='grid-input' defaultValue={item.codigo_barras} placeholder='84912345678' onChange={(event) => setNewCodBarra(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Nome do Item</Form.Label>
-                    <Form.Control type='text' defaultValue={item.nome_item} placeholder='SSD 240GB' onChange={(event) => setNewItemNome(event.target.value)} />
+                <Form.Group className='grid-child'>
+                    <Form.Label>Nome do Item <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control type='text' className='grid-input' style={{ 'width': lenN + 'ch' }} defaultValue={item.nome_item} placeholder='SSD 240GB' onChange={(event) => setNewItemNome(event.target.value)} />
                 </Form.Group>
 
 
-                <Form.Group>
-                    {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
+                <Form.Group className='grid-child'>
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select defaultValue={item.categoria} onChange={(event) => setNewCategoria(event.target.value)}>
+                    <Form.Select defaultValue={item.categoria} className='grid-input' onChange={(event) => setNewCategoria(event.target.value)}>
                       <option>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
@@ -141,33 +155,25 @@ function StoragesEdit(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' defaultValue={item.descricao} placeholder='SSD DA MARCA X 240GB NOVO' onChange={(event) => setNewDescricao(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' style={{ 'width': lenD + 'ch' }} defaultValue={item.descricao} placeholder='SSD DA MARCA X 240GB NOVO' onChange={(event) => setNewDescricao(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Quantidade</Form.Label>
-                    <Form.Control type='number' defaultValue={item.quantidade} placeholder='5' onChange={(event) => setNewQuantidade(event.target.value)} />
+                    <Form.Control type='number' className='grid-input' defaultValue={item.quantidade} placeholder='5' onChange={(event) => setNewQuantidade(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Valor Unitário</Form.Label>
-                    <Form.Control type='number' defaultValue={item.valor_un} placeholder='9.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
+                    <Form.Control type='number' className='grid-input' defaultValue={item.valor_un} placeholder='9.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
                 </Form.Group>
 
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Item</Button>
+                <Button variant='outline-warning' className='grid-button-sto grid-child' type='submit'>Editar Item</Button>
             </Form>
-
-            {/* CHECA O ALERTA A SER MOSTRADO */}
-            { (response.status != '' && response.status == 'success') && 
-                navigation("/estoque", {state: {'status':response.status, 'msg':response.msg}})
-                ||
-                (response.status != '' && response.status == 'error') &&
-                <AlertPopUp status={response.status} msg={response.msg} close={() => {setResponse({status:'', msg:''})}}/>
-            }
 
             </div>
             

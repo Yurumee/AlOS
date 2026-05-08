@@ -2,7 +2,7 @@
     color: #fff3b7;
 } 
 
-.button-client {
+.button-product {
     border-radius: 10px;
     border-color: #ffc107;
     background-color: #ffc107;
@@ -29,7 +29,7 @@
     margin-left: 30px;
 }
 
-.grid-container {
+.grid-container-prod {
     display: grid;
     grid-template-columns: [first] 2fr [second] 2fr [third] 2fr;
     justify-items: center;
@@ -42,9 +42,9 @@
     margin-bottom: 0;
 }
 
-.grid-button-cli {
+.grid-button-prod {
     grid-column: 2;
-    grid-row: 5;
+    grid-row: 6;
     justify-self: center;
     align-self: center;
 }
@@ -54,12 +54,52 @@
     max-width: 350px;
 }
 
-.grid-switch-cli {
-    grid-column: 2;
+#grid-switch-one {
+    grid-column: 1;
     grid-row: 4;
     margin-bottom: 10px;
     justify-self: center;
     align-self: center;
+
+}
+
+#grid-switch-two {
+    grid-column: 3;
+    grid-row: 4;
+    margin-bottom: 10px;
+    justify-self: center;
+    align-self: center;
+    
+}
+
+#grid-switch-three {
+    grid-column: 1;
+    grid-row: 5;
+    margin-bottom: 10px;
+    justify-self: center;
+    align-self: center;
+    
+}
+
+#grid-switch-four {
+    grid-column: 3;
+    grid-row: 5;
+    margin-bottom: 10px;
+    justify-self: center;
+    align-self: center;
+    
+}
+
+#grid-text-ace {
+    grid-column: 1;
+    grid-row: 3;
+    width: 450px;
+}
+
+#grid-text-obs {
+    grid-column: 3;
+    grid-row: 3;
+    width: 450px;
 }
 
 .grid-card {
@@ -88,30 +128,29 @@
     display: inline-block;
 }
 
-.modal-client .modal-body {
+.modal-product .modal-body {
     word-break: break-word;
 }
 
-.table-client {
+.table-product {
     width: 100%;
 }
 
-.table-client thead th {
+.table-product thead th {
     font-weight: 500;
 }
 
-.table-client tbody td {
-    /* width: 50px; */
+.table-product tbody td {
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.table-client tbody .table-name-cell {
+.table-product tbody .table-name-cell {
     width: 30%;
 }
 
-.table-client tbody .table-info-cell {
+.table-product tbody .table-info-cell {
     width: 10%;
 }

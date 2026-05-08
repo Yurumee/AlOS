@@ -1,7 +1,6 @@
-import './styles/Clients.css'
+import './styles/Storage.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 
@@ -26,7 +25,21 @@ function ItemsNew(props)
     const [codigo_barras, setCodigoBarras] = useState()
     
     const [response, setResponse] = useState({status:'', msg:''})
-    const navigation  = useNavigate()
+    // const navigation  = useNavigate()
+    
+    const [lenN, setLenN] = useState(0)
+    const [lenD, setLenD] = useState(0)
+
+    useEffect(() => {
+        if (nome_item != undefined) {
+            setLenN(nome_item.length)
+        }
+
+        if (descricao_item != undefined) {
+            setLenD(descricao_item.length)
+        }
+
+    }, [lenN, lenD, nome_item,descricao_item])
 
      // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -84,7 +97,7 @@ function ItemsNew(props)
         .then(res => setResponse(res))
         .catch(error => console.log(error))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/estoque'
     }
 
     return(
@@ -99,21 +112,20 @@ function ItemsNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
+            <Form className='grid-container' onSubmit={submit}>
+                <Form.Group className='grid-child'>
                     <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number'min={0} placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
+                    <Form.Control className='grid-input' type='number'min={0} placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Item <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='SSD 240GB' onChange={(event) => setNomeItem(event.target.value)} />
+                    <Form.Control type='text' style={{ 'width': lenN + 'ch' }} className='grid-input' placeholder='SSD 240GB' onChange={(event) => setNomeItem(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
-                    {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select onChange={(event) => setCategoriaItem(event.target.value)}>
+                    <Form.Select className='grid-input' onChange={(event) => setCategoriaItem(event.target.value)}>
                       <option disabled selected>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
@@ -126,29 +138,22 @@ function ItemsNew(props)
 
                 <Form.Group>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' placeholder='SSD da marca X' onChange={(event) => setDescricaoItem(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' placeholder='SSD da marca X' style={{ 'width': lenD + 'ch' }} onChange={(event) => setDescricaoItem(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Quantidade <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' min={0} placeholder='5' onChange={(event) => setQuantidade(event.target.value)} />
+                    <Form.Control type='number' className='grid-input' min={0} placeholder='5' onChange={(event) => setQuantidade(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group>
                     <Form.Label>Valor Unitário <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
+                    <Form.Control type='number' className='grid-input' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
                 </Form.Group>
 
-                <Button variant='outline-primary' type='submit'>Cadastrar item no estoque</Button>
+                <Button className='grid-button-sto grid-child' variant='warning' type='submit'>Cadastrar item no estoque</Button>
             </Form>
 
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                { (response.status != '' && response.status == 'success') && 
-                    navigation("/estoque", {state: {'status':response.status, 'msg':response.msg}})
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
             </div>
         </>
     )

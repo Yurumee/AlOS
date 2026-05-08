@@ -1,4 +1,4 @@
-import './styles/OS.css'
+import './styles/Attachment.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 
@@ -96,12 +96,12 @@ function AttachmentsEdit(props) {
 
                         <Form.Group className='grid-child' id='grid-prognostic'>
                             <Form.Label>Solução realizada <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                            <Form.Control as='textarea' rows='10' defaultValue={attachment.solucao} placeholder='Apresenta comportamento indesejado...' onChange={(event) => setNewSolucaoAnexo(event.target.value)} />
+                            <Form.Control as='textarea' rows='10' defaultValue={attachment.solucao} placeholder='A solução realizada foi...' onChange={(event) => setNewSolucaoAnexo(event.target.value)} />
                         </Form.Group>
 
                         <Form.Group className='grid-child' id='grid-diagnostic'>
                             <Form.Label>Observação</Form.Label>
-                            <Form.Control as='textarea' rows='10' defaultValue={attachment.observacoes} style={{ 'width': '100%' }} placeholder='O problema encontrado trata-se de...' onChange={(event) => setNewObsAnexo(event.target.value)} />
+                            <Form.Control as='textarea' rows='10' defaultValue={attachment.observacoes} style={{ 'width': '100%' }} placeholder='Considerações adicionais...' onChange={(event) => setNewObsAnexo(event.target.value)} />
                         </Form.Group>
 
                         <br />
@@ -111,7 +111,7 @@ function AttachmentsEdit(props) {
                             <Form.Check type='switch' onChange={(event) => setNewEmitirAnexo(event.target.checked)} />
                         </Form.Group>
 
-                        <Button className='grid-child grid-button' variant='outline-primary' type='submit'>Cadastrar Anexo</Button>
+                        <Button className='grid-child grid-button' variant='outline-warning' type='submit'>Editar Anexo</Button>
                     </Form>
 
                 </div>

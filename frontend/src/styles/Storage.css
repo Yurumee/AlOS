@@ -44,7 +44,7 @@
     margin-bottom: 0;
 }
 
-.grid-button {
+.grid-button-sto {
     grid-column: 2;
     grid-row: 5;
     justify-self: center;
@@ -64,7 +64,7 @@
     align-self: center;
 }
 
-/* .grid-card {
+.grid-card {
     display: grid;
     justify-items: center;
     align-items: center;
@@ -82,7 +82,7 @@
 
 .grid-child-card .grid-button-card {
     width: 40%;
-} */
+}
 
 .divider {
     width: 5px;
@@ -90,9 +90,9 @@
     display: inline-block;
 }
 
-/* .modal-storage .modal-body {
+.modal-storage .modal-body {
     word-break: break-word;
-} */
+}
 
 .table-storage {
     width: 100%;

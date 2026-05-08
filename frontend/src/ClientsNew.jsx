@@ -1,7 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useEffect, useState } from 'react'
 
@@ -153,22 +152,15 @@ function ClientsNew(props) {
                         <Form.Control className='grid-input' type='number' placeholder='99.99' step={0.01} onChange={(event) => setClienteCredito(event.target.value)} />
                     </Form.Group>
 
-                    <Form.Group className='grid-child grid-switch'>
+                    <Form.Group className='grid-child grid-switch-cli'>
                         <Form.Label>Pessoa Jurídica</Form.Label>
                         <Form.Check style={{ 'justifySelf': 'center' }} type='switch' onChange={(event) => setFlagCnpj(event.target.checked)} />
                     </Form.Group>
 
                     <br />
-                    <Button className='grid-button grid-child' variant='outline-primary' type='submit'>Cadastrar cliente</Button>
+                    <Button className='grid-button-cli grid-child' variant='warning' type='submit'>Cadastrar cliente</Button>
                 </Form>
 
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                {(response.status != '' && response.status == 'success') &&
-                    navigation("/clientes", { state: { 'status': response.status, 'msg': response.msg } })
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
             </div>
         </>
     )

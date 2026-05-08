@@ -1,8 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
-
 import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
@@ -114,14 +112,6 @@ function TechniciansEdit(props)
                 <br />
                 <Button variant='outline-warning' type='submit'>Editar Técnico</Button>
             </Form>
-
-            {/* CHECA O ALERTA A SER MOSTRADO */}
-            { (response.status != '' && response.status == 'success') && 
-                navigation("/tecnicos", {state: {'status':response.status, 'msg':response.msg}})
-                ||
-                (response.status != '' && response.status == 'error') &&
-                <AlertPopUp status={response.status} msg={response.msg} close={() => {setResponse({status:'', msg:''})}}/>
-            }
 
             </div>
             

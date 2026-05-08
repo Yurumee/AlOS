@@ -1,4 +1,4 @@
-import './styles/OS.css'
+import './styles/Attachment.css'
 import './styles/index.css'
 import NavBar from './NavBar'
 
@@ -72,12 +72,12 @@ function AttachmentsNew(props) {
 
                         <Form.Group className='grid-child' id='grid-prognostic'>
                             <Form.Label>Solução realizada <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                            <Form.Control as='textarea' rows='10' placeholder='Apresenta comportamento indesejado...' onChange={(event) => setSolucaoAnexo(event.target.value)} />
+                            <Form.Control as='textarea' rows='10' placeholder='A solução realizada foi...' onChange={(event) => setSolucaoAnexo(event.target.value)} />
                         </Form.Group>
 
                         <Form.Group className='grid-child' id='grid-diagnostic'>
                             <Form.Label>Observação</Form.Label>
-                            <Form.Control as='textarea' rows='10' style={{ 'width': '100%' }} placeholder='O problema encontrado trata-se de...' onChange={(event) => setObsAnexo(event.target.value)} />
+                            <Form.Control as='textarea' rows='10' style={{ 'width': '100%' }} placeholder='Considerações adicionais...' onChange={(event) => setObsAnexo(event.target.value)} />
                         </Form.Group>
 
                         <br />

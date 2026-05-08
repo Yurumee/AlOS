@@ -1,7 +1,6 @@
-import './styles/Clients.css'
+import './styles/Storage.css'
 import './styles/index.css'
 import NavBar from './NavBar'
-import AlertPopUp from './AlertPopUp'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -28,7 +27,6 @@ function StoragesDelete(props) {
                                                 'Authorization': 'Bearer ' + props.token
                                             }
                                         }).then(resp => resp.json())
-            // const list = Object.values(resp)
             setItem(resp)
             setIsLoading(false)
         }
@@ -51,7 +49,7 @@ function StoragesDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/estoque'
     }
 
     function cancel()
@@ -62,14 +60,6 @@ function StoragesDelete(props) {
     return (
 
         <>
-                {/* CHECA O ALERTA A SER MOSTRADO */}
-                { (response.status != '' && response.status == 'success') && 
-                    navigation("/tecnicos", {state: {'status':response.status, 'msg':response.msg}})
-                    ||
-                    (response.status != '' && response.status == 'error') &&
-                    <AlertPopUp status={response.status} msg={response.msg} />
-                }
-
             <NavBar />
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
             <div>
@@ -81,20 +71,26 @@ function StoragesDelete(props) {
             {!isLoading && item &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar este item?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{item.nome_item} - COD BARRAS {item.codigo_barras}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {item.nome_item}</p>
-                                    <p>Descrição: {item.descricao}</p>
-                                    <p>Quantidade em estoque: {item.quantidade}</p>
-                                </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
+                                    <p className='grid-p-card'>Nome do Item</p>
+                                    <p>{item.nome_item}</p>
 
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                                    <p className='grid-p-card'>Descrição do Item</p>
+                                    <p>{item.descricao}</p>
+
+                                    <p className='grid-p-card'>Quantidade em Estoque</p>
+                                    <p>{item.quantidade}</p>
+                                    
+                                </Card.Text>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 
