@@ -1,4 +1,5 @@
-from config import db
+from ..db import db
+# from config import db
 # import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import INTEGER, VARCHAR, BOOLEAN, DATETIME, DateTime, ForeignKey

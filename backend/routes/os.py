@@ -1,4 +1,5 @@
-from config import db
+from ..db import db
+# from config import db
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, jsonify, request

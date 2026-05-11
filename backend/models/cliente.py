@@ -1,10 +1,13 @@
 # importando bibliotecas necessarias
-from config import db
+# from config import db 
+from ..db import db
 from sqlalchemy import INTEGER, VARCHAR, NUMERIC, Numeric, BOOLEAN
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from models.produto import Produto
-from models.ordemServico import OrdemServico
+from .produto import Produto
+from .ordemServico import OrdemServico
+# from models.produto import Produto
+# from models.ordemServico import OrdemServico
 class Cliente(db.Model):
     __tablename__ = 'cliente'
 

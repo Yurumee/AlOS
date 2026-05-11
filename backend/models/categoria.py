@@ -1,9 +1,12 @@
-from config import db
+from ..db import db
+# from config import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import INTEGER, VARCHAR
 
-from models.estoque import Estoque
-from models.servico import Servico
+from .estoque import Estoque
+from .servico import Servico
+# from models.estoque import Estoque
+# from models.servico import Servico
 
 class Categoria(db.Model):
     __tablename__ = 'categoria'

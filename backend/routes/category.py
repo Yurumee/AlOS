@@ -1,5 +1,6 @@
 # realizando importações necessárias
-from config import db
+from ..db import db
+# from config import db
 from flask_jwt_extended import jwt_required
 from flask import Blueprint, jsonify, request
 from sqlalchemy import or_

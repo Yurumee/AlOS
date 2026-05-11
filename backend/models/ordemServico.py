@@ -1,4 +1,5 @@
-from config import db
+from ..db import db
+# from config import db
 # from typing import Optional
 import datetime
 from sqlalchemy import VARCHAR, INTEGER, NUMERIC, BOOLEAN, Numeric, DATETIME, DateTime, ForeignKey

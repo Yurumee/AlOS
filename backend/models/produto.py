@@ -1,8 +1,10 @@
-from config import db
+from ..db import db
+# from config import db
 from sqlalchemy import VARCHAR, INTEGER, BOOLEAN, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from models.ordemServico import OrdemServico
+from .ordemServico import OrdemServico
+# from models.ordemServico import OrdemServico
 # from models.cliente import Cliente
 
 class Produto(db.Model):

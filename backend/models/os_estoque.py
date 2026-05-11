@@ -1,4 +1,4 @@
-from config import db
+from ..db import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import INTEGER, ForeignKey
 

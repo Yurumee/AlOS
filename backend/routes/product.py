@@ -1,5 +1,6 @@
 # realizando importações necessárias
-from config import db, log_path
+from ..db import db
+# from config import db, log_path
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, jsonify, request
 from datetime import datetime

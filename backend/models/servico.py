@@ -1,5 +1,6 @@
 # importando bibliotecas necessarias
-from config import db
+from ..db import db
+# from config import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import VARCHAR, INTEGER, NUMERIC, Numeric, ForeignKey
 
