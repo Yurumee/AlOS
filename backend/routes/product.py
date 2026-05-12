@@ -13,8 +13,8 @@ view_product = Blueprint('view_product', __name__, url_prefix='/produto')
 @view_product.route('/', methods=['GET'])
 @jwt_required()
 def all_products():
-    from models.produto import Produto
-    from models.cliente import Cliente
+    from ..models.produto import Produto
+    from ..models.cliente import Cliente
 
     products = db.session.query(Produto).all()
     result = {}
@@ -48,8 +48,8 @@ def all_products():
 @jwt_required()
 def new_product():
     if request.method == 'POST':
-        from models.produto import Produto
-        from models.cliente import Cliente
+        from ..models.produto import Produto
+        from ..models.cliente import Cliente
 
         try:
             # guarda dados do frontend
@@ -137,7 +137,7 @@ def new_product():
 @view_product.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_product(id_desejado):
-    from models.produto import Produto
+    from ..models.produto import Produto
 
     if request.method == 'POST':
         # recebe dados do frontend
@@ -207,7 +207,7 @@ def patch_product(id_desejado):
 @view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_product(id_desejado):
-    from models.produto import Produto
+    from ..models.produto import Produto
 
     if request.method == 'POST':
         # checa se o produto existe
@@ -237,8 +237,8 @@ def delete_product(id_desejado):
 @view_product.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def getProduct(id_desejado):
-    from models.produto import Produto
-    from models.cliente import Cliente
+    from ..models.produto import Produto
+    from ..models.cliente import Cliente
 
     try:
         produto_desejado = db.session.query(Produto).filter_by(produto_id=id_desejado).first()
@@ -282,7 +282,7 @@ def getProduct(id_desejado):
 @view_product.route('/cliente/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def getProductByClient(id_desejado):
-    from models.produto import Produto
+    from ..models.produto import Produto
     # from models.cliente import Cliente
 
     print(id_desejado)

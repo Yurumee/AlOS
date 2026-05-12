@@ -17,7 +17,7 @@ mock_user = {
                 }
 
 
-class TestClient(unittest.TestCase):
+class TestTechnician(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config=config_dict['test'])
         
@@ -114,10 +114,10 @@ class TestClient(unittest.TestCase):
         # checando
         tech = db.session.query(Tecnico).filter_by(tecnico_id=2).one_or_none()
         
-        assert tech.nome_tecnico == 'Cicrano'
-        assert tech.contato_tecnico == '987654321'
-        assert tech.endereco == 'Rua Nova, n° 789' 
-        assert tech.administrador == False
+        assert tech.nome_tecnico == data_edit['nome_tecnico']
+        assert tech.contato_tecnico == data_edit['contato_tecnico']
+        assert tech.endereco == data_edit['endereco_tecnico']
+        assert tech.administrador == data_edit['admin']
         
     def test_tech_delete(self):
         '''

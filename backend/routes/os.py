@@ -14,11 +14,11 @@ view_os = Blueprint('view_os', __name__, url_prefix='/os')
 @view_os.route('/', methods=['GET'])
 @jwt_required()
 def all_os():
-    from models.ordemServico import OrdemServico
-    from models.cliente import Cliente
-    from models.produto import Produto
-    from models.tecnico import Tecnico
-    from models.anexo import Anexo
+    from ..models.ordemServico import OrdemServico
+    from ..models.cliente import Cliente
+    from ..models.produto import Produto
+    from ..models.tecnico import Tecnico
+    from ..models.anexo import Anexo
 
     orders = db.session.query(OrdemServico).all()
     result = {}
@@ -71,14 +71,14 @@ def all_os():
 @jwt_required()
 def new_os():
     if request.method == 'POST':
-        from models.ordemServico import OrdemServico
-        from models.tecnico import Tecnico
-        from models.produto import Produto
-        from models.cliente import Cliente
-        from models.servico import Servico
-        from models.estoque import Estoque
-        from models.os_estoque import Os_estoque
-        from models.os_servico import Os_servico
+        from ..models.ordemServico import OrdemServico
+        from ..models.tecnico import Tecnico
+        from ..models.produto import Produto
+        from ..models.cliente import Cliente
+        from ..models.servico import Servico
+        from ..models.estoque import Estoque
+        from ..models.os_estoque import Os_estoque
+        from ..models.os_servico import Os_servico
 
         try:
             # guarda dados do frontend
@@ -154,7 +154,7 @@ def new_os():
             validade = datetime.strptime(validade, '%Y-%m-%dT%H:%M')
 
         if fechamento == None:
-            fechamento = criacao + timedelta(weeks=1)
+            fechamento = criacao + timedelta(weeks=2)
 
         else:
             fechamento = datetime.strptime(fechamento, '%Y-%m-%dT%H:%M')
@@ -194,7 +194,7 @@ def new_os():
 
         # se a os tiver sido emitida e autorizada, retire os itens de estoque
         if emitir and estado == 'Autorizada':
-            from models.estoque import Estoque
+            from ..models.estoque import Estoque
 
             for item in orcamento:
                 if item['tipo'] == 'estoque':
@@ -254,11 +254,11 @@ def new_os():
 @view_os.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_os(id_desejado):
-    from models.ordemServico import OrdemServico
-    from models.estoque import Estoque
-    from models.servico import Servico
-    from models.os_estoque import Os_estoque
-    from models.os_servico import Os_servico
+    from ..models.ordemServico import OrdemServico
+    from ..models.estoque import Estoque
+    from ..models.servico import Servico
+    from ..models.os_estoque import Os_estoque
+    from ..models.os_servico import Os_servico
 
     if request.method == 'POST':
         # recebe dados do frontend
@@ -387,10 +387,10 @@ def patch_os(id_desejado):
 @view_os.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_os(id_desejado):
-    from models.ordemServico import OrdemServico
-    from models.os_estoque import Os_estoque
-    from models.os_servico import Os_servico
-    from models.anexo import Anexo
+    from ..models.ordemServico import OrdemServico
+    from ..models.os_estoque import Os_estoque
+    from ..models.os_servico import Os_servico
+    from ..models.anexo import Anexo
 
     if request.method == 'POST':
         # checa se a ordem existe
@@ -438,11 +438,11 @@ def delete_os(id_desejado):
 @view_os.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def get_os(id_desejado):
-    from models.ordemServico import OrdemServico
-    from models.servico import Servico
-    from models.estoque import Estoque
-    from models.produto import Produto
-    from models.cliente import Cliente
+    from ..models.ordemServico import OrdemServico
+    from ..models.servico import Servico
+    from ..models.estoque import Estoque
+    from ..models.produto import Produto
+    from ..models.cliente import Cliente
     
     orcamento = []
     # i = 0
@@ -527,15 +527,15 @@ def get_os(id_desejado):
 @view_os.route('/orcamento/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def get_os_budget(id_desejado):
-    from models.ordemServico import OrdemServico
-    from models.produto import Produto
-    from models.cliente import Cliente
-    from models.tecnico import Tecnico
-    from models.estoque import Estoque
-    from models.servico import Servico
-    from models.anexo import Anexo
-    from models.os_estoque import Os_estoque
-    from models.os_servico import Os_servico
+    from ..models.ordemServico import OrdemServico
+    from ..models.produto import Produto
+    from ..models.cliente import Cliente
+    from ..models.tecnico import Tecnico
+    from ..models.estoque import Estoque
+    from ..models.servico import Servico
+    from ..models.anexo import Anexo
+    from ..models.os_estoque import Os_estoque
+    from ..models.os_servico import Os_servico
 
     i = 0
     orcamento_itens = {}

@@ -12,8 +12,8 @@ view_storage = Blueprint('view_storage', __name__, url_prefix='/estoque')
 @view_storage.route('/', methods=['GET'])
 @jwt_required()
 def all_storage():
-    from models.estoque import Estoque
-    from models.categoria import Categoria
+    from ..models.estoque import Estoque
+    from ..models.categoria import Categoria
 
     storage = db.session.query(Estoque).all()
     result = {}
@@ -42,8 +42,8 @@ def all_storage():
 @jwt_required()
 def new_item():
     if request.method == 'POST':
-        from models.estoque import Estoque
-        from models.categoria import Categoria
+        from ..models.estoque import Estoque
+        from ..models.categoria import Categoria
 
         try:
             # guarda dados do frontend
@@ -125,8 +125,8 @@ def new_item():
 @view_storage.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_item(id_desejado):
-    from models.estoque import Estoque
-    from models.categoria import Categoria
+    from ..models.estoque import Estoque
+    from ..models.categoria import Categoria
 
     if request.method == 'POST':
         
@@ -216,7 +216,7 @@ def patch_item(id_desejado):
 @view_storage.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_item(id_desejado):
-    from models.estoque import Estoque
+    from ..models.estoque import Estoque
 
     if request.method == 'POST':
         # checa se o produto existe
@@ -241,8 +241,8 @@ def delete_item(id_desejado):
 @view_storage.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def getItem(id_desejado):
-    from models.estoque import Estoque
-    from models.categoria import Categoria
+    from ..models.estoque import Estoque
+    from ..models.categoria import Categoria
 
     try:
         item_desejado = db.session.query(Estoque).filter_by(item_id=id_desejado).first()
@@ -276,7 +276,7 @@ def getItem(id_desejado):
 @view_storage.route('/gerenciamento/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def manageItem(id_desejado):
-    from models.estoque import Estoque
+    from ..models.estoque import Estoque
 
     data = request.json
     quant = int(data.get('quantidade'))
@@ -311,7 +311,7 @@ def manageItem(id_desejado):
 @view_storage.route('/busca/<int:category_id>', methods=['GET'])
 @jwt_required()
 def storage_by_type(category_id):
-    from models.estoque import Estoque
+    from ..models.estoque import Estoque
     # from models.servico import Servico
 
     storage = db.session.query(Estoque).filter_by(categoria_id=category_id).all()

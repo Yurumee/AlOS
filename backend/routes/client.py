@@ -14,7 +14,7 @@ view_client = Blueprint('view_client', __name__, url_prefix='/cliente')
 @jwt_required()
 def all_clients():
 
-    from models.cliente import Cliente
+    from ..models.cliente import Cliente
 
     clients = db.session.query(Cliente).all()
     result = {}
@@ -44,7 +44,7 @@ def all_clients():
 @jwt_required()
 def new_client():
     if request.method == 'POST':
-        from models.cliente import Cliente
+        from ..models.cliente import Cliente
 
         try:
             # guarda dados do frontend
@@ -159,7 +159,7 @@ def new_client():
 @view_client.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_client(id_desejado):
-    from models.cliente import Cliente
+    from ..models.cliente import Cliente
 
     if request.method == 'POST':
         # recebe dados do frontend
@@ -265,8 +265,8 @@ def patch_client(id_desejado):
 @view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_client(id_desejado):
-    from models.cliente import Cliente
-    from models.produto import Produto
+    from ..models.cliente import Cliente
+    from ..models.produto import Produto
 
     if request.method == 'POST':
         # checa se o cliente existe
@@ -299,7 +299,7 @@ def delete_client(id_desejado):
 @view_client.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def getClient(id_desejado):
-    from models.cliente import Cliente
+    from ..models.cliente import Cliente
 
     try:
         cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()

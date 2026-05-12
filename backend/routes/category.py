@@ -13,7 +13,7 @@ view_category = Blueprint('view_category', __name__, url_prefix='/categoria')
 @view_category.route('/', methods=['GET'])
 @jwt_required()
 def all_category():
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
     categories = db.session.query(Categoria).all()
     
     result = {}
@@ -33,7 +33,7 @@ def all_category():
 @view_category.route('/<path:path>', methods=['GET'])
 @jwt_required()
 def all_typed_category(path=None):
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
 
     type_for = path
     
@@ -64,7 +64,7 @@ def all_typed_category(path=None):
 @view_category.route('/novo', methods=['POST'])
 @jwt_required()
 def new_category():
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
     
     if request.method == 'POST':
 
@@ -139,7 +139,7 @@ def new_category():
 @view_category.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_categoria(id_desejado):
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
 
     if request.method == 'POST':
         # recebe dados do frontend
@@ -190,7 +190,7 @@ def patch_categoria(id_desejado):
 @view_category.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_categoria(id_desejado):
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
 
     if request.method == 'POST':
         # checa se o produto existe
@@ -215,7 +215,7 @@ def delete_categoria(id_desejado):
 @view_category.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def get_categoria(id_desejado):
-    from models.categoria import Categoria
+    from ..models.categoria import Categoria
 
     try:
         categoria_desejada = db.session.query(Categoria).filter_by(categoria_id=id_desejado).first()
@@ -245,9 +245,9 @@ def get_categoria(id_desejado):
 @view_category.route('/busca/<str_busca>', methods=['GET'])
 @jwt_required()
 def get_categoria_by_type(str_busca):
-    from models.estoque import Estoque
-    from models.servico import Servico
-    from models.categoria import Categoria
+    from ..models.estoque import Estoque
+    from ..models.servico import Servico
+    from ..models.categoria import Categoria
 
     if str_busca == 'estoque':
         titulos_categorias = db.session.query(Categoria).filter(Categoria.tipo.ilike(str_busca)).all()

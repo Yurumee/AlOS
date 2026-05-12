@@ -12,8 +12,8 @@ view_service = Blueprint('view_service', __name__, url_prefix='/servico')
 @view_service.route('/', methods=['GET'])
 @jwt_required()
 def all_service():
-    from models.servico import Servico
-    from models.categoria import Categoria
+    from ..models.servico import Servico
+    from ..models.categoria import Categoria
 
     services = db.session.query(Servico).all()
     result = {}
@@ -40,8 +40,8 @@ def all_service():
 @jwt_required()
 def new_service():
     if request.method == 'POST':
-        from models.servico import Servico
-        from models.categoria import Categoria
+        from ..models.servico import Servico
+        from ..models.categoria import Categoria
 
         try:
             # guarda dados do frontend
@@ -123,8 +123,8 @@ def new_service():
 @view_service.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_service(id_desejado):
-    from models.servico import Servico
-    from models.categoria import Categoria
+    from ..models.servico import Servico
+    from ..models.categoria import Categoria
 
     if request.method == 'POST':
         
@@ -204,7 +204,7 @@ def patch_service(id_desejado):
 @view_service.route('/excluir/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def delete_service(id_desejado):
-    from models.servico import Servico
+    from ..models.servico import Servico
 
     if request.method == 'POST':
         # checa se o servico existe
@@ -232,8 +232,8 @@ def delete_service(id_desejado):
 @view_service.route('/pesquisar/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def get_service(id_desejado):
-    from models.servico import Servico
-    from models.categoria import Categoria
+    from ..models.servico import Servico
+    from ..models.categoria import Categoria
 
     try:
         servico_desejado = db.session.query(Servico).filter_by(servico_id=id_desejado).first()
@@ -268,7 +268,7 @@ def get_service(id_desejado):
 @view_service.route('/busca/<int:category_id>', methods=['GET'])
 @jwt_required()
 def service_by_type(category_id):
-    from models.servico import Servico
+    from ..models.servico import Servico
     services = db.session.query(Servico).filter_by(categoria_id=category_id).all()
     result = {}
     
