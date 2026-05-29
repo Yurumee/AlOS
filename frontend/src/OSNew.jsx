@@ -189,6 +189,7 @@ function OSNew(props) {
                         
                         let itemindex = itemsBudgetList.findIndex((item) => item.id_item === id)
                         let newqtd = Object.assign({}, itemsBudgetList[itemindex])
+                        console.log(itemsBudgetList)
                         
                         if (!(newqtd.quantidade >= qtd_estoque))
                         {
@@ -358,6 +359,8 @@ function OSNew(props) {
             <>
 
                 <NavBar />
+
+                {console.log(itemsBudgetList)}
 
                 <div className='container'>
 

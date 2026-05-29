@@ -14,8 +14,8 @@ view_attachment = Blueprint('view_attachment', __name__, url_prefix='/anexo')
 @jwt_required()
 def new_attachment(id_desejado):
     if request.method == 'POST':
-        from models.ordemServico import OrdemServico
-        from models.anexo import Anexo
+        from ..models.ordemServico import OrdemServico
+        from ..models.anexo import Anexo
 
         data = request.get_json()
 
@@ -29,7 +29,7 @@ def new_attachment(id_desejado):
             os_desejado = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).first()
         
         except Exception as e:
-            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS', 'error':str(e)}
             return response, 500
         
         if os_desejado:
@@ -68,13 +68,12 @@ def new_attachment(id_desejado):
                         return response, 500
 
 
-
 # rota usada para editar um anexo
 @view_attachment.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def edit_attachment(id_desejado):
     if request.method == 'POST':
-        from models.anexo import Anexo
+        from ..models.anexo import Anexo
 
         data = request.get_json()
 
@@ -83,7 +82,7 @@ def edit_attachment(id_desejado):
         garantia = data.get('garantia')
         observacoes = data.get('observacoes')
         emitir = data.get('emitido')
-
+        
         try:
             anexo_desejado = db.session.query(Anexo).filter_by(anexo_id=id_desejado).first()
         except Exception as e:
@@ -106,7 +105,7 @@ def edit_attachment(id_desejado):
                 anexo_desejado.solucao = solucao
 
             if emitir != None and emitir != anexo_desejado.emitida:
-                anexo_desejado.solucao = emitir
+                anexo_desejado.emitida = emitir
             
             db.session.commit()
 
@@ -119,7 +118,7 @@ def edit_attachment(id_desejado):
 @jwt_required()
 def delete_attachment(id_desejado):
     if request.method == 'POST':
-        from models.anexo import Anexo
+        from ..models.anexo import Anexo
 
         try:
             anexo_desejado = db.session.query(Anexo).filter_by(anexo_id=id_desejado).first()
@@ -150,7 +149,7 @@ def delete_attachment(id_desejado):
 @view_attachment.route('/<int:id_desejado>', methods=['GET'])
 @jwt_required()
 def get_attachment(id_desejado):
-    from models.anexo import Anexo
+    from ..models.anexo import Anexo
 
     try:
         anexo_desejado = db.session.query(Anexo).filter_by(anexo_id=id_desejado).first()

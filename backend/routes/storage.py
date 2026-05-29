@@ -57,8 +57,6 @@ def new_item():
             quantidade = int(data.get('quantidade'))
             preco_un = float(data.get('valor_un'))
             cod_barra = data.get('codigo_barras')
-
-            print(data)
             
         except Exception as e:
             return jsonify({'error':str(e)})
@@ -114,10 +112,12 @@ def new_item():
             db.session.commit()
             # fim da transação
 
-            return '', 201
+            response = {'status':'success', 'msg':'ITEM CADASTRADO'}
+            return response, 201
 
         except Exception as e:
-            return str(e)
+            response = {'status':'error', 'msg': str(e)}
+            return response, 500
 
 # rota para alterar um produto existente
 # esta rota deve alterar os dados do produto desejado baseado no id
@@ -136,7 +136,7 @@ def patch_item(id_desejado):
         # separando em variaveis
         nome_item = data.get('nome_item')
         categoria = data.get('categoria_item')
-        descricao = data.get('descicao_item')
+        descricao = data.get('descricao_item')
         quantidade = data.get('quantidade')
         preco_un = data.get('valor_un')
         cod_barra = data.get('codigo_barras')

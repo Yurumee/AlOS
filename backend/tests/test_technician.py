@@ -5,9 +5,12 @@ from ..db import db
 from flask_jwt_extended import create_access_token
 from ..insert_sup import insert_sup
 
-mock_user = {
+
+class TestTechnician(unittest.TestCase):
+    def setUp(self):
+        self.mock_user = {
                 'cpf_tecnico': '12345678902',
-                'user': 'fulano',
+                'user': 'Fulano',
                 'senha_tecnico':'123456',
                 'senha_confirma':'123456',
                 'nome_tecnico': 'Fulano',
@@ -16,9 +19,6 @@ mock_user = {
                 'admin': True
                 }
 
-
-class TestTechnician(unittest.TestCase):
-    def setUp(self):
         self.app = create_app(config=config_dict['test'])
         
         self.appContext = self.app.app_context()
@@ -51,7 +51,7 @@ class TestTechnician(unittest.TestCase):
         TESTE SE os dados são inseridos corretamente
         '''
 
-        response = self.client.post('/tecnico/novo', json=mock_user, headers=self.headers)
+        response = self.client.post('/tecnico/novo', json=self.mock_user, headers=self.headers)
         assert response.status_code == 201
 
     def test_tech_login(self):
@@ -73,8 +73,6 @@ class TestTechnician(unittest.TestCase):
         QUANDO requisitado logout
         TESTE SE o logout é realizado corretamente
         '''
-
-        from flask import session
 
         # login
         data = {
@@ -104,7 +102,7 @@ class TestTechnician(unittest.TestCase):
         }
 
         # inserindo tecnico
-        self.client.post('/tecnico/novo', json=mock_user, headers=self.headers)
+        self.client.post('/tecnico/novo', json=self.mock_user, headers=self.headers)
         
         # editando
         response = self.client.post('/tecnico/editar/2', json=data_edit, headers=self.headers)
@@ -122,13 +120,12 @@ class TestTechnician(unittest.TestCase):
     def test_tech_delete(self):
         '''
         DADO um TECNICO EXISTENTE
-        QUANDO editado
-        TESTE SE os dados são modificados corretamente
+        QUANDO deletado
+        TESTE SE os dados são excluídos corretamente
         '''
-        # from ..models.tecnico import Tecnico
 
         # inserindo
-        self.client.post('/tecnico/novo', json=mock_user, headers=self.headers)
+        self.client.post('/tecnico/novo', json=self.mock_user, headers=self.headers)
 
         # excluindo
         response = self.client.post('/tecnico/excluir/2', headers=self.headers)
@@ -141,10 +138,9 @@ class TestTechnician(unittest.TestCase):
         QUANDO pesquisado
         TESTE SE os dados são retornados corretamente
         '''
-        # from ..models.tecnico import Tecnico
 
         # inserindo
-        self.client.post('/tecnico/novo', json=mock_user, headers=self.headers)
+        self.client.post('/tecnico/novo', json=self.mock_user, headers=self.headers)
 
         # pesquisando
         response = self.client.get('/tecnico/pesquisar/2', headers=self.headers)
@@ -156,7 +152,7 @@ class TestTechnician(unittest.TestCase):
                             'id':2,
                             'cpf': '12345678902',
                             'nome_completo': 'Fulano',
-                            'usuario': 'fulano',
+                            'usuario': 'Fulano',
                             'endereco': 'Rua Bonita, n 123',
                             'telefone': '912345678',
                             'admin': True
@@ -169,7 +165,9 @@ class TestTechnician(unittest.TestCase):
         QUANDO pesquisado
         TESTE SE todos os tecnicos são retornados corretamente
         '''
-        # from ..models.tecnico import Tecnico
+
+        # inserindo
+        self.client.post('/tecnico/novo', json=self.mock_user, headers=self.headers)
 
         response = self.client.get('/tecnico/', headers=self.headers)
         data = response.json
@@ -182,6 +180,16 @@ class TestTechnician(unittest.TestCase):
                             'usuario': 'admin',
                             'nome_completo': 'Administrador',
                             'endereco': 'Rua dos Bobos, nº 0',
+                            'telefone': '912345678',
+                            'admin': 'Sim'
+                        },
+                        
+                        '2': {
+                            'id':2,
+                            'cpf': '12345678902',
+                            'usuario': 'Fulano',
+                            'nome_completo': 'Fulano',
+                            'endereco': 'Rua Bonita, n 123',
                             'telefone': '912345678',
                             'admin': 'Sim'
                         }

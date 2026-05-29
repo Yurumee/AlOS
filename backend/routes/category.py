@@ -71,12 +71,10 @@ def new_category():
         try:
             # guarda dados do frontend
             data = request.json
-
             # separando em variaveis
-            # cliente_id = data.get('cliente_id')
             nome_categoria = data.get('nome_categoria')
             tipo = data.get('tipo_categoria')
-            descricao = data.get('descicao_categoria')
+            descricao = data.get('descricao_categoria')
             
         except Exception as e:
             return jsonify({'error':str(e)})
@@ -91,24 +89,9 @@ def new_category():
         except:
             return '', 500
         
-        # # verifica se o tipo da categoria ja existe no banco
-        # try:
-        #     categoria_exists = db.session.query(Categoria).filter(Categoria.tipo.ilike(f'%{tipo}%')).first()
-            
-        #     if categoria_exists:
-        #         return '', 409
-                
-        # except:
-        #     return '', 500
-        
         if not nome_categoria or nome_categoria == '' or len(nome_categoria) < 3:
             response = {'status':'error', 'msg':'O TÍTULO PARA A CATEGORIA É INVÁLIDO'}
             return response, 406
-        
-        # if tipo == None or tipo == '':
-        #     response = {'status':'error', 'msg':'O TIPO DA CATEGORIA É INVÁLIDO'}
-        #     return response, 406
-        
         
         try:
             # realizando transação
@@ -118,11 +101,9 @@ def new_category():
                                 tipo = tipo,
                                 descricao = descricao,
                             )
-
+            
             # inserindo e realizando commit
             db.session.add(categoria)
-
-            # product.cliente.append(cliente_desejado)
 
             db.session.commit()
             # fim da transação
@@ -148,7 +129,7 @@ def patch_categoria(id_desejado):
         # separando em variaveis
         nome_categoria = data.get('nome_categoria')
         tipo = data.get('tipo_categoria')
-        descricao = data.get('descicao_categoria')
+        descricao = data.get('descricao_categoria')
         
         # checa se a categoria existe
         try:

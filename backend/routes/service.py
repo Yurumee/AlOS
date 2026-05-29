@@ -51,10 +51,8 @@ def new_service():
             # cliente_id = data.get('cliente_id')
             nome_servico = data.get('nome_servico')
             categoria = data.get('categoria_servico')
-            descricao = data.get('descicao_servico')
+            descricao = data.get('descricao_servico')
             valor = data.get('custo_servico')
-
-            print(data)
             
         except Exception as e:
             return jsonify({'error':str(e)})
@@ -134,7 +132,7 @@ def patch_service(id_desejado):
         # separando em variaveis
         nome_servico = data.get('nome_servico')
         categoria = data.get('categoria_servico')
-        descricao = data.get('descicao_servico')
+        descricao = data.get('descricao_servico')
         valor = data.get('valor_servico')
 
         # checa se o produto existe
