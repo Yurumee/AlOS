@@ -226,7 +226,7 @@ class TestOrders(unittest.TestCase):
         '''
         DADO um modelo OrdemServico
         QUANDO excluir uma OS
-        TESTE SE a OS é criada com sucesso
+        TESTE SE a OS é deletada com sucesso
         '''
 
         self.client.post('/os/novo', json=self.mock_os, headers=self.headers)
