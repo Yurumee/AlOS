@@ -410,7 +410,7 @@ function OSEdit(props)
                             )
                             }
                             <br/>
-                            <p >Valor total: R${parseFloat(sum).toFixed(2)}</p>
+                            <p >Valor total: R${parseFloat(sum + order.orcamento_total).toFixed(2)}</p>
                         </ul>
                     </div>
 
@@ -471,14 +471,14 @@ function OSEdit(props)
 
                 <br />
 
-                <Form.Group className='grid-child grid-switch'>
+                <Form.Group className='grid-child grid-switch-edit'>
                     <Form.Label>Emitir OS</Form.Label>
                     <Form.Check type='switch' onChange={(event) => setNewEmitirOrdem(event.target.checked)} />
                 </Form.Group>
 
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar OS</Button>
+                <Button className='grid-child grid-button-edit' variant='outline-warning' type='submit'>Editar OS</Button>
             </Form>
 
             </div>

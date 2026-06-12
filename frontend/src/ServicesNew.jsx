@@ -80,7 +80,7 @@ function ServicesNew(props)
         .then(res => setResponse(res))
         .catch(error => console.log(error))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/servicos'
     }
 
     return(

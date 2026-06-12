@@ -45,8 +45,6 @@ function BudgetOS(props) {
             setOrcamentoEstoque(Object.values(data.orcamento_item))
             setOrcamentoServico(Object.values(data.orcamento_servico))
 
-            console.log(data)
-
             setIsLoading(false)
         }
 
@@ -135,22 +133,22 @@ function BudgetOS(props) {
                                 <div className="budget-grid">
                                     <div className="budget-section" style={{"gridColumn":2}}>
                                         <p className='budget-p'>
-                                            Ordem criada em <strong>{orcamento.data_emissao}</strong>
+                                            CRIADA EM <strong>{orcamento.data_emissao.toUpperCase()}</strong>
                                         </p>
                                     </div>
 
                                     {orcamento.is_emitida &&
                                         <div className="budget-section">
-                                            <p className="budget-p">
-                                                Ordem emitida e fechada em <strong>{orcamento.data_fechamento}</strong>
+                                            <p className="budget-p" style={{'color':'green'}}>
+                                                EMITIDA E FECHADA EM <strong>{orcamento.data_fechamento.toUpperCase()}</strong>
                                             </p>
                                         </div>
                                     }
 
                                     {!orcamento.is_emitida &&
                                         <div className="budget-section">
-                                            <p className="budget-p">
-                                                <strong>Ordem não-emitida</strong>
+                                            <p className="budget-p" style={{'color':'red'}}>
+                                                <strong>NÃO EMITIDA</strong>
                                             </p>
                                         </div>
                                     }
@@ -425,6 +423,14 @@ function BudgetOS(props) {
 
                                             }
 
+                                            {orcamentoServico.length <= 0 &&
+                                                <>
+                                                    <p className='budget-p'>
+                                                        <strong>NÃO ORÇADO</strong>
+                                                    </p>
+                                                </>
+                                            }
+
                                         </div>
 
 
@@ -450,23 +456,16 @@ function BudgetOS(props) {
 
                                                 </>
                                             }
+
+                                            {orcamentoEstoque.length <= 0 &&
+                                                <>
+                                                    <p className='budget-p'>
+                                                        <strong>NÃO ORÇADO</strong>
+                                                    </p>
+                                                </>
+                                            }
                                         </div>
 
-                                        {orcamentoServico.length <= 0 &&
-                                            <>
-                                                <p>
-                                                    <strong>NÃO ORÇADO</strong>
-                                                </p>
-                                            </>
-                                        }
-
-                                        {orcamentoEstoque.length <= 0 &&
-                                            <>
-                                                <p>
-                                                    <strong>NÃO ORÇADO</strong>
-                                                </p>
-                                            </>
-                                        }
 
                                     </div>
 

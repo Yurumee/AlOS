@@ -50,7 +50,7 @@ function ServicesDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/servicos'
     }
 
     function cancel()

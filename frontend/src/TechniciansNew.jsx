@@ -60,7 +60,7 @@ function TechniciansNew(props)
         .then(res => setResponse(res))
         .catch(error => console.log(error))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/tecnicos'
     }
 
     return(

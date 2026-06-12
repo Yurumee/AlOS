@@ -7,7 +7,6 @@ import { useState } from 'react'
 
 function OSVisualize(props) {
     const order = props.order
-    console.log(order)
 
     function edit_current() {
         window.location.href = `/editar-os/${order.id}`

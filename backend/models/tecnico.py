@@ -21,3 +21,4 @@ class Tecnico(db.Model):
     # RELACIONAMENTOS
     # relacionamento 1:n com ordemServico
     ordem_servicos: Mapped[list['OrdemServico']] = relationship()
+    

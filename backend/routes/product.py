@@ -283,11 +283,9 @@ def getProduct(id_desejado):
 def getProductByClient(id_desejado):
     from models.produto import Produto
     # from models.cliente import Cliente
-
-    print(id_desejado)
+    
     try:
         produtos_desejados = db.session.query(Produto).filter_by(cliente_id=id_desejado).all()
-        print(produtos_desejados)
 
     except Exception as e:
         response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
@@ -300,7 +298,5 @@ def getProductByClient(id_desejado):
                     "id":produto.produto_id,
                     "num_serie": produto.num_serie,
                 }
-
-    print(result)
                 
     return result, 302

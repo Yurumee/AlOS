@@ -52,7 +52,7 @@ import AttachmentsEdit from './AttachmentsEdit.jsx';
 import AttachmentsDelete from './AttachmentsDelete.jsx';
 import AttachmentsOS from './AttachmentsOS.jsx';
 
-import Home from './Home.jsx';
+// import Home from './Home.jsx';
 import Login from './Login.jsx';
 
 import PageNotFound from './NotFound.jsx';
@@ -80,7 +80,7 @@ function Main(){
       <>
 
       <Routes>
-        <Route index element={<Home />} />
+        <Route index element={<OS token={token}/>} />
         <Route path='/clientes' element={<Clients token={token} />}/>
         <Route path='/novo-cliente' element={<ClientsNew token={token}/>}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit token={token}/>}/>
@@ -147,7 +147,6 @@ function Main(){
   )
 }
 
-// const {token, removeToken, setToken} = useToken()
 
 createRoot(document.getElementById('root')).render(
   <Main />

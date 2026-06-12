@@ -40,7 +40,7 @@ function TechniciansDelete(props) {
         const URL = `http://localhost:5000/tecnico/excluir/${id}`
         await fetch(URL, 
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers: 
                     {
                         'Content-Type':'application/json',
@@ -50,7 +50,7 @@ function TechniciansDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/tecnicos'
     }
 
     function cancel()

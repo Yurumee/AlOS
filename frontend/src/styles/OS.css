@@ -22,6 +22,13 @@
     align-self: center;
 }
 
+.grid-button-edit {
+    grid-column: 3;
+    grid-row: 4;
+    justify-self: center;
+    align-self: center;
+}
+
 .grid-input {
     min-width: 250px;
     max-width: 350px;
@@ -30,6 +37,14 @@
 .grid-switch {
     grid-column: 2;
     grid-row: 6;
+    margin-bottom: 10px;
+    justify-self: center;
+    align-self: center;
+}
+
+.grid-switch-edit {
+    grid-column: 2;
+    grid-row: 4;
     margin-bottom: 10px;
     justify-self: center;
     align-self: center;

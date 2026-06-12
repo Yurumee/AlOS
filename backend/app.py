@@ -37,10 +37,10 @@ app.register_blueprint(view_attachment)
 
 if __name__ == '__main__':
     with app.app_context():
-        from insert_sup import __insert_sup
+        from insert_sup import insert_sup
 
         db.create_all()
-        __insert_sup()
+        insert_sup()
 
         
     app.run()

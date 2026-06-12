@@ -94,9 +94,8 @@ function ServicesEdit(props)
         .then(res => res.json())
         .then(res => setResponse(res))
         .catch(error => console.log(error))
-        // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
         
-        // window.location.href = '/clientes'
+        window.location.href = '/servicos'
     }
 
     return(

@@ -3,15 +3,12 @@ import useToken from './components/useToken';
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-// import { useNavigate } from 'react-router-dom';
 
-function NavBar(props) {
-    // const navigation = useNavigate()
+function NavBar() {
     
     const { removeToken } = useToken()
 
@@ -23,52 +20,18 @@ function NavBar(props) {
         })
         .then(() => {removeToken()})
         .catch((error) => console.log(error))
-
-        // if(localStorage.getItem('token'))
-        // {
-        //     window.location.reload()
-        // }
+        
         window.location.reload()
 
-        // navigation("/login", { replace: true } );
+        window.location.href = '/login'
+
     }
-
-    // function goto_home() {
-    //     window.location.href = '/'
-    // }
-
-    // function goto_client() {
-    //     window.location.href = '/clientes'
-    // }
-
-    // function goto_product() {
-    //     window.location.href = '/produtos'
-    // }
-
-    // function goto_stock() {
-    //     window.location.href = '/estoque'
-    // }
-
-    // function goto_service() {
-    //     window.location.href = '/servicos'
-    // }
-
-    // function goto_os() {
-    //     window.location.href = '/ordem-servicos'
-    // }
-
-    // function search() {
-
-    // }
 
     return (
         <>
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
             <Navbar expand="lg" bg='warning'>
             <Container fluid>
-                <Navbar.Brand href='/'>
-                    <img src={props.img} alt="" />
-                </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
@@ -77,7 +40,7 @@ function NavBar(props) {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Nav.Link href="/">Home</Nav.Link>
+                        <Nav.Link href="/os">Home</Nav.Link>
                         
                         <NavDropdown title='Ordem de Serviço'>
                             <NavDropdown.Item href='/os'>Ir para OS</NavDropdown.Item>
@@ -103,22 +66,24 @@ function NavBar(props) {
                             <NavDropdown.Item href='/deletar-produto'>Deletar Produto</NavDropdown.Item>
                         </NavDropdown>
                         
-                        {/* <Nav.Link href="/estoque">Estoque</Nav.Link> */}
                         <NavDropdown title='Estoque'>
                             <NavDropdown.Item href='/estoque'>Ir para Estoque</NavDropdown.Item>
                             <NavDropdown.Divider></NavDropdown.Divider>
                             <NavDropdown.Item href='/novo-item'>Novo Item</NavDropdown.Item>
                             <NavDropdown.Item href='/editar-item'>Editar um Item</NavDropdown.Item>
                             <NavDropdown.Item href='/deletar-item'>Deletar um Item</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/categorias'>Ir para Categorias</NavDropdown.Item>
                         </NavDropdown>
 
-                        {/* <Nav.Link href="/servicos">Serviços</Nav.Link> */}
                         <NavDropdown title='Serviços'>
                             <NavDropdown.Item href='/servicos'>Ir para Serviços</NavDropdown.Item>
                             <NavDropdown.Divider></NavDropdown.Divider>
                             <NavDropdown.Item href='/novo-servico'>Novo Serviço</NavDropdown.Item>
                             <NavDropdown.Item href='/editar-servico'>Editar Serviço</NavDropdown.Item>
                             <NavDropdown.Item href='/deletar-servico'>Deletar Serviço</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/categorias'>Ir para Categorias</NavDropdown.Item>
                         </NavDropdown>
 
                         <NavDropdown title='Técnicos'>
@@ -130,15 +95,6 @@ function NavBar(props) {
                         </NavDropdown>
 
                     </Nav>
-
-                    {/* <Form className="d-flex">
-                        <Form.Control
-                            type="search"
-                            placeholder="Search"
-                            className="me-2"
-                            aria-label="Search" />
-                        <Button variant="outline-success">Search</Button>
-                    </Form> */}
                     
                     <Button variant='danger' onClick={logout} style={{'marginLeft':'8px'}}>Sair</Button>
 

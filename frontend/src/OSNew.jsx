@@ -138,10 +138,7 @@ function OSNew(props) {
             
             const all_items = list_estoque.concat(list_servico)
 
-            // console.log(list_estoque)
-
             setItemsSearched(all_items)
-            // setItemsSearched(list_estoque)
             setIsLoading(false)
         }
     }

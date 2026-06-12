@@ -40,7 +40,7 @@ function Login(props){
         
         if(response.status == 'success')
         {
-            navigation("/", {state: {'status':response.status, 'msg':response.msg}})
+            window.location.href = '/'
             setLoginUser('')
             setLoginSenha('')
         }

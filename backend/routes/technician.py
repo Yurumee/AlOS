@@ -5,46 +5,8 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime, timezone, timedelta
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt, get_jwt_identity, jwt_required
 import json
-# from os import path, makedirs
 
 view_technician = Blueprint('view_technician', __name__, url_prefix='/tecnico')
-
-# rota para cadastro de um admin padrao
-# PARA FINS DE DEBUG
-# @view_technician.route('/admin', methods=['GET'])
-# def create_admin():
-#     from config import __CPF_ADMIN__, __USER_ADMIN__, __NOME_ADMIN__, __SENHA_ADMIN__, __CONTATO_ADMIN__, __ENDERECO_ADMIN__, __IS_ADMIN__
-#     from models.tecnico import Tecnico
-    
-#     tecnico_exists = db.session.query(Tecnico).filter_by(cpf_tecnico=__CPF_ADMIN__).one_or_none()
-
-#     __SENHA_ADMIN_HASH__ = bcrypt.generate_password_hash(__SENHA_ADMIN__)
-
-#     __IS_ADMIN_TRUE__ = bool(__IS_ADMIN__)
-
-#     if not tecnico_exists:
-#         try:
-#             tec_admin = Tecnico(
-#                                 cpf_tecnico = __CPF_ADMIN__,
-#                                 usuario = __USER_ADMIN__ ,
-#                                 senha = __SENHA_ADMIN_HASH__,
-#                                 nome_tecnico = __NOME_ADMIN__,
-#                                 contato_tecnico = __CONTATO_ADMIN__,
-#                                 endereco = __ENDERECO_ADMIN__,
-#                                 administrador = __IS_ADMIN_TRUE__
-#                                 )
-#             db.session.add(tec_admin)
-#             db.session.commit()
-        
-#         except Exception as e:
-#             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-#             return response, 201
-        
-#         response = {'status':'success', 'msg':'TÉCNICO CRIADO COM SUCESSO!'}
-#         return response, 201
-    
-#     response = {'status':'error', 'msg':'TÉCNICO JÁ CADASTRADO!'}
-#     return response, 409
 
 # rota para recarregar o token expirado
 @view_technician.after_request
@@ -102,7 +64,6 @@ def tech_login():
         # se for autorizado
         # cria o token
         token_access = create_access_token(identity=str(tech_exists.tecnico_id))
-        # response = {"access_token":token_access}
         response = {'status':'success', 'msg':'TÉCNICO LOGADO COM SUCESSO!', "access_token":token_access}
         return response, 200
     
@@ -115,8 +76,8 @@ def tech_logout():
     unset_jwt_cookies(response)
     return response, 200
 
-# rota get all clients
-# essa rota deve exibir todos os clientes em lista na tela inicial do modulo de clientes
+# rota get all technicians
+# essa rota deve exibir todos os tecnicos em lista na tela inicial do modulo de tecnicos
 @view_technician.route('/', methods=['GET'])
 @jwt_required()
 def all_technicians():
@@ -149,8 +110,7 @@ def new_technician():
         from models.tecnico import Tecnico
 
         # pegando o id do tecnico do token logado atualmente
-        # convertendo para um int
-        
+        # convertendo para um int        
         tech_id = int(get_jwt_identity())
 
         # pesquisando pelo tecnico
@@ -171,8 +131,6 @@ def new_technician():
         # cheque se ele é admin
         # se for, permita o cadastro
         if tech_exists.administrador == True:
-            # print(tech_exists.nome_tecnico)
-            # print('é admin')
             
             # puxe os dados do novo tecnico
             data = request.json
@@ -257,10 +215,8 @@ def new_technician():
             response = {'status':'error', 'msg':'TÉCNICO NÃO POSSUI PERMISSÃO DE ADMINISTRADOR'}
             return response, 401
 
-        # return '', 201
-
 # rota para cadastro de um editar tecnico
-# PARA CADASTRAR NOVOS TECNICOS, O ATUAL DEVE SER UM ADMIN
+# PARA EDITAR NOVOS TECNICOS, O ATUAL DEVE SER UM ADMIN
 @view_technician.route('/editar/<int:id_desejado>', methods=['POST'])
 @jwt_required()
 def patch_technician(id_desejado):
@@ -276,18 +232,8 @@ def patch_technician(id_desejado):
         try:
             tech_exists = db.session.query(Tecnico).filter_by(tecnico_id=tech_id).one_or_none()
         except Exception as e:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-
-            finally:
-                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500    
+            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500    
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
@@ -301,36 +247,18 @@ def patch_technician(id_desejado):
 
             # puxe os dados do tecnico a ser edditado
             data = request.json
-            # cpf_tech = data.get('cpf_tecnico')
-            # senha_tech = data.get('senha_tecnico')
-            # senha_confirma_tech = data.get('senha_confirma')
             nome_tech = data.get('nome_tecnico')
             contato_tech = data.get('contato_tecnico')
             endereco_tech = data.get('endereco_tecnico')
             is_admin = data.get('admin')
-
-            # checa se o cpf é valido
-            # if len(cpf_tech) != 11:
-            #     print('cpf invalido')
-            #     return '', 406
 
             # checa se o tecnico desejado existe
             try:
                 is_registered = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
             
             except Exception as e:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    return response, 500
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
             
             # se nao existir, retorne erro
             if not is_registered:
@@ -377,33 +305,12 @@ def patch_technician(id_desejado):
                     is_registered.administrador = is_admin
                 
                 db.session.commit()
-                
-            except Exception as e:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                        file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    return response, 500
-
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN PATCH: TECNICO ID {id_desejado} EDITADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                    print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-
-            finally:
                 response = {'status':'success','msg':'TECNICO EDITADO COM SUCESSO!'}
                 return response, 200
+                
+            except Exception as e:
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
         # caso nao, retorne nao autorizado
         else:
             response = {'status':'error','msg':'TÉCNICO NÃO AUTENTICADO'}
@@ -412,12 +319,12 @@ def patch_technician(id_desejado):
 
 
 # rota para deletar um tecnico com base no id informado
-@view_technician.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_technician.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_technician(id_desejado):
     from models.tecnico import Tecnico
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
 
         tech_id = int(get_jwt_identity())
 
@@ -426,18 +333,8 @@ def delete_technician(id_desejado):
             tech_exists = db.session.query(Tecnico).filter_by(tecnico_id=tech_id).one_or_none()
         
         except Exception as e:
-            try:
-                with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                    file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                print('LOG ESCRITO COM SUCESSO')
-                
-            except Exception as f:
-                print('LOG NAO PODE SER CRIADO')
-                print(str(f))
-
-            finally:
-                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                return response, 500    
+            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            return response, 500    
         
         # se o tecnico nao existir, retorne erro 404
         if not tech_exists:
@@ -454,53 +351,27 @@ def delete_technician(id_desejado):
                 tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
 
             except:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                            file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
-                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-                    return response, 500
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
 
             if not tecnico_exists:
                 response = {'status':'error', 'msg':'O TECNICO PESQUISADO NÃO EXISTE'}
                 return response, 404
 
-            # exclui o tecnico
-            try:
-                    db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).delete()
-                    db.session.commit()
-
-                    try:
-                        with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                            file.write(f'BACKEND TECHNICIAN DELETE: TECNICO ID {id_desejado} DELETADO POR {tech_exists.nome_tecnico} AS {datetime.now().strftime('%d/%m/%Y AS %H:%M:%S')}')
-                        print('LOG ESCRITO COM SUCESSO')
-
-                    except:
-                        print('LOG NAO PODE SER CRIADO')
-
-                    finally:
+            if tecnico_exists.tecnico_id != tech_id:
+                # exclui o tecnico
+                try:
+                        db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).delete()
+                        db.session.commit()
                         response = {'status':'success', 'msg':'TECNICO APAGADO COM SUCESSO!'}
                         return response, 500
 
-            except Exception as e:
-                try:
-                    with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                            file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-                    print('LOG ESCRITO COM SUCESSO')
-
-                except Exception as f:
-                    print('LOG NAO PODE SER CRIADO')
-                    print(str(f))
-
-                finally:
+                except Exception as e:
                     response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
                     return response, 500
+            else:
+                response = {'status':'error','msg':'NÃO PODE DELETAR UM TÉCNICO EM USO'}
+                return response, 500
         
 
 # esta rota pesquisa o id do tecnico
@@ -513,16 +384,8 @@ def getTechnician(id_desejado):
         tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
         print(tecnico_exists)
     except Exception as e:
-        try:
-            with open(f'{log_path}\\log_tech_{datetime.now().strftime('%d_%m_%Y_at_%H_%M_%S')}.txt', 'a') as file:
-                file.write(f'BACKEND TECHNICIAN ERROR: {str(e)}')
-            print('LOG ESCRITO COM SUCESSO')
-        
-        except Exception as f:
-            print('LOG NAO PODE SER CRIADO')
-        finally:
-            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
-            return response, 500
+        response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+        return response, 500
     
     if tecnico_exists:
         result = {}
