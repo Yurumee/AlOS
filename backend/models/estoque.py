@@ -14,7 +14,7 @@ class Estoque(db.Model):
     categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'), nullable=True)
 
     nome_item: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
-    descricao_item: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)
+    descricao_item: Mapped[str] = mapped_column(VARCHAR(30), nullable=True, default='Não Informado')
     quantidade: Mapped[int] = mapped_column(INTEGER, default=0, nullable=False)
     preco_unitario: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), default=0.01, nullable=False)
     cod_barras: Mapped[str] = mapped_column(VARCHAR, unique=True)

@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Categories.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useState } from 'react'
 
@@ -15,10 +15,6 @@ function CategoriesNew(props)
     const [titulo, setTitulo] = useState()
     const [tipo, setTipo] = useState()
     const [descricao, setDescricao] = useState()
-
-    const [response, setResponse] = useState({status:'', msg:''})
-    const navigation  = useNavigate()
-
 
     async function submit(event) 
     {
@@ -63,29 +59,28 @@ function CategoriesNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
+            <Form className='grid-container-cat' onSubmit={submit}>
+                <Form.Group className='grid-child'>
                     <Form.Label>Título <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Formatação' onChange={(event) => setTitulo(event.target.value)}></Form.Control>
+                    <Form.Control className='grid-input' type='text' placeholder='Formatação' onChange={(event) => setTitulo(event.target.value)}></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Tipo da categoria</Form.Label>
-                    <Form.Select defaultValue={''} onChange={(event) => setTipo(event.target.value)}>
+                    <Form.Select className='grid-input' defaultValue={''} onChange={(event) => setTipo(event.target.value)}>
                         <option disabled value={''}>---Selecione um tipo---</option>
                         <option value={"Servico"}>Serviço</option>
                         <option value={"Estoque"}>Estoque</option>
                         <option value={"Geral"}>Geral</option>
                     </Form.Select>
-                    {/* <Form.Control type='text' placeholder='Serviço' onChange={(event) => setTipo(event.target.value)}></Form.Control> */}
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' placeholder='Formatação completa realizada por um técnico' onChange={(event) => setDescricao(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' placeholder='Formatação completa realizada por um técnico' onChange={(event) => setDescricao(event.target.value)} />
                 </Form.Group>
 
-                <Button variant='outline-primary' type='submit'>Cadastrar categoria</Button>
+                <Button className='grid-button-cat grid-child' variant='outline-warning' type='submit'>Cadastrar categoria</Button>
             </Form>
 
             </div>

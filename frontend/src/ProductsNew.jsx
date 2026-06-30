@@ -1,6 +1,6 @@
 import './styles/Products.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useState, useEffect } from 'react'
 
@@ -161,7 +161,7 @@ function ProductsNew(props)
                     <Form.Check type='switch' onChange={(event) => setBackup(event.target.checked)} />
                 </Form.Group>
                 <br />
-                <Button className='grid-child grid-button-prod' variant='warning' type='submit'>Cadastrar produto</Button>
+                <Button className='grid-child grid-button-prod' variant='outline-warning' type='submit'>Cadastrar produto</Button>
             </Form>
 
             </div>

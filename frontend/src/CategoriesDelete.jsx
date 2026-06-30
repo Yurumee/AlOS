@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Categories.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,6 @@ import Button from 'react-bootstrap/esm/Button'
 
 function CategoriesDelete(props) {
     let params = useParams()
-    const navigation  = useNavigate()
     const id = params.id
     const [category, setCategory] = useState()
     const [isLoading, setIsLoading] = useState(true)
@@ -27,7 +26,6 @@ function CategoriesDelete(props) {
                         'Authorization': 'Bearer ' + props.token
                     },
             }).then(resp => resp.json())
-            // const list = Object.values(resp)
             setCategory(resp)
             setIsLoading(false)
         }
@@ -50,7 +48,7 @@ function CategoriesDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-        // window.location.href = '/clientes'
+        window.location.href = '/categorias'
     }
 
     function cancel()
@@ -73,18 +71,19 @@ function CategoriesDelete(props) {
             {!isLoading && category &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar esta categoria?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{category.titulo}</Card.Title>
                                 <Card.Text>
-                                    <p>Descrição: {category.descricao}</p>
+                                    <p className='grid-p-card'>Descrição da Categoria</p>
+                                    <p>{category.descricao}</p>
                                 </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
-
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 

@@ -1,6 +1,6 @@
 import './styles/Storage.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -130,7 +130,7 @@ function StoragesEdit(props)
                         <p className='h2'>Editando Item - {item.codigo_barras}</p>
             </div>
 
-            <Form className='grid-container' onSubmit={submit}>
+            <Form className='grid-container-storage' onSubmit={submit}>
                 <Form.Group className='grid-child'>
                     <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control type='number' className='grid-input' defaultValue={item.codigo_barras} placeholder='84912345678' onChange={(event) => setNewCodBarra(event.target.value)} />
@@ -143,7 +143,7 @@ function StoragesEdit(props)
 
 
                 <Form.Group className='grid-child'>
-                    <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Label>Categoria</Form.Label>
                     <Form.Select defaultValue={item.categoria} className='grid-input' onChange={(event) => setNewCategoria(event.target.value)}>
                       <option>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
@@ -157,7 +157,7 @@ function StoragesEdit(props)
 
                 <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' className='grid-input' style={{ 'width': lenD + 'ch' }} defaultValue={item.descricao} placeholder='SSD DA MARCA X 240GB NOVO' onChange={(event) => setNewDescricao(event.target.value)} />
+                    <Form.Control as='textarea' rows={3} className='grid-input' style={{ 'width': lenD + 'ch' }} defaultValue={item.descricao} placeholder='SSD DA MARCA X 240GB NOVO' onChange={(event) => setNewDescricao(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className='grid-child'>

@@ -1,8 +1,19 @@
 .material-icons.md-primary {
     color: #fff3b7;
-} 
+}
 
-.button-client {
+#is-admin {
+    grid-row: 5;
+    grid-column: 1 / span 2;
+}
+
+#cpf {
+    grid-column: span 3;
+    width: 250px;
+    /* grid-row: 1; */
+}
+
+.button-tech {
     border-radius: 10px;
     border-color: #ffc107;
     background-color: #ffc107;
@@ -29,9 +40,9 @@
     margin-left: 30px;
 }
 
-.grid-container-cli {
+.grid-container-tech {
     display: grid;
-    grid-template-columns: [first] 2fr [second] 2fr [third] 2fr;
+    grid-template-columns: 2fr 2fr 2fr;
     justify-items: center;
     justify-content: space-around;
     align-items: center;
@@ -42,8 +53,8 @@
     margin-bottom: 0;
 }
 
-.grid-button-cli {
-    grid-column: 2;
+.grid-button-tech {
+    grid-column: 2 / span 2;
     grid-row: 5;
     justify-self: center;
     align-self: center;
@@ -101,7 +112,6 @@
 }
 
 .table-client tbody td {
-    /* width: 50px; */
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;

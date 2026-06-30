@@ -1,6 +1,6 @@
 .grid-container-os {
     display: grid;
-    grid-template-columns: [first] fit-content(20%) [second] fit-content(20%) [third] fit-content(20%) [fourth] fit-content(20%) fit-content(20%);
+    grid-template-columns: [first] fit-content(20%) [second] fit-content(20%) [third] fit-content(20%) [fourth] fit-content(20%);
     gap: 5px;
 
     justify-items: center;
@@ -112,7 +112,7 @@
     display: flex;
 }
 
-#table-budget {
+#table-budget-os {
     width: 100%;
     justify-items: center;
     grid-column: 3 / span 2;
@@ -243,4 +243,15 @@ hr {
     margin-top: 100px;
     opacity: 1 !important;
     border: none !important;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    column-gap: 10px;
+    align-self: center;
+    justify-self: start;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 30px;
 }

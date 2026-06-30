@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Services.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -22,8 +22,19 @@ function ServicesNew(props)
     const [descricao_servico, setDescricaoServico] = useState()
     const [valor, setValor] = useState()
     
-    const [response, setResponse] = useState({status:'', msg:''})
-    const navigation  = useNavigate()
+    const [lenN, setLenN] = useState(0)
+    const [lenD, setLenD] = useState(0)
+
+    useEffect(() => {
+        if (nome_servico != undefined) {
+            setLenN(nome_servico.length)
+        }
+
+        if (descricao_servico != undefined) {
+            setLenD(descricao_servico.length)
+        }
+
+    }, [lenN, lenD, nome_servico, descricao_servico])
 
      // realiza a chama da função apenas uma vez, quando a pagina é carregada
     useEffect(() => 
@@ -95,15 +106,14 @@ function ServicesNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
+            <Form className='grid-container-serv' onSubmit={submit}>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Serviço <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Formatação' onChange={(event) => setNomeServico(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' style={{ 'width': lenN + 'ch' }} placeholder='Formatação' onChange={(event) => setNomeServico(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
-                    {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
-                    <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
+                <Form.Group className='grid-child'>
+                    <Form.Label>Categoria</Form.Label>
                     <Form.Select onChange={(event) => setCategoriaServico(event.target.value)}>
                       <option disabled selected>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
@@ -115,17 +125,17 @@ function ServicesNew(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control as='textarea' rows={2} placeholder='Formatação e instalação de aplicativos' onChange={(event) => setDescricaoServico(event.target.value)} />
+                    <Form.Control as='textarea' rows={3} className='grid-input' id='description' style={{ 'width': lenD + 'ch' }} placeholder='Formatação e instalação de aplicativos' onChange={(event) => setDescricaoServico(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Valor do Serviço Prestado <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control type='number' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValor(event.target.value)} />
                 </Form.Group>
 
-                <Button variant='outline-primary' type='submit'>Cadastrar Serviço</Button>
+                <Button className='grid-button-serv grid-child' variant='outline-warning' type='submit'>Cadastrar Serviço</Button>
             </Form>
 
             </div>

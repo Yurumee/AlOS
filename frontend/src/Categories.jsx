@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Categories.css'
 import './styles/index.css'
-import NavBar from './NavBar.jsx'
+import NavBar from './Navbar.jsx'
 import CategoriesVisualize from './CategoriesVisualize.jsx'
 import ModalCat from './ModalCat.jsx'
 

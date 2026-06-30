@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Tech.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
@@ -41,6 +41,26 @@ function TechniciansEdit(props)
 
         getTechnician()
     }, [])
+
+    const [lenNC, setLenNC] = useState(0)
+    const [lenT, setLenT] = useState(0)
+    const [lenEN, setLenEN] = useState(0)
+
+    useEffect(() => {
+        if (new_tecnico_nome != undefined) {
+            setLenNC(new_tecnico_nome.length)
+        }
+
+        if (new_tecnico_tel != undefined) {
+            setLenT(new_tecnico_tel.length)
+        }
+
+        if (new_tecnico_endereco != undefined) {
+            setLenEN(new_tecnico_endereco.length)
+        }
+
+    }, [lenNC, lenT, lenEN, new_tecnico_nome, new_tecnico_tel, new_tecnico_endereco])
+
 
     async function submit(event) 
     {
@@ -86,30 +106,30 @@ function TechniciansEdit(props)
 
             <h1>Editando Técnico - {technician.cpf}</h1>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container-tech' onSubmit={submit}>
 
-                <Form.Group>
-                    <Form.Label>Nome do Ciente</Form.Label>
-                    <Form.Control type='text' defaultValue={technician.nome_completo} placeholder='João Maria' onChange={(event) => setNewTecnicoNome(event.target.value)} />
+                <Form.Group className='grid-child'>
+                    <Form.Label>Nome do Técnico</Form.Label>
+                    <Form.Control className='grid-input' type='text' defaultValue={technician.nome_completo} placeholder='João Maria' style={{ 'width': lenNC + 'ch' }} onChange={(event) => setNewTecnicoNome(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Telefone</Form.Label>
-                    <Form.Control type='number' defaultValue={technician.telefone} placeholder='84912345678' onChange={(event) => setNewTecnicoTel(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' defaultValue={technician.telefone} style={{ 'width': lenT + 'ch' }} placeholder='84912345678' onChange={(event) => setNewTecnicoTel(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Endereço</Form.Label>
-                    <Form.Control type='text' defaultValue={technician.endereco} placeholder='Rua Exemplo, 001' onChange={(event) => setNewTecnicoEndereco(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' defaultValue={technician.endereco} style={{ 'width': lenEN + 'ch' }} placeholder='Rua Exemplo, 001' onChange={(event) => setNewTecnicoEndereco(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' style={{'gridColumn': '1 / span 2', 'gridRow': '3'}}>
                     <Form.Label>Permissões de Administrador</Form.Label>
                     <Form.Check type='switch' defaultChecked={technician.admin} onChange={(event) => setNewTecnicoAdmin(event.target.checked)} />
                 </Form.Group>
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Técnico</Button>
+                <Button className='grid-child grid-button-edit' variant='outline-warning' style={{'gridColumn': '2 / span 2', 'gridRow': '3'}} type='submit'>Editar Técnico</Button>
             </Form>
 
             </div>

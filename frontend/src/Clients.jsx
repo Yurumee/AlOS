@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import ClientsVisualize from './ClientsVisualize'
 import ModalId from './ModalId'
 

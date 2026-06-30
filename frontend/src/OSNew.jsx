@@ -1,6 +1,6 @@
 import './styles/OS.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -363,10 +363,9 @@ function OSNew(props) {
                         <span style={{ 'color': 'red' }}>* representam campos obrigatórios</span>
                     </div>
 
-                    <Form className='grid-container' onSubmit={submit}>
+                    <Form className='grid-container-os' onSubmit={submit}>
 
                         <Form.Group className='grid-child'>
-                            {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
                             <Form.Label>Cliente <span style={{ 'color': 'red' }}>*</span></Form.Label>
                             <Form.Select defaultValue={''} onChange={(event) => { setClienteOrdem(event.target.value); searchProduct(event.target.value) }}>
                                 <option value={''} disabled>---Selecione um cliente---</option>
@@ -481,7 +480,7 @@ function OSNew(props) {
 
                         </Form.Group>
 
-                        <Table striped bordered hover variant='warning' id='table-budget'>
+                        <Table striped bordered hover variant='warning' id='table-budget-os'>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -524,7 +523,7 @@ function OSNew(props) {
                                                     <td className='table-info-cell'> {item.custo} </td>
                                                     <td className='table-info-cell'> --- </td>
 
-                                                    <td className='table-info-cell table-add-rem-button'> 
+                                                    <td className='table-info-cell table-add-rem-button' style={{}}> 
                                                         <Button onClick={() => { addDelItemsBudget(true, 1, item.id_servico, item.nome_servico, item.custo, 1, 'servico') }} variant="success">Adicionar</Button>
                                                         <Button onClick={() => { addDelItemsBudget(false, 1, item.id_servico, item.nome_servico, item.custo, 0, 'servico') }} variant="danger">Retirar</Button>
                                                     </td>
@@ -544,7 +543,7 @@ function OSNew(props) {
                             <Form.Check type='switch' onChange={(event) => setEmitirOrdem(event.target.checked)} />
                         </Form.Group>
 
-                        <Button className='grid-child grid-button' variant='outline-primary' type='submit'>Cadastrar OS</Button>
+                        <Button className='grid-child grid-button' variant='outline-warning' type='submit'>Cadastrar OS</Button>
                     </Form>
 
 

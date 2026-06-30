@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Tech.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -73,20 +73,25 @@ function TechniciansDelete(props) {
             {!isLoading && technician &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar este técnico?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{technician.cpf}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {technician.nome_completo}</p>
-                                    <p>Usuário: {technician.usuario}</p>
-                                    <p>É Administrador: {technician.admin ? 'Sim' : 'Não'}</p>
-                                </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
+                                    <p className='grid-p-card'>Nome do Técnico</p>
+                                    <p>{technician.nome_completo}</p>
 
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                                    <p className='grid-p-card'>Nome de Usuário</p>
+                                    <p>{technician.usuario}</p>
+
+                                    <p className='grid-p-card'>É Administrador:</p>
+                                    <p>{technician.admin ? 'Sim' : 'Não'}</p>
+                                </Card.Text>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 

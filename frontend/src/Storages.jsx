@@ -1,6 +1,6 @@
 import './styles/Storage.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import StoragesVisualize from './StoragesVisualize'
 import ModalItem from './ModalItem'
 import ManageItem from './ManageItem'
@@ -208,11 +208,11 @@ function Storages(props)
                 </div>
             }
             
-            {/* tabela de produtos existentes*/}
+            {/* tabela de itens existentes*/}
             { !isLoading &&
                 
                 <div className="container">
-                    <p className='h2'>ITEMS EM ESTOQUE</p>
+                    <p className='h2'>ITENS EM ESTOQUE</p>
 
                     <Table striped bordered hover responsive variant='warning' className='table-storage'>
                         <thead>

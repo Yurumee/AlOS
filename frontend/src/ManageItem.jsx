@@ -12,9 +12,9 @@ function ManageItem(props) {
     const [quantidade, setQuantidade] = useState()
 
     return (
-        <div className="modal show" style={{ display: 'block' }}>
-            <Modal.Dialog>
-                <Modal.Header closeButton onClick={props.close}>
+        <div style={{ display: 'block' }}>
+            <Modal show={props.show} onHide={props.close}>
+                <Modal.Header closeButton>
                     <Modal.Title>Estoque do Item - {item.codigo_barras}</Modal.Title>
                 </Modal.Header>
 
@@ -34,7 +34,7 @@ function ManageItem(props) {
                     <Button onClick={(event) => { props.reposition(event, true, quantidade, item.id) }} variant="success">Repor esta quantidade</Button>
                     <Button onClick={(event) => { props.reposition(event, false, quantidade, item.id) }} variant="danger">Retirar esta quantidade</Button>
                 </Modal.Footer>
-            </Modal.Dialog>
+            </Modal>
         </div>
     )
 }

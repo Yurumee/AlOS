@@ -1,6 +1,6 @@
 import './styles/Attachment.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'

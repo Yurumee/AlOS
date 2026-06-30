@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Services.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -73,19 +73,22 @@ function ServicesDelete(props) {
             {!isLoading && service &&
                 <>
 
-                <div className="container mt-3">
+                <div className="container grid-card mt-3">
 
-                    <Card>
+                    <Card className='grid-child-card'>
                         <Card.Header>Deseja realmente deletar este serviço?</Card.Header>
                             <Card.Body>
                                 <Card.Title>{service.nome_servico} - ID {service.id}</Card.Title>
                                 <Card.Text>
-                                    <p>Nome: {service.nome_servico}</p>
-                                    <p>Descrição: {service.descricao}</p>
-                                </Card.Text>
-                            <Button className='material-symbols-outlined' variant="success" onClick={confirm}>check_circle</Button>
+                                    <p className='grid-p-card'>Título do Serviço</p>
+                                    <p>{service.nome_servico}</p>
 
-                            <Button className='material-symbols-outlined' variant="danger" onClick={cancel}>cancel</Button>
+                                    <p className='grid-p-card'>Descrição do Serviço</p>
+                                    <p>{service.descricao}</p>
+                                </Card.Text>
+                            <Button className='material-symbols-outlined grid-button-card' variant="success" onClick={confirm}>check_circle</Button>
+                            <div className="divider"></div>
+                            <Button className='material-symbols-outlined grid-button-card' variant="danger" onClick={cancel}>cancel</Button>
                             </Card.Body>
                     </Card>
 

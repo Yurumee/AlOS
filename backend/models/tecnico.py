@@ -15,7 +15,7 @@ class Tecnico(db.Model):
     senha: Mapped[str] = mapped_column(VARCHAR)
     nome_tecnico: Mapped[str] = mapped_column(VARCHAR(50))
     contato_tecnico: Mapped[str] = mapped_column(VARCHAR(20))
-    endereco: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)
+    endereco: Mapped[str] = mapped_column(VARCHAR(30), nullable=True, default='Sem Informação')
     administrador: Mapped[bool] = mapped_column(BOOLEAN, default=False)
 
     # RELACIONAMENTOS

@@ -67,8 +67,19 @@ def new_service():
 
         # categoria deve existir
         if not categoria_desejada:
-            response = {'status':'error', 'msg':'A CATEGORIA SOLICITADA NÃO ESTÁ CADASTRADA NO BANCO DE DADOS'}
-            return response, 404
+            # se a categoria padrao nao existir
+            categoria_desejada = db.session.query(Categoria).filter_by(titulo='Padrão').first()
+            
+            # crie a categoria padrao
+            if categoria_desejada == None:
+                categoria_geral = Categoria(
+                                            titulo = 'Padrão',
+                                            tipo = 'Geral',
+                                            descricao = 'Categoria geral padrão'
+                                            )
+                db.session.add(categoria_geral)
+                db.session.commit()
+                
 
         # verifica se o servico ja existe no banco
         try:

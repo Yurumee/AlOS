@@ -1,6 +1,6 @@
 import './styles/Products.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import ProductsVisualize from './ProductsVisualize'
 import ModalProd from './ModalProd'
 

@@ -5,7 +5,7 @@ import './styles/index.css'
 
 import { useState } from 'react'
 
-import Navbar from './NavBar'
+import NavBar from './Navbar'
 import Button from 'react-bootstrap/Button'
 
 function Home(props) {

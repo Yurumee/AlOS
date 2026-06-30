@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Services.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import ServicesVisualize from './ServicesVisualize'
 import ModalServ from './ModalServ'
 

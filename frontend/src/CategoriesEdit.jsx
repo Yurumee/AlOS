@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Categories.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -15,7 +15,6 @@ function CategoriesEdit(props)
     const id = params.id
     const [category, setCategory] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const [response, setResponse] = useState({status:'', msg:''})
 
     // guardando valores na variavel
     const [new_category_titulo, setNewCategoryTitulo] = useState()
@@ -32,8 +31,7 @@ function CategoriesEdit(props)
                                             }
                                         }
                                     ).then(resp => resp.json())
-            console.log(resp)
-            // const list = Object.values(resp)
+
             setCategory(resp)
             setIsLoading(false)
         }
@@ -69,9 +67,6 @@ function CategoriesEdit(props)
         .then(res => res.json())
         .then(res => setResponse(res))
         .catch(error => console.log(error))
-        // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
-        
-        // window.location.href = '/clientes'
     }
 
     return(
@@ -84,16 +79,16 @@ function CategoriesEdit(props)
 
             <h1>Editando Categoria - {category.id}</h1>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container-cat' onSubmit={submit}>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Título da Categoria</Form.Label>
-                    <Form.Control type='text' defaultValue={category.titulo} placeholder='Formatação' onChange={(event) => setNewCategoryTitulo(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' defaultValue={category.titulo} placeholder='Formatação' onChange={(event) => setNewCategoryTitulo(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Tipo da categoria</Form.Label>
-                    <Form.Select defaultValue={category.tipo} onChange={(event) => setNewTipo(event.target.value)}>
+                    <Form.Select className='grid-input' defaultValue={category.tipo} onChange={(event) => setNewTipo(event.target.value)}>
                         <option disabled value={''}>---Selecione um tipo---</option>
                         <option value={"Serviço"}>Serviço</option>
                         <option value={"Estoque"}>Estoque</option>
@@ -101,13 +96,13 @@ function CategoriesEdit(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' defaultValue={category.descricao} placeholder='Formatação completa realizada por um técnico' onChange={(event) => setNewDescricao(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' defaultValue={category.descricao} placeholder='Formatação completa realizada por um técnico' onChange={(event) => setNewDescricao(event.target.value)} />
                 </Form.Group>
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar categoria</Button>
+                <Button className='grid-button-cat grid-child' variant='outline-warning' type='submit'>Editar categoria</Button>
             </Form>
 
             </div>

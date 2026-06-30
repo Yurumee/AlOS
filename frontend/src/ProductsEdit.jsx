@@ -1,6 +1,6 @@
 import './styles/Products.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -29,6 +29,7 @@ function ProductsEdit(props)
     const [lenA, setLenA] = useState(0)
     const [lenObs, setLenObs] = useState(0)
     const [lenMod, setLenMod] = useState(0)
+    const [lenC, setLenC] = useState(0)
     
     useEffect(() => {
         if (new_acessorio != undefined) {
@@ -43,7 +44,11 @@ function ProductsEdit(props)
             setLenMod(new_modelo.length)
         }
 
-    }, [lenA, lenObs, lenMod, new_acessorio, new_obs, new_modelo])
+        if (new_cor != undefined) {
+            setLenC(new_cor.length)
+        }
+
+    }, [lenA, lenObs, lenMod, lenC, new_acessorio, new_obs, new_modelo, new_cor])
 
     useEffect(() => {
         async function getProduct()
@@ -55,7 +60,6 @@ function ProductsEdit(props)
                 }
             }
             ).then(resp => resp.json())
-            console.log(resp)
             setProduct(resp)
             setIsLoading(false)
         }
@@ -119,22 +123,32 @@ function ProductsEdit(props)
                 
                 <Form.Group className='grid-child'>
                     <Form.Label>Cor do Produto</Form.Label>
-                    <Form.Control type='text' className='grid-input' defaultValue={product.cor} onChange={(event) => setNewCor(event.target.value)} />
+                    <Form.Control type='text' className='grid-input' style={{ 'width': lenC + 'ch' }} defaultValue={product.cor} onChange={(event) => setNewCor(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className='grid-child'>
                     <Form.Label>Sistema Operacional do Produto <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                    <Form.Control type='text' className='grid-input' defaultValue={product.sis_operacional} onChange={(event) => setNewSisOperacional(event.target.value)} />
+                    <Form.Select defaultValue={product.sis_operacional} className='grid-input' style={{'gridColumn': 'span 2'}} onChange={(event) => setNewSisOperacional(event.target.value)}>
+                        <option disabled value={''}>---Selecione um sistema---</option>
+                        <option value={"WIN 11"}>WIN 11</option>
+                        <option value={"WIN 10"}>WIN 10</option>
+                        <option value={"WIN 8.5"}>WIN 8.5</option>
+                        <option value={"WIN 8"}>WIN 8</option>
+                        <option value={"WIN 7"}>WIN 7</option>
+                        <option value={"LINUX"}>LINUX</option>
+                        <option value={"CHROME OS"}>CHROME OS</option>
+                        <option value={"OUTRO"}>OUTRO</option>
+                    </Form.Select>
                 </Form.Group>
 
                 <Form.Group className='grid-child' id='grid-text-ace'>
                     <Form.Label>Acessórios</Form.Label>
-                    <Form.Control type='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.acessorios} onChange={(event) => setNewAcessorio(event.target.value)} />
+                    <Form.Control as='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.acessorios} onChange={(event) => setNewAcessorio(event.target.value)} />
                 </Form.Group>
 
                 <Form.Group className='grid-child' id='grid-text-obs'>
                     <Form.Label>Observações</Form.Label>
-                    <Form.Control type='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.obs} onChange={(event) => setNewObservacao(event.target.value)} />
+                    <Form.Control as='textarea' rows={5} style={{ 'width': '100%' }} defaultValue={product.obs} onChange={(event) => setNewObservacao(event.target.value)} />
                 </Form.Group>
                 
                 <Form.Group className='grid-child' id='grid-switch-one'>

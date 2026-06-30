@@ -1,7 +1,7 @@
 import './styles/index.css'
 import './styles/Attachment.css'
 
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import Button from 'react-bootstrap/Button'
 
 import { useEffect, useState, useRef } from 'react'

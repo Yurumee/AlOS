@@ -44,8 +44,8 @@ function ModalItem(props) {
 
     return (
         <div className="modal show" style={{ display: 'block'}}>
-            <Modal.Dialog>
-                <Modal.Header closeButton onClick={props.close}>
+            <Modal show={props.show} onHide={props.close}>
+                <Modal.Header closeButton>
                     <Modal.Title>Insira o ID do item desejado</Modal.Title>
                 </Modal.Header>
     
@@ -59,7 +59,7 @@ function ModalItem(props) {
                     <Button onClick={redirect} variant="warning">Continuar</Button>
                     {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
                 </Modal.Footer>
-            </Modal.Dialog>
+            </Modal>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import './styles/index.css'
 
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 

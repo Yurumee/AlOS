@@ -17,14 +17,14 @@ class Produto(db.Model):
 
     modelo: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
     num_serie: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
-    cor: Mapped[str] = mapped_column(VARCHAR(20), nullable=True)
+    cor: Mapped[str] = mapped_column(VARCHAR(20), nullable=True, default='Não Informado')
     sis_operacional: Mapped[str] = mapped_column(VARCHAR(20))
     avaria: Mapped[bool] = mapped_column(BOOLEAN)
     liga: Mapped[bool] = mapped_column(BOOLEAN)
     carrega: Mapped[bool] = mapped_column(BOOLEAN)
     backup: Mapped[bool] = mapped_column(BOOLEAN)
-    acessorios: Mapped[str] = mapped_column(VARCHAR, nullable=True)
-    observacoes: Mapped[str] = mapped_column(VARCHAR, nullable=True)
+    acessorios: Mapped[str] = mapped_column(VARCHAR, nullable=True, default='Não Possui')
+    observacoes: Mapped[str] = mapped_column(VARCHAR, nullable=True, default='Não Possui')
 
     # RELACIONAMENTOS
     # relacionamento 1:n com ordemServico

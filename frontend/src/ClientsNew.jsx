@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -103,7 +103,7 @@ function ClientsNew(props) {
                     <span style={{ 'color': 'red' }}>* representam campos obrigatórios</span>
                 </div>
 
-                <Form className='grid-container' onSubmit={submit}>
+                <Form className='grid-container-cli' onSubmit={submit}>
                     <Form.Group className='grid-child'>
                         <Form.Label>CPF/CNPJ <span style={{ 'color': 'red' }}>*</span></Form.Label>
                         <Form.Control className='grid-input' type='number' min={0} placeholder='00000000000' onChange={(event) => setCpfCnpj(event.target.value)}></Form.Control>
@@ -158,7 +158,7 @@ function ClientsNew(props) {
                     </Form.Group>
 
                     <br />
-                    <Button className='grid-button-cli grid-child' variant='warning' type='submit'>Cadastrar cliente</Button>
+                    <Button className='grid-button-cli grid-child' variant='outline-warning' type='submit'>Cadastrar cliente</Button>
                 </Form>
 
             </div>

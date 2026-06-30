@@ -1,6 +1,6 @@
 import './styles/OS.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -334,15 +334,7 @@ function OSEdit(props)
             <hr />
             
 
-            <Form className='grid-container' onSubmit={submit}>
-
-                {/* <Form.Group className='grid-child'>
-                    <Form.Label>Ordem para </Form.Label>
-                </Form.Group>
-
-                <Form.Group className='grid-child'>
-                    <Form.Label>Ordem para </Form.Label>
-                </Form.Group> */}
+            <Form className='grid-container-os' onSubmit={submit}>
                 
                 <Form.Group className='grid-child'>
                     <Form.Label>Estado da OS <span style={{ 'color': 'red' }}>*</span></Form.Label>

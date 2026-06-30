@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 
 function Login(props){
-    const navigation  = useNavigate()
-    const [response, setResponse] = useState({status:'', msg:''})
+    // const navigation  = useNavigate()
     const [loginUser, setLoginUser] = useState()
     const [loginSenha, setLoginSenha] = useState()
     
@@ -35,16 +34,9 @@ function Login(props){
             }
         )
         .then(res => res.json())
-        .then((res) => {props.setToken(res.access_token); setResponse(res.status, res.msg);}) // se bem sucedida, guarda o token
+        .then((res) => {props.setToken(res.access_token); setLoginUser(''); setLoginSenha(''); 
+            window.location.href = '/os'}) // se bem sucedida, guarda o token
         .catch((error) => console.log(error))
-        
-        if(response.status == 'success')
-        {
-            window.location.href = '/'
-            setLoginUser('')
-            setLoginSenha('')
-        }
-
 
     }
 

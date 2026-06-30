@@ -1,12 +1,11 @@
 import './styles/Storage.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useNavigate } from 'react-router-dom'
 
 function ItemsNew(props)
 {
@@ -25,7 +24,6 @@ function ItemsNew(props)
     const [codigo_barras, setCodigoBarras] = useState()
     
     const [response, setResponse] = useState({status:'', msg:''})
-    // const navigation  = useNavigate()
     
     const [lenN, setLenN] = useState(0)
     const [lenD, setLenD] = useState(0)
@@ -112,7 +110,7 @@ function ItemsNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form className='grid-container' onSubmit={submit}>
+            <Form className='grid-container-storage' onSubmit={submit}>
                 <Form.Group className='grid-child'>
                     <Form.Label>Código de Barras <span style={{'color':'red'}}>*</span></Form.Label>
                     <Form.Control className='grid-input' type='number'min={0} placeholder='01234567890123' onChange={(event) => setCodigoBarras(event.target.value)}></Form.Control>
@@ -124,7 +122,7 @@ function ItemsNew(props)
                 </Form.Group>
 
                 <Form.Group>
-                    <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Label>Categoria</Form.Label>
                     <Form.Select className='grid-input' onChange={(event) => setCategoriaItem(event.target.value)}>
                       <option disabled selected>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
@@ -138,7 +136,8 @@ function ItemsNew(props)
 
                 <Form.Group>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' className='grid-input' placeholder='SSD da marca X' style={{ 'width': lenD + 'ch' }} onChange={(event) => setDescricaoItem(event.target.value)} />
+                    <Form.Control as='textarea' className='grid-input' rows={3} placeholder='SSD da marca X' style={{ 'width': lenD + 'ch' }} onChange={(event) => setDescricaoItem(event.target.value)} />
+                    
                 </Form.Group>
 
                 <Form.Group>
@@ -151,7 +150,7 @@ function ItemsNew(props)
                     <Form.Control type='number' className='grid-input' min={0} placeholder='49.99' step={0.01} onChange={(event) => setValorUn(event.target.value)} />
                 </Form.Group>
 
-                <Button className='grid-button-sto grid-child' variant='warning' type='submit'>Cadastrar item no estoque</Button>
+                <Button className='grid-button-sto grid-child' variant='outline-warning' type='submit'>Cadastrar item no estoque</Button>
             </Form>
 
             </div>

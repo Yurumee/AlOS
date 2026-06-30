@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button'
 
 function TechniciansVisualize(props) {
     const technician = props.technician
-    console.log(props)
 
     function edit_current() {
         window.location.href = `/editar-tecnico/${technician.id}`

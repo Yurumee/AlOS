@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Services.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -24,6 +24,20 @@ function ServicesEdit(props)
     const [new_categoria, setNewCategoria] = useState()
     const [new_descricao, setNewDescricao] = useState()
     const [new_preco, setNewPreco] = useState()
+
+    const [lenN, setLenN] = useState(0)
+    const [lenD, setLenD] = useState(0)
+
+    useEffect(() => {
+        if (new_service_nome != undefined) {
+            setLenN(new_service_nome.length)
+        }
+
+        if (new_descricao != undefined) {
+            setLenD(new_descricao.length)
+        }
+
+    }, [lenN, lenD, new_service_nome, new_descricao])
 
     useEffect(() => {
 
@@ -54,8 +68,7 @@ function ServicesEdit(props)
                                                 'Authorization': 'Bearer ' + props.token
                                             }
                                         }).then(resp => resp.json())
-            // console.log(resp)
-            // const list = Object.values(resp)
+
             setService(resp)
             setIsLoading(false)
         }
@@ -104,22 +117,23 @@ function ServicesEdit(props)
 
         { !isLoading &&
 
-            <div className='container' >
+            <div className='container'>
 
-            <h1>Editando Serviço - {service.nome_servico}</h1>
+                <div style={{ 'marginBottom': '15px' }}>
+                    <p className='h2'>Editando Serviço - {service.nome_servico}</p>
+                </div>
 
-            <Form onSubmit={submit}>
+            <Form className='grid-container-serv' onSubmit={submit}>
                 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Serviço</Form.Label>
-                    <Form.Control type='text' defaultValue={service.nome_servico} placeholder='Manutenção de Notebook' onChange={(event) => setNewServiceNome(event.target.value)} />
+                    <Form.Control type='text' style={{ 'width': lenN + 'ch' }} className='grid-input' defaultValue={service.nome_servico} placeholder='Manutenção de Notebook' onChange={(event) => setNewServiceNome(event.target.value)} />
                 </Form.Group>
 
 
-                <Form.Group>
-                    {/* <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label> */}
+                <Form.Group className='grid-child'>
                     <Form.Label>Categoria <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Select defaultValue={service.categoria} onChange={(event) => setNewCategoria(event.target.value)}>
+                    <Form.Select className='grid-input' defaultValue={service.categoria} onChange={(event) => setNewCategoria(event.target.value)}>
                       <option>---Selecione uma categoria---</option>
                       {!isLoading && categories.map(category => (
                                     <>
@@ -130,18 +144,18 @@ function ServicesEdit(props)
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Descrição</Form.Label>
-                    <Form.Control type='text' defaultValue={service.descricao} placeholder='Check-up geral no aparelho' onChange={(event) => setNewDescricao(event.target.value)} />
+                    <Form.Control as='textarea' style={{ 'width': lenD + 'ch' }} className='grid-input' rows={3} defaultValue={service.descricao} placeholder='Check-up geral no aparelho' onChange={(event) => setNewDescricao(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Valor do Serviço</Form.Label>
-                    <Form.Control type='number' defaultValue={service.valor} placeholder='19.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
+                    <Form.Control type='number' className='grid-input' defaultValue={service.valor} placeholder='19.99' step={0.01} onChange={(event) => setNewPreco(event.target.value)} />
                 </Form.Group>
 
                 <br />
-                <Button variant='outline-warning' type='submit'>Editar Serviço</Button>
+                <Button className='grid-button-serv grid-child' variant='outline-warning' type='submit'>Editar Serviço</Button>
             </Form>
 
             </div>

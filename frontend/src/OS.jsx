@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/OS.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import OSVisualize from './OSVisualize'
 import ModalOS from './ModalOS'
 import Filter from './Filter'

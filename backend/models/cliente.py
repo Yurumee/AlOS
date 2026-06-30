@@ -14,7 +14,7 @@ class Cliente(db.Model):
     
     cpf_cnpj: Mapped[str] = mapped_column(VARCHAR(14), unique=True, nullable=False) # max 11 ou 14
     nome_completo: Mapped[str] = mapped_column(VARCHAR(50), nullable=False)
-    nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50), nullable=True)
+    nome_fantasia: Mapped[str] = mapped_column(VARCHAR(50), nullable=True, default='---')
     pessoa_juridica: Mapped[bool] = mapped_column(BOOLEAN)
     telefone: Mapped[str] = mapped_column(VARCHAR(20), nullable=False)
     endereco: Mapped[str] = mapped_column(VARCHAR(50), nullable=False) # rua, numero

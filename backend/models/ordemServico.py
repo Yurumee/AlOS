@@ -27,8 +27,8 @@ class OrdemServico(db.Model):
     # por padrão, adiciona 2 semanas
     validade: Mapped[DateTime] = mapped_column(DATETIME, nullable=False, default=datetime.datetime.now() + datetime.timedelta(weeks=2))
 
-    prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False)
-    diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=True)
+    prognostico: Mapped[str] = mapped_column(VARCHAR, nullable=False, default='Não cadastrado')
+    diagnostico: Mapped[str] = mapped_column(VARCHAR, nullable=True, default='Não cadastrado')
     orcamento: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), nullable=True)
     estado_os: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     emitida: Mapped[bool] = mapped_column(BOOLEAN, default=False, nullable=False)

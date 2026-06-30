@@ -2,7 +2,7 @@
     color: #fff3b7;
 } 
 
-.button-client {
+.button-service {
     border-radius: 10px;
     border-color: #ffc107;
     background-color: #ffc107;
@@ -21,17 +21,18 @@
 
 .buttons {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     column-gap: 10px;
+    align-self: center;
     justify-self: start;
     margin-top: 15px;
     margin-bottom: 15px;
     margin-left: 30px;
 }
 
-.grid-container-cli {
+.grid-container-serv {
     display: grid;
-    grid-template-columns: [first] 2fr [second] 2fr [third] 2fr;
+    grid-template-columns: [first] 2fr [second] 2fr;
     justify-items: center;
     justify-content: space-around;
     align-items: center;
@@ -42,9 +43,9 @@
     margin-bottom: 0;
 }
 
-.grid-button-cli {
-    grid-column: 2;
-    grid-row: 5;
+.grid-button-serv {
+    grid-column: span 2;
+    grid-row: 4;
     justify-self: center;
     align-self: center;
 }
@@ -54,9 +55,9 @@
     max-width: 350px;
 }
 
-.grid-switch-cli {
+.grid-switch-serv {
     grid-column: 2;
-    grid-row: 4;
+    /* grid-row: 4; */
     margin-bottom: 10px;
     justify-self: center;
     align-self: center;
@@ -88,30 +89,29 @@
     display: inline-block;
 }
 
-.modal-client .modal-body {
+.modal-service .modal-body {
     word-break: break-word;
 }
 
-.table-client {
+.table-service {
     width: 100%;
 }
 
-.table-client thead th {
+.table-service thead th {
     font-weight: 500;
 }
 
-.table-client tbody td {
-    /* width: 50px; */
+.table-service tbody td {
     max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.table-client tbody .table-name-cell {
+.table-service tbody .table-name-cell {
     width: 30%;
 }
 
-.table-client tbody .table-info-cell {
+.table-service tbody .table-info-cell {
     width: 10%;
 }

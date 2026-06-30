@@ -80,7 +80,7 @@ function Main(){
       <>
 
       <Routes>
-        <Route index element={<OS token={token}/>} />
+        <Route index element={<OS token={token} />} />
         <Route path='/clientes' element={<Clients token={token} />}/>
         <Route path='/novo-cliente' element={<ClientsNew token={token}/>}/>
         <Route path='/editar-cliente/:id' element={<ClientsEdit token={token}/>}/>
@@ -92,45 +92,44 @@ function Main(){
         <Route path='/novo-produto' element={<ProductsNew token={token}/>}/>
         <Route path='/editar-produto/:id' element={<ProductsEdit token={token}/>}/>
         <Route path='/deletar-produto/:id' element={<ProductsDelete token={token}/>}/>
-        <Route path='/editar-produto' element={<ModalProd operation={'edit'}/>}/>
-        <Route path='/deletar-produto' element={<ModalProd operation={'delete'} />}/>
+        <Route path='/editar-produto' element={<ModalProd operation={'edit'} show={() => true} close={() => {false; window.location.href = '/produtos'}} />}/>
+        <Route path='/deletar-produto' element={<ModalProd operation={'delete'} show={() => true} close={() => {false; window.location.href = '/produtos'}} />}/>
         
         <Route path='/tecnicos' element={<Technicians token={token}/>}/>
         <Route path='/novo-tecnico' element={<TechniciansNew token={token}/>}/>
         <Route path='/editar-tecnico/:id' element={<TechniciansEdit token={token}/>}/>
         <Route path='/deletar-tecnico/:id' element={<TechniciansDelete token={token}/>}/>
-        <Route path='/editar-tecnico' element={<ModalTech operation={'edit'}/>}/>
-        <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} />}/>
+        <Route path='/editar-tecnico' element={<ModalTech operation={'edit'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
+        <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
           
         <Route path='/estoque' element={<Storages token={token}/>}/>
         <Route path='/novo-item' element={<StoragesNew token={token}/>}/>
         <Route path='/editar-item/:id' element={<StoragesEdit token={token}/>}/>
         <Route path='/deletar-item/:id' element={<StoragesDelete token={token}/>}/>
-        <Route path='/editar-item' element={<ModalItem operation={'edit'}/>}/>
-        <Route path='/deletar-item' element={<ModalItem operation={'delete'} />}/>
+        <Route path='/editar-item' element={<ModalItem operation={'edit'} show={() => true} close={() => {false; window.location.href = '/estoque'}} />}/>
+        <Route path='/deletar-item' element={<ModalItem operation={'delete'} show={() => true} close={() => {false; window.location.href = '/estoque'}} />}/>
 
         <Route path='/categorias' element={<Categories token={token}/>}/>
         <Route path='/nova-categoria' element={<CategoriesNew token={token}/>}/>
         <Route path='/editar-categoria/:id' element={<CategoriesEdit token={token}/>}/>
         <Route path='/deletar-categoria/:id' element={<CategoriesDelete token={token}/>}/>
-        <Route path='/editar-categoria' element={<ModalCat operation={'edit'}/>}/>
-        <Route path='/deletar-categoria' element={<ModalCat operation={'delete'} />}/>
+        <Route path='/editar-categoria' element={<ModalCat operation={'edit'} show={() => true} close={() => {false; window.location.href = '/categorias'}} />}/>
+        <Route path='/deletar-categoria' element={<ModalCat operation={'delete'} show={() => true} close={() => {false; window.location.href = '/categorias'}} />}/>
 
         <Route path='/servicos' element={<Services token={token}/>}/>
         <Route path='/novo-servico' element={<ServicesNew token={token}/>}/>
         <Route path='/editar-servico/:id' element={<ServicesEdit token={token}/>}/>
         <Route path='/deletar-servico/:id' element={<ServicesDelete token={token}/>}/>
-        <Route path='/editar-servico' element={<ModalServ operation={'edit'}/>}/>
-        <Route path='/deletar-servico' element={<ModalServ operation={'delete'} />}/>
+        <Route path='/editar-servico' element={<ModalServ operation={'edit'} show={() => true} close={() => {false; window.location.href = '/servicos'}} />}/>
+        <Route path='/deletar-servico' element={<ModalServ operation={'delete'} show={() => true} close={() => {false; window.location.href = '/servicos'}} />}/>
 
         <Route path='/os' element={<OS  token={token}/>}/>
         <Route path='/nova-os' element={<OSNew  token={token}/>}/>
         <Route path='/editar-os/:id' element={<OSEdit token={token}/>}/>
         <Route path='/orcamento-os/:id' element={<BudgetOS token={token}/>}/>
-        {/* <Route path='/orcamento-os/:id' element={<OSEdit token={token}/>}/> */}
         <Route path='/deletar-os/:id' element={<OSDelete token={token}/>}/>
-        <Route path='/editar-os' element={<ModalOS operation={'edit'}/>}/>
-        <Route path='/deletar-os' element={<ModalOS operation={'delete'}/>}/>
+        <Route path='/editar-os' element={<ModalOS operation={'edit'} show={() => true} close={() => {false; window.location.href = '/os'}}/>}/>
+        <Route path='/deletar-os' element={<ModalOS operation={'delete'} show={() => true} close={() => {false; window.location.href = '/os'}} />}/>
 
         <Route path='/cadastrar-anexo-os/:id' element={<AttachmentsNew token={token}/>}/>
         <Route path='/exibir-anexo-os/:id' element={<AttachmentsVisualize token={token}/>}/>

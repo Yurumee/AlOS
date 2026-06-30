@@ -1,13 +1,13 @@
-import './styles/Clients.css'
+import './styles/Tech.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useState } from 'react'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
-import Technicians from './Technicians'
+// import Technicians from './Technicians'
 
 function TechniciansNew(props)
 {
@@ -75,48 +75,48 @@ function TechniciansNew(props)
                     <span style={{'color':'red'}}>* representam campos obrigatórios</span>
                 </div>
 
-            <Form onSubmit={submit}>
-                <Form.Group>
+            <Form className='grid-container-tech' onSubmit={submit}>
+                <Form.Group className='grid-child' id='cpf'>
                     <Form.Label>CPF <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='00000000000' onChange={(event) => setCpf(event.target.value)}></Form.Control>
+                    <Form.Control className='grid-input' type='number' placeholder='00000000000' onChange={(event) => setCpf(event.target.value)}></Form.Control>
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Nome do Técnico <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='João Maria' onChange={(event) => setTecnicoNome(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' placeholder='João Maria' onChange={(event) => setTecnicoNome(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child' id='is-admin'>
                     <Form.Label>É administrador</Form.Label>
                     <Form.Check type='switch' onChange={(event) => setFlagAdmin(event.target.checked)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Telefone <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='number' placeholder='84912345678' onChange={(event) => setTecnicoTel(event.target.value)} />
+                    <Form.Control className='grid-input' type='number' placeholder='84912345678' onChange={(event) => setTecnicoTel(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
-                    <Form.Label>Endereço <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Rua Exemplo, 001' onChange={(event) => setTecnicoEndereco(event.target.value)} />
-                </Form.Group>
-
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Usuário para login <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='text' placeholder='Joao01' onChange={(event) => setTecnicoUsuario(event.target.value)} />
+                    <Form.Control className='grid-input' type='text' placeholder='Joao01' onChange={(event) => setTecnicoUsuario(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Senha <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='password' placeholder='Insira sua senha' onChange={(event) => setTecnicoSenha(event.target.value)} />
+                    <Form.Control className='grid-input' type='password' placeholder='Insira sua senha' onChange={(event) => setTecnicoSenha(event.target.value)} />
                 </Form.Group>
 
-                <Form.Group>
+                <Form.Group className='grid-child'>
                     <Form.Label>Confirmação de senha <span style={{'color':'red'}}>*</span></Form.Label>
-                    <Form.Control type='password' placeholder='Insira sua senha' onChange={(event) => setTecnicoSenhaConf(event.target.value)} />
+                    <Form.Control className='grid-input' type='password' placeholder='Insira sua senha' onChange={(event) => setTecnicoSenhaConf(event.target.value)} />
+                </Form.Group>
+
+                <Form.Group className='grid-child'>
+                    <Form.Label>Endereço <span style={{'color':'red'}}>*</span></Form.Label>
+                    <Form.Control className='grid-input' type='text' placeholder='Rua Exemplo, 001' onChange={(event) => setTecnicoEndereco(event.target.value)} />
                 </Form.Group>
                 
-                <Button variant='outline-primary' type='submit'>Cadastrar técnico</Button>
+                <Button className='grid-button-tech grid-child' variant='outline-warning' type='submit'>Cadastrar técnico</Button>
             </Form>
 
             </div>

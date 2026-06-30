@@ -43,15 +43,15 @@ function ModalServ(props) {
     }
 
     return (
-        <div className="modal show" style={{ display: 'block'}}>
-            <Modal.Dialog>
-                <Modal.Header closeButton onClick={props.close}>
+        <div style={{ display: 'block'}}>
+            <Modal show={props.show} onHide={props.close}>
+                <Modal.Header closeButton>
                     <Modal.Title>Buscar serviço desejado</Modal.Title>
                 </Modal.Header>
     
                 <Modal.Body>
                     <FloatingLabel label="ID " className="mb-3">
-                        <Form.Control type="text" required placeholder="ID" onChange={(event) => setIdService(event.target.value)} />
+                        <Form.Control type="number" required placeholder="ID" onChange={(event) => setIdService(event.target.value)} />
                     </FloatingLabel>
                 </Modal.Body>
     
@@ -59,7 +59,7 @@ function ModalServ(props) {
                     <Button onClick={redirect} variant="warning">Continuar</Button>
                     {!props.show && <Button onClick={go_back} variant="secondary">Voltar</Button>}
                 </Modal.Footer>
-            </Modal.Dialog>
+            </Modal>
         </div>
     )
 }

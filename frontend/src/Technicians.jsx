@@ -1,6 +1,6 @@
-import './styles/Clients.css'
+import './styles/Tech.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 import TechniciansVisualize from './TechniciansVisualize'
 import ModalTech from './ModalTech'
 
@@ -86,23 +86,21 @@ function Technicians(props)
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
             
-            <NavBar search='http://127.0.0.1:5000/tecnico/pesquisar/' search_str/>
-
-            {/* ALERTA */}
+            <NavBar/>
 
             <div className='buttons'>
 
-                <Button bsPrefix='button-client' variant='warning' onClick={new_tech}>
+                <Button bsPrefix='button-tech' variant='warning' onClick={new_tech}>
                     <span className="material-icons md-24 md-primary">add_circle_outline</span>
                     Novo Técnico
                 </Button>
 
-                <Button bsPrefix='button-client' onClick={edit_tech}>
+                <Button bsPrefix='button-tech' onClick={edit_tech}>
                     <span className="material-icons md-24 md-primary">edit</span>
                     Editar Técnico
                 </Button>
                 
-                <Button bsPrefix='button-client' onClick={delete_tech}>
+                <Button bsPrefix='button-tech' onClick={delete_tech}>
                     <span className="material-icons md-24 md-primary">delete_outline</span>
                     Excluir Técnico
                 </Button>
@@ -116,9 +114,9 @@ function Technicians(props)
                 </div>
             }
             
-            {/* tabela de clientes existentes*/}
+            {/* tabela de tecnicos existentes*/}
             { !isLoading && 
-                <div className="clientsCreated container">
+                <div className="TechsCreated container">
                     <p className='h2'>TÉCNICOS CADASTRADOS</p>
 
                     <Table striped bordered hover responsive variant='warning'>
@@ -128,7 +126,6 @@ function Technicians(props)
                                 <th>Nome Completo</th>
                                 <th>Telefone</th>
                                 <th>Endereço</th>
-                                {/* <th>Usuário Cadastrado</th> */}
                                 <th>#</th>
                             </tr>
                         </thead>
@@ -139,7 +136,6 @@ function Technicians(props)
                                         <tr key={tech.id}>
                                             <td> {tech.id} </td>
                                             <td> {tech.nome_completo} </td>
-                                            {/* <td> {tech.usuario} </td> */}
                                             <td> {tech.telefone} </td>
                                             <td> {tech.endereco} </td>
 

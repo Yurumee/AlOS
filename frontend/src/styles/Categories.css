@@ -29,7 +29,7 @@
     margin-left: 30px;
 }
 
-.grid-container-cli {
+.grid-container-cat {
     display: grid;
     grid-template-columns: [first] 2fr [second] 2fr [third] 2fr;
     justify-items: center;
@@ -42,7 +42,7 @@
     margin-bottom: 0;
 }
 
-.grid-button-cli {
+.grid-button-cat {
     grid-column: 2;
     grid-row: 5;
     justify-self: center;
@@ -52,14 +52,6 @@
 .grid-input {
     min-width: 250px;
     max-width: 350px;
-}
-
-.grid-switch-cli {
-    grid-column: 2;
-    grid-row: 4;
-    margin-bottom: 10px;
-    justify-self: center;
-    align-self: center;
 }
 
 .grid-card {

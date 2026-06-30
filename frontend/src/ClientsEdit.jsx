@@ -1,6 +1,6 @@
 import './styles/Clients.css'
 import './styles/index.css'
-import NavBar from './NavBar'
+import NavBar from './Navbar'
 
 import { useEffect, useState } from 'react'
 
@@ -105,7 +105,6 @@ function ClientsEdit(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
             .catch(error => console.log(error))
-        // .then(data => console.log(`STATUS: ${data.status} | MSG: ${data.msg}`))
 
         window.location.href = '/clientes'
     }
@@ -122,7 +121,7 @@ function ClientsEdit(props) {
                         <p className='h2'>Editando Cliente - {client.cpf_cnpj}</p>
                     </div>
 
-                    <Form className='grid-container' onSubmit={submit}>
+                    <Form className='grid-container-cli' onSubmit={submit}>
 
                         <Form.Group className='grid-child'>
                             <Form.Label>Nome do Ciente</Form.Label>

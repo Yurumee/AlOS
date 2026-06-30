@@ -14,7 +14,7 @@ class Servico(db.Model):
     categoria_id: Mapped[int] = mapped_column(INTEGER, ForeignKey('categoria.categoria_id'), nullable=True)
 
     nome_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=False, unique=True)
-    descricao_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=True)
+    descricao_servico: Mapped[str] = mapped_column(VARCHAR(30), nullable=True, default='Não Informado')
     custo: Mapped[Numeric] = mapped_column(NUMERIC(7, 2), default=0.01 , nullable=False)
 
     # RELACIONAMENTOS
