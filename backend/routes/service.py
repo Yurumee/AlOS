@@ -47,13 +47,10 @@ def new_service():
             data = request.json
 
             # separando em variaveis
-            # cliente_id = data.get('cliente_id')
             nome_servico = data.get('nome_servico')
-            categoria = data.get('categoria_servico')
+            categoria = None if not data.get('categoria_servico') else data.get('categoria_servico')
             descricao = data.get('descicao_servico')
             valor = data.get('custo_servico')
-
-            print(data)
             
         except Exception as e:
             return jsonify({'error':str(e)})

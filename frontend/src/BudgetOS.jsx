@@ -368,7 +368,7 @@ function BudgetOS(props) {
 
 
                             <div className='budget-prog-diag'>
-                                <div className="budget-header">
+                                <div className="budget-header" style={{'borderLeft': '0px', 'borderRight': '0px'}}>
                                     PROGNÓSTICO
                                 </div>
                                 <div>
@@ -381,7 +381,7 @@ function BudgetOS(props) {
                             </div>
 
                             <div className='budget-prog-diag'>
-                                <div className="budget-header">
+                                <div className="budget-header" style={{'borderLeft': '0px', 'borderRight': '0px'}}>
                                     DIAGNÓSTICO
                                 </div>
                                 <div>

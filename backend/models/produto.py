@@ -17,7 +17,7 @@ class Produto(db.Model):
 
     modelo: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
     num_serie: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
-    cor: Mapped[str] = mapped_column(VARCHAR(20), nullable=True, default='Não Informado')
+    cor: Mapped[str] = mapped_column(VARCHAR(20), default='Não Informado')
     sis_operacional: Mapped[str] = mapped_column(VARCHAR(20))
     avaria: Mapped[bool] = mapped_column(BOOLEAN)
     liga: Mapped[bool] = mapped_column(BOOLEAN)

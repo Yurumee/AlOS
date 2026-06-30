@@ -96,16 +96,18 @@ function AttachmentsOS(props) {
                                 }
 
                             </div>
-                                <div>
-                                    <h5 className='attachment-p'>
-                                        Garantia até <strong>{attachment.garantia}</strong>
-                                    </h5>
+                                <div className="attachment-grid">
+                                    <div className="attachment-section">
+                                        <h5 className='attachment-p'>
+                                            Garantia até <strong>{attachment.garantia}</strong>
+                                        </h5>
+                                    </div>
                                 </div>
                         </div>
                         
                         
-                        <div className='attachment-prog-diag'>
-                            <div className="attachment-header">
+                        <div className='attachment-sol-obs'>
+                            <div className="attachment-header" style={{'borderLeft':'0px', 'borderRight':'0px'}}>
                                 SOLUÇÃO REALIZADA 
                             </div>
                             <div>
@@ -117,11 +119,11 @@ function AttachmentsOS(props) {
                             </div>
                         </div>
 
-                        <div className='attachment-prog-diag'>
-                            <div className="attachment-header">
+                        <div className='attachment-sol-obs'>
+                            <div className="attachment-header" style={{'borderLeft':'0px', 'borderRight':'0px'}}>
                                 OBSERVAÇÕES
                             </div>
-                            <div className="">
+                            <div>
                                 <div className="attachment-section">
                                     <p className="attachment-p">
                                         {attachment.observacoes}

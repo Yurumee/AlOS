@@ -49,15 +49,12 @@ def new_item():
             data = request.json
 
             # separando em variaveis
-            # cliente_id = data.get('cliente_id')
             nome_item = data.get('nome_item')
-            categoria = data.get('categoria_item')
+            categoria = None if not data.get('categoria_item') else data.get('categoria_item')
             descricao = data.get('descricao_item')
             quantidade = int(data.get('quantidade'))
             preco_un = float(data.get('valor_un'))
             cod_barra = data.get('codigo_barras')
-
-            print(data)
             
         except Exception as e:
             return jsonify({'error':str(e)})

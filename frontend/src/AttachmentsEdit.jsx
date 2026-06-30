@@ -87,19 +87,19 @@ function AttachmentsEdit(props) {
                         <span style={{ 'color': 'red' }}>* representam campos obrigatórios</span>
                     </div>
 
-                    <Form className='grid-container' onSubmit={submit}>
+                    <Form className='grid-container-att' onSubmit={submit}>
 
-                        <Form.Group className='grid-child' id='grid-date-create'>
+                        <Form.Group className='grid-child' id='grid-date-create-att'>
                             <Form.Label>Garantia <span style={{ 'color': 'red' }}>*</span></Form.Label>
-                            <Form.Control type='datetime-local' defaultValue={attachment.garantia} onChange={(event) => setNewGarantiaAnexo(event.target.value)} ></Form.Control>
+                            <Form.Control className='grid-input' type='datetime-local' defaultValue={attachment.garantia} onChange={(event) => setNewGarantiaAnexo(event.target.value)} ></Form.Control>
                         </Form.Group>
 
-                        <Form.Group className='grid-child' id='grid-prognostic'>
+                        <Form.Group className='grid-child' id='grid-solution-att'>
                             <Form.Label>Solução realizada <span style={{ 'color': 'red' }}>*</span></Form.Label>
                             <Form.Control as='textarea' rows='10' defaultValue={attachment.solucao} placeholder='A solução realizada foi...' onChange={(event) => setNewSolucaoAnexo(event.target.value)} />
                         </Form.Group>
 
-                        <Form.Group className='grid-child' id='grid-diagnostic'>
+                        <Form.Group className='grid-child' id='grid-obs-att'>
                             <Form.Label>Observação</Form.Label>
                             <Form.Control as='textarea' rows='10' defaultValue={attachment.observacoes} style={{ 'width': '100%' }} placeholder='Considerações adicionais...' onChange={(event) => setNewObsAnexo(event.target.value)} />
                         </Form.Group>
@@ -111,7 +111,7 @@ function AttachmentsEdit(props) {
                             <Form.Check type='switch' onChange={(event) => setNewEmitirAnexo(event.target.checked)} />
                         </Form.Group>
 
-                        <Button className='grid-child grid-button' variant='outline-warning' type='submit'>Editar Anexo</Button>
+                        <Button className='grid-child grid-button-att' variant='outline-warning' type='submit'>Editar Anexo</Button>
                     </Form>
 
                 </div>

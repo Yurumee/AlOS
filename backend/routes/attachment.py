@@ -22,7 +22,9 @@ def new_attachment(id_desejado):
         solucao = data.get('solucao')
         garantia = data.get('garantia')
         observacoes = data.get('observacoes')
-        emitir = data.get('emitido')
+        emitir = False if not data.get('emitido') else data.get('emitido')
+
+        print(data)
 
         try:
             os_desejado = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).first()
@@ -83,6 +85,8 @@ def edit_attachment(id_desejado):
         observacoes = data.get('observacoes')
         emitir = data.get('emitido')
 
+        print(data)
+
         try:
             anexo_desejado = db.session.query(Anexo).filter_by(anexo_id=id_desejado).first()
         except Exception as e:
@@ -94,23 +98,27 @@ def edit_attachment(id_desejado):
             return response, 500
         
         else:
-            if garantia != None and garantia != anexo_desejado.garantia:
-                garantia = datetime.strptime(garantia, '%Y-%m-%dT%H:%M')
-                anexo_desejado.garantia = garantia
+            try:
+                if garantia != None and garantia != anexo_desejado.garantia:
+                    garantia = datetime.strptime(garantia, '%Y-%m-%dT%H:%M')
+                    anexo_desejado.garantia = garantia
+
+                if observacoes != None and observacoes != anexo_desejado.observacoes:
+                    anexo_desejado.observacoes = observacoes
+
+                if solucao != None and solucao != anexo_desejado.solucao:
+                    anexo_desejado.solucao = solucao
+
+                if emitir != None and emitir != anexo_desejado.emitida:
+                    anexo_desejado.emitida = emitir
+
+                db.session.commit()
+
+                response = {'status':'success', 'msg':'ANEXO ALTERADO COM SUCESSO!'}
+                return response, 200
             
-            if observacoes != None and observacoes != anexo_desejado.observacoes:
-                anexo_desejado.observacoes = observacoes
-
-            if solucao != None and solucao != anexo_desejado.solucao:
-                anexo_desejado.solucao = solucao
-
-            if emitir != None and emitir != anexo_desejado.emitida:
-                anexo_desejado.solucao = emitir
-            
-            db.session.commit()
-
-            response = {'status':'success', 'msg':'ANEXO ALTERADO COM SUCESSO!'}
-            return response, 200
+            except Exception as e:
+                print(str(e))
             
 
 # rota usada para excluir um anexo
@@ -127,9 +135,10 @@ def delete_attachment(id_desejado):
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
             return response, 500
         
-        if anexo_desejado.emitida:
-            response = {'status':'error', 'msg':'ANEXO JA EMITIDO'}
-            return response, 500
+        if anexo_desejado:
+            if anexo_desejado.emitida:
+                response = {'status':'error', 'msg':'ANEXO JA EMITIDO'}
+                return response, 500
         
         else:
             try:

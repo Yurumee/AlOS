@@ -48,7 +48,7 @@ function AttachmentsDelete(props) {
             .then(res => res.json())
             .then(res => setResponse(res))
 
-            window.location.href = '/os'
+        window.location.href = '/os'
     }
 
     function cancel() {

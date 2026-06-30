@@ -14,7 +14,7 @@ class Anexo(db.Model):
 
     solucao: Mapped[str] = mapped_column(VARCHAR, nullable=False)
     garantia: Mapped[DateTime] = mapped_column(DATETIME, nullable=False)
-    observacoes: Mapped[str] = mapped_column(VARCHAR, nullable=False, default='')
+    observacoes: Mapped[str] = mapped_column(VARCHAR, default='Sem observações adicionais')
     emitida: Mapped[bool] = mapped_column(BOOLEAN, default=False, nullable=False)
 
     # RELACIONAMENTOS

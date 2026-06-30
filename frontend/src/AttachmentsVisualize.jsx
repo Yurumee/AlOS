@@ -47,14 +47,14 @@ function AttachmentsVisualize(props) {
             {!isLoading &&
             <>
                 <div className='container'>
-                    <div className='budget-container'>
-                        <div className='budget' style={{'marginTop':'15px'}}>
-                            <div className="budget-header">
+                    <div className='attachment-container'>
+                        <div className='attachment' style={{'marginTop':'15px'}}>
+                            <div className="attachment-header">
                                 <h1>ANEXO DA ORDEM DE SERVIÇO N°{attachment.id}</h1>
                                 
                                 {attachment.is_emitida &&
                                     <div>
-                                        <h3 className="budget-p">
+                                        <h3 className="attachment-p">
                                             <strong>Anexo emitido</strong>
                                         </h3>
                                     </div>
@@ -62,16 +62,16 @@ function AttachmentsVisualize(props) {
 
                                 {!attachment.is_emitida &&
                                     <div>
-                                        <h3 className="budget-p">
+                                        <h3 className="attachment-p">
                                             <strong>Anexo não emitido</strong>
                                         </h3>
                                     </div>
                                 }
 
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <h5 className='budget-p'>
+                            <div className="attachment-grid">
+                                <div className="attachment-section">
+                                    <h5 className='attachment-p'>
                                         Garantia até <strong>{attachment.garantia}</strong>
                                     </h5>
                                 </div>
@@ -80,26 +80,27 @@ function AttachmentsVisualize(props) {
                         </div>
                         
                         
-                        <div className='budget-prog-diag'>
-                            <div className="budget-header">
+                        <div className='attachment-sol-obs' style={{'border':'0'}}>
+                            <div className="attachment-header">
                                 SOLUÇÃO REALIZADA 
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <p className='budget-p'>
+                            <div className="attachment-grid">
+                                <div className="attachment-section">
+                                    <p className='attachment-p'>
                                         {attachment.solucao}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className='budget-prog-diag'>
-                            <div className="budget-header">
+                        <div className='attachment-sol-obs' style={{'border':'0'}}>
+                            <div className="attachment-header">
                                 OBSERVAÇÕES
                             </div>
-                            <div className="budget-grid">
-                                <div className="budget-section">
-                                    <p className="budget-p">
+                            <div className="attachment-grid">
+                                <div className="attachment-section">
+                                    <p className="attachment-p">
+                                        {!attachment.observacoes && 'Sem observações cadastradas'}
                                         {attachment.observacoes}
                                     </p>
                                 </div>
