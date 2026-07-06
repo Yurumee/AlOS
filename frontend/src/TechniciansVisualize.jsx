@@ -15,6 +15,10 @@ function TechniciansVisualize(props) {
         window.location.href = `/deletar-tecnico/${technician.id}`
     }
 
+    function new_pass() {
+        window.location.href = `/nova-senha/${technician.id}`
+    }
+
     return (
         <div className="modal show" style={{ display: 'block' }}>
             <Modal.Dialog>
@@ -34,6 +38,7 @@ function TechniciansVisualize(props) {
                 <Modal.Footer>
                     <Button onClick={delete_current} variant="danger">Excluir Técnico</Button>
                     <Button onClick={edit_current} variant="warning">Editar Técnico</Button>
+                    <Button onClick={new_pass} variant="info">Alterar Senha</Button>
                 </Modal.Footer>
             </Modal.Dialog>
         </div>

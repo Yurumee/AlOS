@@ -34,7 +34,7 @@ function Login(props){
             }
         )
         .then(res => res.json())
-        .then((res) => {props.setToken(res.access_token); setLoginUser(''); setLoginSenha(''); 
+        .then((res) => {res.access_token ? props.setToken(res.access_token) : window.location.href = '/login'; 
             window.location.href = '/os'}) // se bem sucedida, guarda o token
         .catch((error) => console.log(error))
 

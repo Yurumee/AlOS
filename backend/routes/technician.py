@@ -61,11 +61,12 @@ def tech_login():
             response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}    
             return response, 401
         
-        # se for autorizado
-        # cria o token
-        token_access = create_access_token(identity=str(tech_exists.tecnico_id))
-        response = {'status':'success', 'msg':'TÉCNICO LOGADO COM SUCESSO!', "access_token":token_access}
-        return response, 200
+        if bcrypt.check_password_hash(tech_exists.senha, senha):
+            # se for autorizado
+            # cria o token
+            token_access = create_access_token(identity=str(tech_exists.tecnico_id))
+            response = {'status':'success', 'msg':'TÉCNICO LOGADO COM SUCESSO!', "access_token":token_access}
+            return response, 200
     
 
 # rota para logout do tecnico
@@ -168,6 +169,15 @@ def new_technician():
             
             
             # senao, continue tentando cadastrar
+            # cheque se as senhas tem 8 caracteres
+            if not senha_tech or len(senha_tech) < 8 or senha_tech ==  '':
+                response = {'status':'error', 'msg':'SENHA INVÁLIDA'}
+                return response, 406
+            
+            if not senha_confirma_tech or len(senha_confirma_tech) < 8 or senha_confirma_tech ==  '':
+                response = {'status':'error', 'msg':'SENHA INVÁLIDA'}
+                return response, 406
+
             # cheque se as senhas sao iguais
             if senha_tech != senha_confirma_tech:
                 response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}
@@ -404,3 +414,77 @@ def getTechnician(id_desejado):
     
     response = {'status':'error', 'msg':'NENHUM TÉCNICO ENCONTRADO COM ESTE ID'}
     return response, 404
+
+# rota para alterar senha de um tecnico
+# PARA ALTERAR SENHA, O ATUAL DEVE SER UM ADMIN
+@view_technician.route('/senha/<int:id_desejado>', methods=['POST'])
+@jwt_required()
+def new_pass_technician(id_desejado):
+    if request.method == 'POST':
+        from models.tecnico import Tecnico
+
+        # pegando o id do tecnico do token logado atualmente
+        # convertendo para um int        
+        tech_id = int(get_jwt_identity())
+
+        # pesquisando pelo tecnico
+        try:
+            tech_exists = db.session.query(Tecnico).filter_by(tecnico_id=tech_id).one_or_none()
+
+        except Exception as e:
+            response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            # print(str(e))   
+            return response, 500
+        
+        # se o tecnico nao existir, retorne erro 404
+        if not tech_exists:
+            response = {'status':'error', 'msg':'TECNICO NÃO ENCONTRADO'}
+            return '', 404
+        
+        # caso o tecnico exista
+        # cheque se ele é admin
+        # se for, permita o cadastro
+        if tech_exists.administrador == True:
+            
+            # puxe os dados do novo tecnico
+            data = request.json
+            senha_tech = data.get('nova_senha')
+            senha_confirma_tech = data.get('nova_senha_conf')
+            print(senha_tech)
+            print(senha_confirma_tech)
+            
+            try:
+                tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
+            except Exception as e:
+                response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                return response, 500
+            
+            # verifica se as senhas coincidem
+            if senha_tech != senha_confirma_tech:
+                response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}
+                return response, 406
+            
+            if not senha_tech or not senha_confirma_tech:
+                response = {'status':'error', 'msg':'SENHAS NÃO COINCIDEM'}
+                return response, 406
+            
+            if tech_exists:
+                # tenta alterar senha do tecnico
+                try:
+                    print(tecnico_exists.senha)
+                    tecnico_exists.senha = bcrypt.generate_password_hash(senha_tech)
+                    db.session.commit()
+
+                    print(tecnico_exists.senha)
+
+                    response = {'status':'success', 'msg':'SENHA ALTERADA COM SUCESSO!'}
+                    return response, 201
+
+                except Exception as e:
+                    response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+                    return response, 500
+
+        # caso nao, retorne nao autorizado
+        else:
+            response = {'status':'error', 'msg':'TÉCNICO NÃO POSSUI PERMISSÃO DE ADMINISTRADOR'}
+            return response, 401

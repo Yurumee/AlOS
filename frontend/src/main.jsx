@@ -5,6 +5,7 @@ import Technicians from './Technicians.jsx';
 import TechniciansNew from './TechniciansNew.jsx';
 import TechniciansEdit from './TechniciansEdit.jsx';
 import TechniciansDelete from './TechniciansDelete.jsx';
+import TechniciansPass from './TechniciansPass.jsx';
 
 import Clients from './Clients.jsx'
 import ClientsNew from './ClientsNew.jsx';
@@ -97,6 +98,7 @@ function Main(){
         <Route path='/novo-tecnico' element={<TechniciansNew token={token}/>}/>
         <Route path='/editar-tecnico/:id' element={<TechniciansEdit token={token}/>}/>
         <Route path='/deletar-tecnico/:id' element={<TechniciansDelete token={token}/>}/>
+        <Route path='/nova-senha/:id' element={<TechniciansPass token={token}/>}/>
         <Route path='/editar-tecnico' element={<ModalTech operation={'edit'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
         <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
           
