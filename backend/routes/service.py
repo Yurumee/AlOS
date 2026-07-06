@@ -76,6 +76,8 @@ def new_service():
                                             )
                 db.session.add(categoria_geral)
                 db.session.commit()
+
+                categoria_desejada = db.session.query(Categoria).filter_by(titulo='Padrão').first()
                 
 
         # verifica se o servico ja existe no banco
@@ -208,12 +210,12 @@ def patch_service(id_desejado):
         
 
 # rota para deletar um produto com base no id informado
-@view_service.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_service.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_service(id_desejado):
     from models.servico import Servico
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se o servico existe
         try:
             servico_exists = db.session.query(Servico).filter_by(servico_id=id_desejado).one_or_none()

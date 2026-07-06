@@ -40,7 +40,7 @@ function ServicesDelete(props) {
         const URL = `http://localhost:5000/servico/excluir/${id}`
         await fetch(URL, 
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers: 
                     {
                         'Content-Type':'application/json',

@@ -14,7 +14,6 @@ function ClientsDelete(props) {
     const id = params.id
     const [client, setClient] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const [response, setResponse] = useState({ status: '', msg: '' })
 
     useEffect(() => {
         async function getClient() {
@@ -37,7 +36,7 @@ function ClientsDelete(props) {
         const URL = `http://localhost:5000/cliente/excluir/${id}`
         await fetch(URL,
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers:
                 {
                     'Content-Type': 'application/json',
@@ -45,7 +44,6 @@ function ClientsDelete(props) {
                 },
             })
             .then(res => res.json())
-            .then(res => setResponse(res))
 
             window.location.href = '/clientes'
     }

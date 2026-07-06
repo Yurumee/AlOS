@@ -1,5 +1,5 @@
 # realizando importações necessárias
-from config import db, log_path
+from config import db
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
@@ -261,13 +261,13 @@ def patch_client(id_desejado):
             return response, 500
 
 # rota para deletar um cliente com base no id informado
-@view_client.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_client.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_client(id_desejado):
     from models.cliente import Cliente
     from models.produto import Produto
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se o cliente existe
         try:
             cliente_exists = db.session.query(Cliente).filter_by(cliente_id=id_desejado).one_or_none()

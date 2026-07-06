@@ -34,10 +34,10 @@ db_folder = path.join(app.root_path, 'database')
 makedirs(db_folder, exist_ok=True)
 
 # cria a pasta para logs
-logs_folder = path.join(app.root_path, 'logs')
-makedirs(logs_folder, exist_ok=True)
+# logs_folder = path.join(app.root_path, 'logs')
+# makedirs(logs_folder, exist_ok=True)
 
-log_path = f'{app.root_path}\logs'
+# log_path = f'{app.root_path}\logs'
 
 # criando a secret key do jwt
 app.config['JWT_SECRET_KEY'] = token_urlsafe(nbytes=32)

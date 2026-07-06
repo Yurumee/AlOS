@@ -38,7 +38,7 @@ function AttachmentsDelete(props) {
         const URL = `http://localhost:5000/anexo/excluir/${id}`
         await fetch(URL,
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers:
                 {
                     'Content-Type': 'application/json',

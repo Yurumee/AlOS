@@ -122,7 +122,7 @@ function ProductsNew(props)
                         <option disabled value={''}>---Selecione um sistema---</option>
                         <option value={"WIN 11"}>WIN 11</option>
                         <option value={"WIN 10"}>WIN 10</option>
-                        <option value={"WIN 8.5"}>WIN 8.5</option>
+                        <option value={"WIN 8.1"}>WIN 8.1</option>
                         <option value={"WIN 8"}>WIN 8</option>
                         <option value={"WIN 7"}>WIN 7</option>
                         <option value={"LINUX"}>LINUX</option>

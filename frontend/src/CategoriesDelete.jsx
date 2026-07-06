@@ -38,7 +38,7 @@ function CategoriesDelete(props) {
         const URL = `http://localhost:5000/categoria/excluir/${id}`
         await fetch(URL, 
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers: 
                     {
                         'Content-Type':'application/json',

@@ -40,7 +40,7 @@ function NavBar() {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Nav.Link href="/os">Home</Nav.Link>
+                        <Nav.Link href="/os">Início</Nav.Link>
                         
                         <NavDropdown title='Ordem de Serviço'>
                             <NavDropdown.Item href='/os'>Ir para OS</NavDropdown.Item>

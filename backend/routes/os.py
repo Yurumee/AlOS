@@ -401,7 +401,7 @@ def patch_os(id_desejado):
             return response, 500
 
 # rota para deletar uma ordem de serviço com base no id informado
-@view_os.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_os.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_os(id_desejado):
     from models.ordemServico import OrdemServico
@@ -409,7 +409,7 @@ def delete_os(id_desejado):
     from models.os_servico import Os_servico
     from models.anexo import Anexo
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se a ordem existe
         try:
             os_exists = db.session.query(OrdemServico).filter_by(ordem_id=id_desejado).one_or_none()

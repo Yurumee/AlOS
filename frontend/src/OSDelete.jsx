@@ -38,7 +38,7 @@ function OSDelete(props) {
         const URL = `http://localhost:5000/os/excluir/${id}`
         await fetch(URL,
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers:
                 {
                     'Content-Type': 'application/json',

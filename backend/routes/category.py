@@ -186,12 +186,12 @@ def patch_categoria(id_desejado):
         return '', 200
 
 # rota para deletar um produto com base no id informado
-@view_category.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_category.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_categoria(id_desejado):
     from models.categoria import Categoria
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se o produto existe
         try:
             categoria_exists = db.session.query(Categoria).filter_by(categoria_id=id_desejado).one_or_none()

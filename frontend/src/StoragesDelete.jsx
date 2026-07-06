@@ -14,7 +14,6 @@ function StoragesDelete(props) {
     const id = params.id
     const [item, setItem] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const [response, setResponse] = useState({status:'', msg:''})
 
     useEffect(() => 
     {
@@ -39,15 +38,15 @@ function StoragesDelete(props) {
         const URL = `http://localhost:5000/estoque/excluir/${id}`
         await fetch(URL, 
             {
-                method: 'POST',
+                method: 'DELETE',
                 headers: 
                     {
                         'Content-Type':'application/json',
                         'Authorization': 'Bearer ' + props.token
                     },
             })
-            .then(res => res.json())
-            .then(res => setResponse(res))
+            // .then((res) => res.json())
+            .catch((err) => console.log(err))
 
         window.location.href = '/estoque'
     }

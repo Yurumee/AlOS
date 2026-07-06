@@ -69,8 +69,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // eslint-disable-next-line react-refresh/only-export-components
 function Main(){
-  // esconde ou mostra modal para editar ou excluir um cliente
-  // const [modalOperationOpen, setModalOperationOpen] = useState(false)
   const {token, setToken} = useToken()
 
   return(

@@ -1,6 +1,6 @@
 # realizando as importações necessarias
 # from config import db, bcrypt, CPF_ADMIN, NOME_ADMIN, SENHA_ADMIN, CONTATO_ADMIN, ENDERECO_ADMIN, IS_ADMIN
-from config import db, bcrypt, log_path
+from config import db, bcrypt
 from flask import Blueprint, request, jsonify
 from datetime import datetime, timezone, timedelta
 from flask_jwt_extended import create_access_token, unset_jwt_cookies, get_jwt, get_jwt_identity, jwt_required

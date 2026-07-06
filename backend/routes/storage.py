@@ -79,6 +79,8 @@ def new_item():
                 db.session.add(categoria_geral)
                 db.session.commit()
 
+                categoria_desejada = db.session.query(Categoria).filter_by(titulo='Padrão').first()
+
         # verifica se o produto ja existe no banco
         try:
             item_exists = db.session.query(Estoque).filter_by(cod_barras=cod_barra).first()
@@ -220,12 +222,12 @@ def patch_item(id_desejado):
         return '', 200
 
 # rota para deletar um produto com base no id informado
-@view_storage.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_storage.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_item(id_desejado):
     from models.estoque import Estoque
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se o produto existe
         try:
             item_exists = db.session.query(Estoque).filter_by(item_id=id_desejado).one_or_none()

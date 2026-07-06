@@ -1,5 +1,5 @@
 # realizando importações necessárias
-from config import db, log_path
+from config import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import Blueprint, jsonify, request
 from datetime import datetime
@@ -203,12 +203,12 @@ def patch_product(id_desejado):
             return response, 500
 
 # rota para deletar um produto com base no id informado
-@view_product.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_product.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_product(id_desejado):
     from models.produto import Produto
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         # checa se o produto existe
         try:
             produto_exists = db.session.query(Produto).filter_by(produto_id=id_desejado).one_or_none()

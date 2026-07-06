@@ -122,10 +122,10 @@ def edit_attachment(id_desejado):
             
 
 # rota usada para excluir um anexo
-@view_attachment.route('/excluir/<int:id_desejado>', methods=['POST'])
+@view_attachment.route('/excluir/<int:id_desejado>', methods=['DELETE'])
 @jwt_required()
 def delete_attachment(id_desejado):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         from models.anexo import Anexo
 
         try:
