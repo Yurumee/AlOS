@@ -35,6 +35,18 @@ function ModalTech(props) {
                 window.location.href = '*'
             }
         }
+
+        if(flag_operation == 'pass') 
+        {
+            if(idTech != undefined) 
+            {
+                window.location.href = `/nova-senha/${idTech}`    
+            }
+            else
+            {
+                window.location.href = '*'
+            }
+        }
     }
 
     function go_back()

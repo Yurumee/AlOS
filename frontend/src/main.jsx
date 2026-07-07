@@ -101,6 +101,7 @@ function Main(){
         <Route path='/nova-senha/:id' element={<TechniciansPass token={token}/>}/>
         <Route path='/editar-tecnico' element={<ModalTech operation={'edit'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
         <Route path='/deletar-tecnico' element={<ModalTech operation={'delete'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
+        <Route path='/nova-senha' element={<ModalTech operation={'pass'} show={() => true} close={() => {false; window.location.href = '/tecnicos'}} />}/>
           
         <Route path='/estoque' element={<Storages token={token}/>}/>
         <Route path='/novo-item' element={<StoragesNew token={token}/>}/>

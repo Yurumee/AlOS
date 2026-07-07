@@ -92,6 +92,8 @@ function NavBar() {
                             <NavDropdown.Item href='/novo-tecnico'>Novo Técnico</NavDropdown.Item>
                             <NavDropdown.Item href='/editar-tecnico'>Editar Técnico</NavDropdown.Item>
                             <NavDropdown.Item href='/deletar-tecnico'>Deletar Técnico</NavDropdown.Item>
+                            <NavDropdown.Divider></NavDropdown.Divider>
+                            <NavDropdown.Item href='/nova-senha'>Alterar Senha</NavDropdown.Item>
                         </NavDropdown>
 
                     </Nav>
