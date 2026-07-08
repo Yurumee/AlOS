@@ -21,7 +21,7 @@ def new_attachment(id_desejado):
         # separando em variaveis
         solucao = data.get('solucao')
         garantia = data.get('garantia')
-        observacoes = data.get('observacoes')
+        observacoes = data.get('observacao')
         emitir = False if not data.get('emitido') else data.get('emitido')
 
         print(data)
@@ -82,7 +82,7 @@ def edit_attachment(id_desejado):
         # separando em variaveis
         solucao = data.get('solucao')
         garantia = data.get('garantia')
-        observacoes = data.get('observacoes')
+        observacoes = data.get('observacao')
         emitir = data.get('emitido')
 
         print(data)

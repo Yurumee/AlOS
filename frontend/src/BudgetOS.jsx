@@ -423,7 +423,7 @@ function BudgetOS(props) {
 
                                             }
 
-                                            {orcamentoServico.length <= 0 &&
+                                            {orcamentoEstoque.length <= 0 &&
                                                 <>
                                                     <p className='budget-p'>
                                                         <strong>NÃO ORÇADO</strong>
@@ -457,7 +457,7 @@ function BudgetOS(props) {
                                                 </>
                                             }
 
-                                            {orcamentoEstoque.length <= 0 &&
+                                            {orcamentoServico.length <= 0 &&
                                                 <>
                                                     <p className='budget-p'>
                                                         <strong>NÃO ORÇADO</strong>
@@ -542,6 +542,14 @@ function BudgetOS(props) {
                                             <p className='budget-p'>
                                                 {orcamento.observacoes}
                                             </p>
+
+                                            {!orcamento.observacoes &&
+                                                <>
+                                                    <p className='budget-p'>
+                                                        <strong>Não informado</strong>
+                                                    </p>
+                                                </>
+                                            }
                                         </div>
 
                                     </div>

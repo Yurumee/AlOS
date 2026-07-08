@@ -49,7 +49,7 @@ def new_service():
             # separando em variaveis
             nome_servico = data.get('nome_servico')
             categoria = None if not data.get('categoria_servico') else data.get('categoria_servico')
-            descricao = data.get('descicao_servico')
+            descricao = data.get('descricao_servico')
             valor = data.get('custo_servico')
             
         except Exception as e:

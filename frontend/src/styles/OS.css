@@ -51,10 +51,12 @@
 }
 
 .table-add-rem-button {
-    display: grid;
+    display: table-cell;
+    /* white-space: nowarp; */
+    /* padding: 5px;
     grid-template-columns: [first] fit-content(50%) [second] fit-content(50%);
     gap: 5px;
-    justify-content: center;
+    justify-content: center; */
 }
 
 .table-add-rem-button input {
@@ -253,4 +255,32 @@ hr {
     margin-top: 15px;
     margin-bottom: 15px;
     margin-left: 30px;
+}
+
+.table-budget-os {
+    width: 100%;
+}
+
+.table-budget-os thead th {
+    font-weight: 500;
+}
+
+.table-budget-os tbody td {
+    /* width: 50px; */
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table-budget-os tbody .table-name-cell {
+    width: 30%;
+}
+
+.table-budget-os tbody .table-info-cell {
+    width: 10%;
+}
+
+td button {
+    margin: 5px;
 }
