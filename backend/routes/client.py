@@ -188,12 +188,12 @@ def patch_client(id_desejado):
         
         # checar se os dados estao corretos
         # cheque se o nome não esta vazio
-        if nome == '':
+        if nome != None and nome == '':
             response = {'status':'error', 'msg':'O NOME NÃO PODE SER VAZIO'}
             return response, 406
         
         # cheque se ele possui nome fantasia caso seja cnpj
-        if not nome_fantasia and cliente_exists.pessoa_juridica == True:
+        if (not nome_fantasia and nome_fantasia == '') and cliente_exists.pessoa_juridica == True:
             response = {'status':'error', 'msg':'O NOME FANTASIA NÃO PODE SER NULO'}
             return response, 406
         
@@ -208,22 +208,21 @@ def patch_client(id_desejado):
             return response, 406
         
         # cheque se o endereco, bairro, cep ou cidade sao nulos
-        if endereco == '':
+        if endereco != None and endereco == '':
             response = {'status':'error', 'msg':'O ENDEREÇO NÃO PODE SER VAZIO'}
             return response, 406
         
-        if bairro == '':
+        if bairro != None and bairro == '':
             response = {'status':'error', 'msg':'O BAIRRO NÃO PODE SER VAZIO'}
             return response, 406
         
-        if cidade == '':
+        if cidade != None and cidade == '':
             response = {'status':'error', 'msg':'O CIDADE NÃO PODE SER VAZIO'}
             return response, 406
         
-        if cep == '':
+        if cep != None and cep == '':
             response = {'status':'error', 'msg':'O CEP NÃO PODE SER VAZIO'}
             return response, 406
-        
 
         # realizando modificações
         try:

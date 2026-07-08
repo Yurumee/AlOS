@@ -109,10 +109,10 @@ function OSEdit(props)
             
             const all_items = list_estoque.concat(list_servico)
 
-            // console.log(list_estoque)
+            console.log(list_estoque)
 
             setItemsSearched(all_items)
-            // setItemsSearched(list_estoque)
+            setItemsSearched(list_estoque)
             setIsLoading(false)
         }
     }
@@ -264,9 +264,9 @@ function OSEdit(props)
                     {
                         soma = 0
                     }
-                    
                     setSum(soma)
                     setItemsBudgetList(newlist)
+                    
                 }
 
                 // se não for maior que 1
@@ -274,7 +274,7 @@ function OSEdit(props)
                 {
                     // se tiver exatamente apenas um item
                     // limpe a lista
-                    if (itemsBudgetList.length == 1)
+                    if (itemsBudgetList.length == 0)
                     {
                         setItemsBudgetList([])
                         setSum(0)
@@ -284,6 +284,8 @@ function OSEdit(props)
                     {
                         let newlist = itemsBudgetList.filter((item) => itemsBudgetList.indexOf(item) !== itemindex)
                         setItemsBudgetList(newlist)
+                        let soma = sum - (Number(preco) * Number(qtd))
+                        setSum(soma)
                     }
                 }
             })
@@ -332,7 +334,6 @@ function OSEdit(props)
                 
             <h1>Editando OS Não-Emitida - N°{order.id}</h1>
             <hr />
-            
 
             <Form className='grid-container-os' onSubmit={submit}>
                 
@@ -408,7 +409,7 @@ function OSEdit(props)
 
                 </Form.Group>
                 
-                <Table striped bordered hover variant='warning' id='table-budget'>
+                <Table striped bordered hover variant='warning' id='table-budget-os'>
                     <thead>
                         <tr>
                             <th>ID</th>

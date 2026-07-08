@@ -79,9 +79,7 @@ function Categories(props) {
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
 
-            <NavBar search='http://127.0.0.1:5000/categoria/pesquisar/' search_str />
-
-            {/* ALERTA */}
+            <NavBar/>
 
             <div className='buttons'>
 
@@ -109,7 +107,7 @@ function Categories(props) {
                 </div>
             }
 
-            {/* tabela de clientes existentes*/}
+            {/* tabela de categorias existentes*/}
             {!isLoading &&
                 <div className="clientsCreated container">
                     <p className='h2'>CATEGORIAS CADASTRADAS</p>
@@ -125,8 +123,6 @@ function Categories(props) {
                             </tr>
                         </thead>
 
-                        {/* {!isLoading && <ClientRows Categories={Categories} />} */}
-
                         <tbody>
                             {!isLoading && categories.map(category => (
                                 <>
@@ -138,7 +134,6 @@ function Categories(props) {
                                         <td> {category.tipo} </td>
 
                                         <td> <Button className="material-icons md-16" style={{ color: '#fff3b7' }} variant='warning' onClick={() => visualize_category(category)}>unfold_more</Button> </td>
-                                        {/* <button onClick={() => visualize_client(client)}>unfold_more</button> </td> */}
                                     </tr>
                                 </>
                             )

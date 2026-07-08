@@ -220,8 +220,6 @@ def new_os():
         try:
             # realizando transação
             # criando a os a ser inserido
-
-            print(valor_orcamento)
             os = OrdemServico(
                                 tecnico_cpf = tecnico_cpf,
                                 produto_id = produto_id,
@@ -275,8 +273,8 @@ def patch_os(id_desejado):
         data = request.get_json()
 
         # separando em variaveis
-        fechamento = data.get('fechamento')
-        validade = data.get('validade')
+        fechamento = datetime.strptime(data.get('fechamento'), '%Y-%m-%dT%H:%M') if data.get('fechamento') else None
+        validade = datetime.strptime(data.get('validade'), '%Y-%m-%dT%H:%M') if data.get('validade') else None
         prognostico = data.get('prognostico')
         diagnostico = data.get('diagnostico')
         orcamento = data.get('orcamento')
@@ -285,6 +283,10 @@ def patch_os(id_desejado):
         valor_orcamento = 0.0
         associacoes_estoque = []
         associacoes_servico = []
+        objeto_estoque = []
+        objeto_servico = []
+
+        print(orcamento)
 
         # checa se a os existe
         try:
@@ -306,22 +308,24 @@ def patch_os(id_desejado):
         # realizando modificações
         try:
             if orcamento != None:
+                
+                objeto_estoque = db.session.query(Os_estoque).where(Os_estoque.ordem_id==os_exists.ordem_id).all()
+                objeto_servico = db.session.query(Os_servico).where(Os_servico.ordem_id==os_exists.ordem_id).all()
 
                 for item in orcamento:
 
-
-                    if associacoes_estoque != []:
+                    if objeto_estoque != []:
                         db.session.query(Os_estoque).where(Os_estoque.ordem_id==os_exists.ordem_id).delete()
                         db.session.commit()
                 
-                    if associacoes_servico != []:
+                    if objeto_servico != []:
                         db.session.query(Os_servico).where(Os_servico.ordem_id==os_exists.ordem_id).delete()
                         db.session.commit()
 
                     valor_orcamento += float(item['preco']) * int(item['quantidade'])
 
                     if item['tipo'] == 'estoque':
-                        
+                        print('aaaaaaaaaaaaaaaaaaaaaaaaaaa')
                         item_desejado = db.session.query(Estoque).filter_by(cod_barras=item['cod_barra_item']).one_or_none()
                         associacoes_estoque.append(
                                                     Os_estoque(
@@ -339,7 +343,6 @@ def patch_os(id_desejado):
                                                                 servicos = servico_desejado
                                                               )
                                                   )
-                
                 
                 os_exists.itens_os.extend(associacoes_estoque)
                 os_exists.servicos_os.extend(associacoes_servico)
@@ -390,7 +393,6 @@ def patch_os(id_desejado):
             if emitir and (estado == 'Criada' or estado == 'Em análise'):
                 estado = 'Finalizada'
 
-            print(valor_orcamento)
             db.session.commit()
 
             response = {'status':'success', 'msg':'ORDEM DE SERVIÇO ALTERADA COM SUCESSO!'}
@@ -398,6 +400,7 @@ def patch_os(id_desejado):
 
         except Exception as e:
             response = {'status':'error', 'msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
+            print(str(e))
             return response, 500
 
 # rota para deletar uma ordem de serviço com base no id informado
