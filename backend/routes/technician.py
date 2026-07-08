@@ -392,7 +392,6 @@ def getTechnician(id_desejado):
 
     try:
         tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
-        print(tecnico_exists)
     except Exception as e:
         response = {'status':'error','msg':'HOUVE UM ERRO NO BANCO DE DADOS'}
         return response, 500
@@ -450,8 +449,6 @@ def new_pass_technician(id_desejado):
             data = request.json
             senha_tech = data.get('nova_senha')
             senha_confirma_tech = data.get('nova_senha_conf')
-            print(senha_tech)
-            print(senha_confirma_tech)
             
             try:
                 tecnico_exists = db.session.query(Tecnico).filter_by(tecnico_id=id_desejado).one_or_none()
@@ -471,11 +468,8 @@ def new_pass_technician(id_desejado):
             if tech_exists:
                 # tenta alterar senha do tecnico
                 try:
-                    print(tecnico_exists.senha)
                     tecnico_exists.senha = bcrypt.generate_password_hash(senha_tech)
                     db.session.commit()
-
-                    print(tecnico_exists.senha)
 
                     response = {'status':'success', 'msg':'SENHA ALTERADA COM SUCESSO!'}
                     return response, 201
